@@ -4,6 +4,7 @@
  * EventEmitter class.
  */
 class EventEmitter {
+
     /**
      * EventEmitter constructor.
      */

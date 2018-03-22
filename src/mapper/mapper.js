@@ -4,6 +4,7 @@
  * Mapper class.
  */
 class Mapper {
+
     /**
      * Mapper constructor.
      */
