@@ -1,5 +1,13 @@
 ## A set of tools for a JavaScript developer
 
+### Installation
+
+```bash
+npm install --save tooleks
+```
+
+### Description
+
 #### `Defer` class
 
 The purpose of the `Defer` object is to expose the associated `Promise` instance that can be used for signaling the successful or unsuccessful completion of the task.
