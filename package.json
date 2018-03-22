@@ -1,0 +1,40 @@
+{
+  "name": "tooleks",
+  "version": "0.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "directories": {
+    "lib": "dist",
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "NODE_ENV=development ./node_modules/.bin/webpack --config './webpack/webpack.config.js'",
+    "test": "./node_modules/.bin/nyc --include './src' ./node_modules/.bin/mocha './tests/**/*.js'",
+    "linter": "./node_modules/.bin/eslint",
+    "formatter": "./node_modules/.bin/prettier --write '{src,tests,webpack}/**/*.js'",
+    "build-preparation": "npm run formatter && npm run linter && npm run build && npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tooleks/tooleks-js.git"
+  },
+  "author": "Oleksandr Tolochko <tooleks@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tooleks/tooleks-js/issues"
+  },
+  "homepage": "https://github.com/tooleks/tooleks-js#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "chai": "^4.1.2",
+    "eslint": "^4.19.0",
+    "mocha": "^5.0.4",
+    "nyc": "^11.6.0",
+    "prettier": "^1.11.1",
+    "sinon": "^4.4.6",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.12",
+    "webpack-merge": "^4.1.2"
+  }
+}
