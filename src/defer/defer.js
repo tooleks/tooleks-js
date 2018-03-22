@@ -4,6 +4,7 @@
  * Defer class.
  */
 class Defer {
+
     /**
      * Defer constructor.
      */
