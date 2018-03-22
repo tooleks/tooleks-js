@@ -10,7 +10,7 @@ npm install --save tooleks
 
 #### `Defer` class
 
-The purpose of the `Defer` object is to expose the associated `Promise` instance that can be used for signaling the successful or unsuccessful completion of the task.
+The purpose of the `Defer` class is to expose the associated `Promise` instance that can be used for signaling the successful or unsuccessful completion of the task.
 
 ```JavaScript
 const Defer = require("tooleks").Defer;
@@ -50,7 +50,7 @@ off();
 
 #### `Mapper` class
 
-The purpose of the `Mapper` class is to transform the initial data formats into the desired formats.
+The purpose of the `Mapper` class is to transform the initial data formats into the desired data formats.
 
 ```JavaScript
 const Mapper = require("tooleks").Mapper;
