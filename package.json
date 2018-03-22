@@ -1,7 +1,14 @@
 {
   "name": "tooleks",
-  "version": "0.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "A set of tools for JavaScript development",
+  "keywords": [
+    "defer",
+    "event",
+    "emitter",
+    "mapper",
+    "optional"
+  ],
   "main": "./dist/index.js",
   "directories": {
     "lib": "dist",

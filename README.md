@@ -1,4 +1,4 @@
-## A set of tools for a JavaScript developer
+## A set of tools for JavaScript development
 
 ### Installation
 
