@@ -10,3 +10,11 @@ describe("main module test", function() {
         expect(require("../../dist").optional).to.be.a("function");
     });
 });
+
+describe("ext-clone module test", function() {
+    it("should have a proper api", function() {
+        expect(require("../../dist/ext-clone").enable).to.be.a("function");
+        expect(require("../../dist/ext-clone").disable).to.be.a("function");
+        expect(require("../../dist/ext-clone").getTypes).to.be.a("function");
+    });
+});

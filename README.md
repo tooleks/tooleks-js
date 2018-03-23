@@ -75,6 +75,45 @@ const result = mapper.map(user, "api.v1.user", "app.user");
 console.log(result); // {id: 1, fullName: "Anna P."}
 ```
 
+#### `clone` extension
+
+The purpose of `clone` extension is to provide a handy mechanism for objects deep cloning. It supports `Boolean`, `Number`, `String`, `Array`, `Map`, `Date`, `Object`, `Function` types cloning.
+
+```JavaScript
+require("tooleks/ext-clone").enable();
+
+const user = {
+    id: 1,
+    firstName: "Anna",
+    lastName: "P.",
+};
+
+const userClone = user.clone();
+
+userClone.fullName = "Anna P.";
+
+console.log(JSON.stringify(userClone) !== JSON.stringify(user)); // true
+```
+
+To customize the default behavior of `clone` extension for your class initialize the `clone` function;
+
+```JavaScript
+require("tooleks/ext-clone").enable();
+
+function MyClass() {
+    //
+}
+
+MyClass.prototype.clone = function() {
+    return "Hello, world!";
+};
+
+const myClass = new MyClass();
+
+const myClassClone = myClass.clone();
+
+console.log(myClassClone); // "Hello, world!"
+```
 
 #### `optional` function
 
