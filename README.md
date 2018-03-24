@@ -43,7 +43,7 @@ const user = {
     lastName: "P.",
 };
 
-const eventEmitter.emit("userCreated", user);
+eventEmitter.emit("userCreated", user);
 
 off();
 ```
