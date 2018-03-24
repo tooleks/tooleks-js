@@ -92,7 +92,7 @@ eval("/* eslint-disable */\n\n\nfunction enable() {\n    Boolean.prototype.clone
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\nconst extensionClone = __webpack_require__(/*! ./ext-clone */ \"./src/ext-clone/ext-clone.js\");\n\nmodule.exports = extensionClone;\n\n//# sourceURL=webpack:///./src/ext-clone/index.js?");
+eval("\n\nconst extClone = __webpack_require__(/*! ./ext-clone */ \"./src/ext-clone/ext-clone.js\");\n\nmodule.exports = extClone;\n\n//# sourceURL=webpack:///./src/ext-clone/index.js?");
 
 /***/ })
 
