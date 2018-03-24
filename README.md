@@ -10,17 +10,22 @@ npm install --save tooleks
 
 #### `Defer` class
 
-The purpose of the `Defer` class is to expose the associated `Promise` instance that can be used for signaling the successful or unsuccessful completion of the task.
+The purpose of the `Defer` class is to expose the associated `Promise` instance that can be used for retrieving the result of the task.
 
 ```JavaScript
 const Defer = require("tooleks").Defer;
 
 const defer = new Defer();
 
-defer.resolve("resolvedValue");
+const user = {
+    firstName: "Anna",
+    lastName: "P.",
+};
 
-defer.promisify().then((value) => {
-    console.log(value); // "resolvedValue"
+defer.resolve(user);
+
+defer.promisify().then((user) => {
+    console.log(user); // {firstName: "Anna P.", lastName: "P."}
 });
 ```
 
@@ -34,11 +39,10 @@ const EventEmitter = require("tooleks").EventEmitter;
 const eventEmitter = new EventEmitter();
 
 const off = eventEmitter.on("userCreated", (user) => {
-    console.log(user); // {id: 1, firstName: "Anna P.", lastName: "P."}
+    console.log(user); // {firstName: "Anna P.", lastName: "P."}
 });
 
 const user = {
-    id: 1,
     firstName: "Anna",
     lastName: "P.",
 };
@@ -59,20 +63,18 @@ const mapper = new Mapper();
 
 mapper.registerResolver("api.v1.user", "app.user", (user) => {
     return {
-        id: user.id,
         fullName: user.firstName + " " + user.lastName,
     };
 });
 
 const user = {
-    id: 1,
     firstName: "Anna",
     lastName: "P.",
 };
 
 const result = mapper.map(user, "api.v1.user", "app.user");
 
-console.log(result); // {id: 1, fullName: "Anna P."}
+console.log(result); // {fullName: "Anna P."}
 ```
 
 #### `clone` extension
@@ -83,14 +85,13 @@ The purpose of `clone` extension is to provide a handy mechanism for objects dee
 require("tooleks/ext-clone").enable();
 
 const user = {
-    id: 1,
     firstName: "Anna",
     lastName: "P.",
 };
 
 const userClone = user.clone();
 
-userClone.fullName = "Anna P.";
+userClone.lastName = "Po.";
 
 console.log(JSON.stringify(userClone) !== JSON.stringify(user)); // true
 ```
@@ -100,19 +101,24 @@ To customize the default behavior of `clone` extension for your class initialize
 ```JavaScript
 require("tooleks/ext-clone").enable();
 
-function MyClass() {
-    //
+function User(firstName, lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
 }
 
-MyClass.prototype.clone = function() {
-    return "Hello, world!";
+User.prototype.clone = function() {
+    const firstName = this.firstName.clone();
+    const lastName = this.lastName.clone();
+    return new User(firstName, lastName);
 };
 
-const myClass = new MyClass();
+const user = new User("Anna", "P.");
 
-const myClassClone = myClass.clone();
+const userClone = user.clone();
 
-console.log(myClassClone); // "Hello, world!"
+userClone.lastName = "Po.";
+
+console.log(JSON.stringify(userClone) !== JSON.stringify(user)); // true
 ```
 
 #### `optional` function
@@ -122,9 +128,12 @@ The purpose of the `optional` function is to suppress possible errors while call
 ```JavaScript
 const optional = require("tooleks").optional;
 
-const object = {};
+const user = {
+    firstName: "Anna",
+    lastName: "P.",
+};
 
-const result = optional(() => optional.undefined.undefined, "defaultValue");
+const fullName = optional(() => user.profile.phoneNumber, null);
 
-console.log(result); // "defaultValue"
+console.log(fullName); // null
 ```
