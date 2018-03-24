@@ -118,6 +118,7 @@ const clonedUser = user.clone();
 
 clonedUser.lastName = "Po.";
 
+console.log(clonedUser instanceof User); // true
 console.log(JSON.stringify(clonedUser) !== JSON.stringify(user)); // true
 ```
 
