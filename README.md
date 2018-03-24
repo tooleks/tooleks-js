@@ -133,7 +133,7 @@ const user = {
     lastName: "P.",
 };
 
-const fullName = optional(() => user.profile.phoneNumber, null);
+const phoneNumber = optional(() => user.profile.phoneNumber, null);
 
-console.log(fullName); // null
+console.log(phoneNumber); // null
 ```
