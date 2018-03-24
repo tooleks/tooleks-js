@@ -72,14 +72,14 @@ const user = {
     lastName: "P.",
 };
 
-const result = mapper.map(user, "api.v1.user", "app.user");
+const userMapped = mapper.map(user, "api.v1.user", "app.user");
 
-console.log(result); // {fullName: "Anna P."}
+console.log(userMapped); // {fullName: "Anna P."}
 ```
 
 #### `clone` extension
 
-The purpose of `clone` extension is to provide a handy mechanism for objects deep cloning. It supports `Boolean`, `Number`, `String`, `Array`, `Map`, `Date`, `Object`, `Function` types cloning.
+The purpose of `clone` extension is to provide a handy mechanism for objects deep cloning. It supports `Boolean`, `Number`, `String`, `Array`, `Map`, `Date`, `Object`, `Function` types.
 
 ```JavaScript
 require("tooleks/ext-clone").enable();
@@ -96,7 +96,7 @@ userClone.lastName = "Po.";
 console.log(JSON.stringify(userClone) !== JSON.stringify(user)); // true
 ```
 
-To customize the default behavior of `clone` extension for your class initialize the `clone` function;
+To customize the default behavior of `clone` extension for your class initialize the `clone` method.
 
 ```JavaScript
 require("tooleks/ext-clone").enable();
@@ -123,7 +123,7 @@ console.log(JSON.stringify(userClone) !== JSON.stringify(user)); // true
 
 #### `optional` function
 
-The purpose of the `optional` function is to suppress possible errors while calling undefined properties or methods and return the default value instead.
+The purpose of the `optional` function is to suppress errors while calling undefined properties or methods and return the default value instead.
 
 ```JavaScript
 const optional = require("tooleks").optional;
@@ -135,5 +135,5 @@ const user = {
 
 const phoneNumber = optional(() => user.profile.phoneNumber, null);
 
-console.log(phoneNumber); // null
+console.log(phoneNumber); // null, damn it.
 ```
