@@ -124,7 +124,7 @@ console.log(JSON.stringify(clonedUser) !== JSON.stringify(user)); // true
 
 #### `optional` function
 
-The purpose of the `optional` function is to suppress errors while calling undefined properties or methods and return the default value instead.
+The purpose of the `optional` function is to suppress errors while calling callback function and return the default value instead.
 
 ```JavaScript
 const {optional} = require("tooleks");
