@@ -1,5 +1,5 @@
 "use strict";
 
-const extensionClone = require("./ext-clone");
+const extClone = require("./ext-clone");
 
-module.exports = extensionClone;
+module.exports = extClone;

@@ -1,6 +1,6 @@
 "use strict";
 
-const mainConfig = require("./main.config");
+const indexConfig = require("./index.config");
 const extCloneConfig = require("./ext-clone.config");
 
-module.exports = [mainConfig, extCloneConfig];
+module.exports = [indexConfig, extCloneConfig];
