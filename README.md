@@ -13,7 +13,7 @@ npm install --save tooleks
 The purpose of the `Defer` class is to expose the associated `Promise` instance that can be used for retrieving the result of the task.
 
 ```JavaScript
-const Defer = require("tooleks").Defer;
+const {Defer} = require("tooleks");
 
 const defer = new Defer();
 
@@ -34,7 +34,7 @@ defer.promisify().then((user) => {
 The purpose of the `EventEmitter` class is to notify listeners when the event occurs.
 
 ```JavaScript
-const EventEmitter = require("tooleks").EventEmitter;
+const {EventEmitter} = require("tooleks");
 
 const eventEmitter = new EventEmitter();
 
@@ -57,7 +57,7 @@ off();
 The purpose of the `Mapper` class is to transform the initial data formats into the desired data formats.
 
 ```JavaScript
-const Mapper = require("tooleks").Mapper;
+const {Mapper} = require("tooleks");
 
 const mapper = new Mapper();
 
@@ -127,7 +127,7 @@ console.log(JSON.stringify(clonedUser) !== JSON.stringify(user)); // true
 The purpose of the `optional` function is to suppress errors while calling undefined properties or methods and return the default value instead.
 
 ```JavaScript
-const optional = require("tooleks").optional;
+const {optional} = require("tooleks");
 
 const user = {
     firstName: "Anna",
