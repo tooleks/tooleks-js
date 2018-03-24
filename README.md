@@ -72,9 +72,9 @@ const user = {
     lastName: "P.",
 };
 
-const userMapped = mapper.map(user, "api.v1.user", "app.user");
+const mappedUser = mapper.map(user, "api.v1.user", "app.user");
 
-console.log(userMapped); // {fullName: "Anna P."}
+console.log(mappedUser); // {fullName: "Anna P."}
 ```
 
 #### `clone` extension
@@ -89,11 +89,11 @@ const user = {
     lastName: "P.",
 };
 
-const userClone = user.clone();
+const clonedUser = user.clone();
 
-userClone.lastName = "Po.";
+clonedUser.lastName = "Po.";
 
-console.log(JSON.stringify(userClone) !== JSON.stringify(user)); // true
+console.log(JSON.stringify(clonedUser) !== JSON.stringify(user)); // true
 ```
 
 To customize the default behavior of `clone` extension for your class initialize the `clone` method.
@@ -114,11 +114,11 @@ User.prototype.clone = function() {
 
 const user = new User("Anna", "P.");
 
-const userClone = user.clone();
+const clonedUser = user.clone();
 
-userClone.lastName = "Po.";
+clonedUser.lastName = "Po.";
 
-console.log(JSON.stringify(userClone) !== JSON.stringify(user)); // true
+console.log(JSON.stringify(clonedUser) !== JSON.stringify(user)); // true
 ```
 
 #### `optional` function
