@@ -6,8 +6,9 @@ module.exports = {
     mode: process.env.NODE_ENV || "production",
     output: {
         filename: "[name].js",
-        // TODO: Replace with "umd" when https://github.com/webpack/webpack/issues/6784 will be fixed.
-        libraryTarget: "commonjs",
+        libraryTarget: "umd",
+        // Note: The following line is needed to be able to build "umd" module compatible with Node.js.
+        globalObject: `typeof self !== "undefined" ? self : this`,
     },
     module: {
         rules: [
@@ -16,6 +17,16 @@ module.exports = {
                 exclude: /node_modules/,
                 use: {
                     loader: "babel-loader",
+                },
+            },
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "eslint-loader",
+                    options: {
+                        fix: true,
+                    },
                 },
             },
         ],
