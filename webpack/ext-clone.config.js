@@ -9,6 +9,7 @@ module.exports = merge(commonConfig, {
         "ext-clone": path.resolve(__dirname, "../src/ext-clone/index.js"),
     },
     output: {
+        library: "tooleks/ext-clone",
         path: path.resolve(__dirname, "../dist"),
     },
 });
