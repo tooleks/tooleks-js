@@ -9,6 +9,7 @@ module.exports = merge(commonConfig, {
         index: path.resolve(__dirname, "../src/index.js"),
     },
     output: {
+        library: "tooleks",
         path: path.resolve(__dirname, "../dist"),
     },
 });
