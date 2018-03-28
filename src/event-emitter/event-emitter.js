@@ -21,7 +21,7 @@ class EventEmitter {
      */
     emit(eventName, payload) {
         if (typeof eventName !== "string") {
-            throw new TypeError("eventName should be a string.");
+            throw new TypeError("The \"eventName\" parameter should be a string.");
         }
 
         const event = this._events[eventName];
@@ -40,11 +40,11 @@ class EventEmitter {
      */
     on(eventName, listener) {
         if (typeof eventName !== "string") {
-            throw new TypeError("eventName should be a string.");
+            throw new TypeError("The \"eventName\" parameter should be a string.");
         }
 
         if (typeof listener !== "function") {
-            throw new TypeError("listener should be a function.");
+            throw new TypeError("The \"listener\" parameter should be a function.");
         }
 
         if (typeof this._events[eventName] === "undefined") {

@@ -101,7 +101,7 @@ class Defer {
      */
     onResolve(listener) {
         if (typeof listener !== "function") {
-            throw new TypeError("listener should be a function.");
+            throw new TypeError("The \"listener\" parameter should be a function.");
         }
 
         if (this._isResolved()) {
@@ -120,7 +120,7 @@ class Defer {
      */
     onReject(listener) {
         if (typeof listener !== "function") {
-            throw new TypeError("listener should be a function.");
+            throw new TypeError("The \"listener\" parameter should be a function.");
         }
 
         if (this._isRejected()) {

@@ -31,13 +31,13 @@ class Mapper {
      */
     registerResolver(from, to, resolver) {
         if (typeof from !== "string") {
-            throw new TypeError("From parameter should be a string.");
+            throw new TypeError("The \"from\" parameter should be a string.");
         }
         if (typeof to !== "string") {
-            throw new TypeError("To parameter should be a string.");
+            throw new TypeError("The \"to\" parameter should be a string.");
         }
         if (typeof resolver !== "function") {
-            throw new TypeError("Resolver parameter should be a string.");
+            throw new TypeError("The \"resolver\" parameter should be a function.");
         }
         if (typeof this._resolvers[from] === "undefined") {
             this._resolvers[from] = {};
