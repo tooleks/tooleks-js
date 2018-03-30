@@ -3,7 +3,9 @@
 const expect = require("chai").expect;
 const sinon = require("sinon");
 
-[require("../../../src").Mapper, require("../../../dist").Mapper].forEach((Mapper) => {
+const providers = [require("../../../src").Mapper, require("../../../dist").Mapper];
+
+providers.forEach((Mapper) => {
     describe("Mapper class test", function() {
         let mapper, from, to, spyResolver, value;
 

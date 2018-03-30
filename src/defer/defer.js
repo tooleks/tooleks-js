@@ -1,6 +1,19 @@
 "use strict";
 
 /**
+ * Assert "listener" parameter.
+ *
+ * @param {*} listener
+ * @return {void}
+ * @throws TypeError
+ */
+function assertListenerParameter(listener) {
+    if (typeof listener !== "function") {
+        throw new TypeError("The \"listener\" parameter should be a function.");
+    }
+}
+
+/**
  * Defer class.
  */
 class Defer {
@@ -16,16 +29,15 @@ class Defer {
     }
 
     /**
-     * Call a callback function with a deferred value.
+     * Call a listener function with a deferred value.
      *
-     * @param callback
+     * @param listener
      * @return {void}
      * @private
      */
-    _callCallback(callback) {
-        if (typeof callback === "function") {
-            callback(this._defferedValue);
-        }
+    _callListener(listener) {
+        assertListenerParameter(listener);
+        listener(this._defferedValue);
     }
 
     /**
@@ -68,10 +80,9 @@ class Defer {
         if (this._isResolvedOrRejected()) {
             return;
         }
-
         this._defferedValue = value;
         this._resolved = true;
-        this._resolveListeners.forEach((listener) => this._callCallback(listener));
+        this._resolveListeners.forEach((listener) => this._callListener(listener));
         this._resolveListeners = [];
     }
 
@@ -85,10 +96,9 @@ class Defer {
         if (this._isResolvedOrRejected()) {
             return;
         }
-
         this._defferedValue = error;
         this._rejected = true;
-        this._rejectListeners.forEach((listener) => this._callCallback(listener));
+        this._rejectListeners.forEach((listener) => this._callListener(listener));
         this._rejectListeners = [];
     }
 
@@ -100,12 +110,9 @@ class Defer {
      * @return {void}
      */
     onResolve(listener) {
-        if (typeof listener !== "function") {
-            throw new TypeError("The \"listener\" parameter should be a function.");
-        }
-
+        assertListenerParameter(listener);
         if (this._isResolved()) {
-            this._callCallback(listener);
+            this._callListener(listener);
         } else {
             this._resolveListeners.push(listener);
         }
@@ -119,12 +126,9 @@ class Defer {
      * @return {void}
      */
     onReject(listener) {
-        if (typeof listener !== "function") {
-            throw new TypeError("The \"listener\" parameter should be a function.");
-        }
-
+        assertListenerParameter(listener);
         if (this._isRejected()) {
-            this._callCallback(listener);
+            this._callListener(listener);
         } else {
             this._rejectListeners.push(listener);
         }

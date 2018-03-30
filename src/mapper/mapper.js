@@ -1,6 +1,45 @@
 "use strict";
 
 /**
+ * Assert "from" parameter.
+ *
+ * @param {*} from
+ * @return {void}
+ * @throws TypeError
+ */
+function assertFromParameter(from) {
+    if (typeof from !== "string") {
+        throw new TypeError("The \"from\" parameter should be a string.");
+    }
+}
+
+/**
+ * Assert "to" parameter.
+ *
+ * @param {*} to
+ * @return {void}
+ * @throws TypeError
+ */
+function assertToParameter(to) {
+    if (typeof to !== "string") {
+        throw new TypeError("The \"to\" parameter should be a string.");
+    }
+}
+
+/**
+ * Assert "resolver" parameter.
+ *
+ * @param {*} resolver
+ * @return {void}
+ * @throws TypeError
+ */
+function assertResolverParameter(resolver) {
+    if (typeof resolver !== "function") {
+        throw new TypeError("The \"resolver\" parameter should be a function.");
+    }
+}
+
+/**
  * Mapper class.
  */
 class Mapper {
@@ -30,15 +69,9 @@ class Mapper {
      * @return {void}
      */
     registerResolver(from, to, resolver) {
-        if (typeof from !== "string") {
-            throw new TypeError("The \"from\" parameter should be a string.");
-        }
-        if (typeof to !== "string") {
-            throw new TypeError("The \"to\" parameter should be a string.");
-        }
-        if (typeof resolver !== "function") {
-            throw new TypeError("The \"resolver\" parameter should be a function.");
-        }
+        assertFromParameter(from);
+        assertToParameter(to);
+        assertResolverParameter(resolver);
         if (typeof this._resolvers[from] === "undefined") {
             this._resolvers[from] = {};
         }

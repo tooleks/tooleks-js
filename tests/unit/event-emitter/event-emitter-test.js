@@ -3,7 +3,9 @@
 const expect = require("chai").expect;
 const sinon = require("sinon");
 
-[require("../../../src").EventEmitter, require("../../../dist").EventEmitter].forEach((EventEmitter) => {
+const providers = [require("../../../src").EventEmitter, require("../../../dist").EventEmitter];
+
+providers.forEach((EventEmitter) => {
     describe("EventEmitter class test", function() {
         let eventEmitter, eventName, payload, spyListener;
 

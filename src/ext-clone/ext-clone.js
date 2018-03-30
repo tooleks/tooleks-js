@@ -70,14 +70,9 @@ function enable() {
 }
 
 function disable() {
-    Boolean.prototype.clone = undefined;
-    Number.prototype.clone = undefined;
-    String.prototype.clone = undefined;
-    Array.prototype.clone = undefined;
-    Map.prototype.clone = undefined;
-    Date.prototype.clone = undefined;
-    Object.prototype.clone = undefined;
-    Function.prototype.clone = undefined;
+    getTypes().forEach((type) => {
+        type.prototype.clone = undefined;
+    });
 }
 
 function getTypes() {

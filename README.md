@@ -25,8 +25,40 @@ const user = {
 defer.resolve(user);
 
 defer.promisify().then((user) => {
-    console.log(user); // {firstName: "Anna P.", lastName: "P."}
+    console.log(user); // { firstName: "Anna P.", lastName: "P." }
 });
+```
+
+#### `DependencyContainer` class
+
+The purpose of the `DependencyContainer` class is to manage dependencies a lot of different objects with a lot of dependencies.
+
+```JavaScript
+const {DependencyContainer} = require("tooleks");
+
+const dc = new DependencyContainer();
+
+function Data() {
+    this.items = [
+        { firstName: "Anna P.", lastName: "P." }
+    ];
+}
+
+function DataProvider(data) {
+    this.data = data;
+}
+
+function UserService(dataProvider) {
+    this.dataProvider = dataProvider;
+}
+
+dc.register("DataProvider", DataProvider);
+dc.register("UserService", UserService, ["DataProvider"]);
+
+const userService = dc.get("UserService");
+
+console.log(userService); // UserService { dataProvider: DataProvider { data: Data { items: [Array] } } }
+
 ```
 
 #### `EventEmitter` class
@@ -39,7 +71,7 @@ const {EventEmitter} = require("tooleks");
 const eventEmitter = new EventEmitter();
 
 const off = eventEmitter.on("userCreated", (user) => {
-    console.log(user); // {firstName: "Anna P.", lastName: "P."}
+    console.log(user); // { firstName: "Anna P.", lastName: "P." }
 });
 
 const user = {
@@ -74,7 +106,7 @@ const user = {
 
 const mappedUser = mapper.map(user, "api.v1.user", "app.user");
 
-console.log(mappedUser); // {fullName: "Anna P."}
+console.log(mappedUser); // { fullName: "Anna P." }
 ```
 
 #### `clone` extension

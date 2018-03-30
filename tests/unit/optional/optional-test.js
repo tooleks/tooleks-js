@@ -2,7 +2,9 @@
 
 const expect = require("chai").expect;
 
-[require("../../../src").optional, require("../../../dist").optional].forEach((optional) => {
+const providers = [require("../../../src").optional, require("../../../dist").optional];
+
+providers.forEach((optional) => {
     describe("optional function test", function() {
         let object, customValue;
 

@@ -2,7 +2,9 @@
 
 const expect = require("chai").expect;
 
-[require("../../../src/ext-clone"), require("../../../dist/ext-clone")].forEach((extClone) => {
+const providers = [require("../../../src/ext-clone"), require("../../../dist/ext-clone")];
+
+providers.forEach((extClone) => {
     describe("clone function test", function() {
         let originalBoolean,
             originalNumber,
