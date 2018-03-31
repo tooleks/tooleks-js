@@ -6,105 +6,125 @@ const providers = [require("../../../src").DependencyContainer, require("../../.
 
 providers.forEach((DependencyContainer) => {
     describe("DependencyContainer class test", function() {
-        let dc, ZeroLevel, FirstLevel, SecondLevel, functionDependency;
+        let dc, NoDependency, TwoDependencies, functionDependency;
 
         beforeEach(function() {
             dc = new DependencyContainer();
-            ZeroLevel = function() {
+            NoDependency = function() {
                 // This prototype has no dependencies.
             };
-            FirstLevel = function(zero) {
-                this.zero = zero;
-            };
-            SecondLevel = function(first) {
+            TwoDependencies = function(first, second) {
                 this.first = first;
+                this.second = second;
             };
-            functionDependency = () => 42;
+            functionDependency = () => {
+                return {};
+            };
         });
 
         it("should have a proper api", function() {
             expect(dc).to.be.an.instanceof(DependencyContainer);
             expect(dc.has).to.be.a("function");
             expect(dc.get).to.be.a("function");
-            expect(dc.register).to.be.a("function");
+            expect(dc.registerBinding).to.be.a("function");
+            expect(dc.removeBinding).to.be.a("function");
         });
 
-        it("should return this on register call", function() {
-            expect(dc.register("Zero", ZeroLevel)).to.be.an.instanceof(DependencyContainer);
+        it("should return this on register binding", function() {
+            expect(dc.registerBinding("NoDependency", NoDependency)).to.be.equal(dc);
+        });
+
+        it("should return this on remove binding", function() {
+            expect(dc.removeBinding("NoDependency")).to.be.equal(dc);
         });
 
         it("should throw an error on get call when type wasn't registered", function() {
-            expect(() => dc.get("Zero")).to.throw();
+            expect(() => dc.get("NoDependency")).to.throw();
         });
 
-        it("should throw an error on register call when id is not a valid type", function() {
-            expect(() => dc.register(null, ZeroLevel)).to.throw();
+        it("should throw an error on register binding when identifier is not a valid type", function() {
+            expect(() => dc.registerBinding(null, NoDependency)).to.throw();
         });
 
-        it("should throw an error on register call when type is not a valid type", function() {
-            expect(() => dc.register("Zero", null)).to.throw();
+        it("should throw an error on register binding when type is not a valid type", function() {
+            expect(() => dc.registerBinding("NoDependency", null)).to.throw();
         });
 
-        it("should throw an error on register call when dependencies is not a valid type", function() {
-            expect(() => dc.register("Zero", ZeroLevel, null)).to.throw();
+        it("should throw an error on register binding when dependencies is not a valid type", function() {
+            expect(() => {
+                dc.registerBinding("NoDependency", NoDependency, {
+                    dependencies: null,
+                });
+            }).to.throw();
+            expect(() => {
+                dc.registerBinding("NoDependency", NoDependency, {
+                    dependencies: [null],
+                });
+            }).to.throw();
         });
 
-        it("should throw an error on register call when type dependencies were not specified", function() {
-            expect(() => dc.register("Second", SecondLevel)).to.throw();
+        it("should throw an error on register binding when singleton is not a valid type", function() {
+            expect(() => {
+                dc.registerBinding("NoDependency", NoDependency, {
+                    singleton: null,
+                });
+            }).to.throw();
         });
 
-        it("should register entry and get instance", function() {
-            dc.register("Zero", ZeroLevel);
-            const zeroLevel = dc.get("Zero");
-            expect(zeroLevel).to.be.an.instanceof(ZeroLevel);
+        it("should throw an error on register binding when dependencies were not specified", function() {
+            expect(() => dc.registerBinding("TwoDependencies", TwoDependencies)).to.throw();
         });
 
-        it("should register entry and have instance", function() {
-            expect(dc.has("Zero")).to.be.equal(false);
-            dc.register("Zero", ZeroLevel);
-            expect(dc.has("Zero")).to.be.equal(true);
+        it("should register binding and remove binding", function() {
+            expect(dc.has("NoDependency")).to.be.equal(false);
+            dc.registerBinding("NoDependency", NoDependency);
+            expect(dc.has("NoDependency")).to.be.equal(true);
+            expect(dc.get("NoDependency")).to.be.an.instanceof(NoDependency);
+            dc.removeBinding("NoDependency");
+            expect(dc.has("NoDependency")).to.be.equal(false);
+            expect(() => dc.get("NoDependency")).to.throw();
         });
 
-        it("should register entry and get instance", function() {
-            dc.register("Zero", ZeroLevel);
-            dc.register("First", FirstLevel, ["Zero"]);
-            dc.register("Second", SecondLevel, ["First"]);
-
-            const secondLevelFirstCall = dc.get("Second");
-            const secondLevelSecondCall = dc.get("Second");
-
-            expect(secondLevelFirstCall).to.be.not.equal(secondLevelSecondCall);
-            expect(secondLevelFirstCall).to.be.an.instanceof(SecondLevel);
-            expect(secondLevelSecondCall).to.be.an.instanceof(SecondLevel);
-
-            expect(secondLevelFirstCall.first).to.be.not.equal(secondLevelSecondCall.first);
-            expect(secondLevelFirstCall.first).to.be.an.instanceof(FirstLevel);
-            expect(secondLevelSecondCall.first).to.be.an.instanceof(FirstLevel);
-
-            expect(secondLevelFirstCall.first.zero).to.be.not.equal(secondLevelSecondCall.first.zero);
-            expect(secondLevelFirstCall.first.zero).to.be.an.instanceof(ZeroLevel);
-            expect(secondLevelSecondCall.first.zero).to.be.an.instanceof(ZeroLevel);
+        it("should register binding and get every time a new instance", function() {
+            dc.registerBinding("NoDependency", NoDependency);
+            const noDependencyFirst = dc.get("NoDependency");
+            expect(noDependencyFirst).to.be.an.instanceof(NoDependency);
+            const noDependencySecond = dc.get("NoDependency");
+            expect(noDependencySecond).to.be.an.instanceof(NoDependency);
+            expect(noDependencyFirst).to.be.not.equal(noDependencySecond);
         });
 
-        it("should register singleton entry and get instance", function() {
-            dc.register("Zero", ZeroLevel);
-            dc.register("First", FirstLevel, ["Zero"]);
-            dc.register("Second", SecondLevel, ["First"], {singleton: true});
+        it("should register singleton binding and get every time the same instance", function() {
+            dc.registerBinding("NoDependency", NoDependency, {
+                singleton: true,
+            });
+            const noDependencyFirstCall = dc.get("NoDependency");
+            expect(noDependencyFirstCall).to.be.an.instanceof(NoDependency);
+            const noDependencySecondCall = dc.get("NoDependency");
+            expect(noDependencySecondCall).to.be.an.instanceof(NoDependency);
+            expect(noDependencyFirstCall).to.be.equal(noDependencySecondCall);
+        });
 
-            const secondLevelFirstCall = dc.get("Second");
-            const secondLevelSecondCall = dc.get("Second");
+        it("should register binding and get a new instance each time", function() {
+            dc.registerBinding("NoDependency", NoDependency);
+            dc.registerBinding("TwoDependencies", TwoDependencies, {
+                dependencies: ["NoDependency", functionDependency],
+            });
 
-            expect(secondLevelFirstCall).to.be.equal(secondLevelSecondCall);
-            expect(secondLevelFirstCall).to.be.an.instanceof(SecondLevel);
-            expect(secondLevelSecondCall).to.be.an.instanceof(SecondLevel);
+            const twoDependenciesFirstCall = dc.get("TwoDependencies");
+            const twoDependenciesSecondCall = dc.get("TwoDependencies");
 
-            expect(secondLevelFirstCall.first).to.be.equal(secondLevelSecondCall.first);
-            expect(secondLevelFirstCall.first).to.be.an.instanceof(FirstLevel);
-            expect(secondLevelSecondCall.first).to.be.an.instanceof(FirstLevel);
+            expect(twoDependenciesFirstCall).to.be.not.equal(twoDependenciesSecondCall);
+            expect(twoDependenciesFirstCall).to.be.an.instanceof(TwoDependencies);
+            expect(twoDependenciesSecondCall).to.be.an.instanceof(TwoDependencies);
 
-            expect(secondLevelFirstCall.first.zero).to.be.equal(secondLevelSecondCall.first.zero);
-            expect(secondLevelFirstCall.first.zero).to.be.an.instanceof(ZeroLevel);
-            expect(secondLevelSecondCall.first.zero).to.be.an.instanceof(ZeroLevel);
+            expect(twoDependenciesFirstCall.first).to.be.not.equal(twoDependenciesSecondCall.first);
+            expect(twoDependenciesFirstCall.first).to.be.an.instanceof(NoDependency);
+            expect(twoDependenciesSecondCall.first).to.be.an.instanceof(NoDependency);
+
+            expect(twoDependenciesFirstCall.second).to.be.not.equal(twoDependenciesSecondCall.second);
+            expect(twoDependenciesFirstCall.second).to.be.an(typeof functionDependency());
+            expect(twoDependenciesSecondCall.second).to.be.an(typeof functionDependency());
         });
     });
 });

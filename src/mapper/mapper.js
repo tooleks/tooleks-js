@@ -66,7 +66,7 @@ class Mapper {
      * @param {String} from
      * @param {String} to
      * @param {Function} resolver
-     * @return {void}
+     * @return {Mapper}
      */
     registerResolver(from, to, resolver) {
         assertFromParameter(from);
@@ -76,6 +76,7 @@ class Mapper {
             this._resolvers[from] = {};
         }
         this._resolvers[from][to] = resolver;
+        return this;
     }
 
     /**
@@ -83,10 +84,11 @@ class Mapper {
      *
      * @param {String} from
      * @param {String} to
-     * @return {void}
+     * @return {Mapper}
      */
     removeResolver(from, to) {
         delete this._resolvers[from][to];
+        return this;
     }
 
     /**

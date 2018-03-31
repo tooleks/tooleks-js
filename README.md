@@ -38,27 +38,29 @@ const {DependencyContainer} = require("tooleks");
 
 const dc = new DependencyContainer();
 
-function Data() {
-    this.items = [
-        { firstName: "Anna P.", lastName: "P." }
-    ];
-}
+const users = [
+    { firstName: "Anna P.", lastName: "P." }
+];
 
-function DataProvider(data) {
-    this.data = data;
+function DataProvider(users) {
+    this.users = users;
 }
 
 function UserService(dataProvider) {
     this.dataProvider = dataProvider;
 }
 
-dc.register("DataProvider", DataProvider);
-dc.register("UserService", UserService, ["DataProvider"]);
+dc.registerBinding("DataProvider", DataProvider, {
+    dependencies: [() => users],
+});
+dc.registerBinding("UserService", UserService, {
+    dependencies: ["DataProvider"],
+    singleton: false,
+});
 
 const userService = dc.get("UserService");
 
-console.log(userService); // UserService { dataProvider: DataProvider { data: Data { items: [Array] } } }
-
+console.log(userService); // UserService { dataProvider: DataProvider { users: [ [Object] ] } }
 ```
 
 #### `EventEmitter` class

@@ -37,7 +37,6 @@ function assertDependenciesParameter(dependencies) {
     if (!Array.isArray(dependencies)) {
         throw new TypeError("The \"dependencies\" parameter should be an array.");
     }
-
     dependencies.forEach((dependency) => {
         if (typeof dependency !== "string" && typeof dependency !== "function") {
             throw new TypeError("The \"dependencies\" parameter should be an array of strings or functions.");
@@ -46,15 +45,15 @@ function assertDependenciesParameter(dependencies) {
 }
 
 /**
- * Assert "options" parameter.
+ * Assert "singleton" parameter.
  *
- * @param {*} options
+ * @param {*} singleton
  * @return {void}
  * @throws TypeError
  */
-function assertOptionsParameter(options) {
-    if (typeof options !== "object" || options === null) {
-        throw new TypeError("The \"options\" parameter should be an object.");
+function assertSingletonParameter(singleton) {
+    if (typeof singleton !== "boolean") {
+        throw new TypeError("The \"singleton\" parameter should be a boolean.");
     }
 }
 
@@ -78,7 +77,18 @@ class DependencyContainer {
      * @private
      */
     _createInstance(binding) {
-        const dependencies = binding.dependencies.map((dependency) => {
+        const dependencies = this._resolveDependencies(binding.parameters.dependencies);
+        return new binding.type(...dependencies);
+    }
+
+    /**
+     * Resolve all of the dependencies from a binding.
+     *
+     * @param {Array<String|Function>} dependencies
+     * @private
+     */
+    _resolveDependencies(dependencies) {
+        return dependencies.map((dependency) => {
             if (typeof dependency === "string") {
                 return this.get(dependency);
             } else if (typeof dependency === "function") {
@@ -86,12 +96,11 @@ class DependencyContainer {
             }
             throw new TypeError("Invalid dependency type.");
         });
-        return new binding.type(...dependencies);
     }
 
     /**
-     * Returns true if the container can return an entry for the given identifier.
-     * Returns false otherwise.
+     * Return true if the container can return the binding for the given identifier.
+     * Return false otherwise.
      *
      * @param {String} identifier
      * @return {Boolean}
@@ -102,9 +111,9 @@ class DependencyContainer {
     }
 
     /**
-     * Finds an entry of the container by its identifier and returns it.
+     * Find the binding of the container by its identifier and return it.
      *
-     * @param identifier
+     * @param {String} identifier
      */
     get(identifier) {
         assertIdentifierParameter(identifier);
@@ -112,35 +121,47 @@ class DependencyContainer {
             throw new Error(`The "${identifier}" binding not found.`);
         }
         const binding = this._bindings[identifier];
-        if (binding.options.singleton && typeof binding.instance !== "undefined") {
+        // Get a singleton instance.
+        if (binding.parameters.singleton && typeof binding.instance !== "undefined") {
             return binding.instance;
         }
+        // Create a new instance.
         const instance = this._createInstance(binding);
-        if (binding.options.singleton) {
+        if (binding.parameters.singleton) {
             binding.instance = instance;
         }
         return instance;
     }
 
     /**
-     * Register a new entry in the container.
+     * Register a new binding in the container.
      *
      * @param {String} identifier
      * @param {Function} type
      * @param {Array<String|Function>} dependencies
-     * @param {Object} options
+     * @param {Boolean} singleton
      * @return {DependencyContainer}
      */
-    register(identifier, type, dependencies = [], options = {}) {
+    registerBinding(identifier, type, {dependencies = [], singleton = false} = {}) {
         assertIdentifierParameter(identifier);
         assertTypeParameter(type);
         assertDependenciesParameter(dependencies);
-        assertOptionsParameter(options);
+        assertSingletonParameter(singleton);
         if (type.length !== dependencies.length) {
             throw new Error(`Invalid number of dependencies were specified for ${identifier}.`);
         }
-        const singleton = Boolean(options.singleton);
-        this._bindings[identifier] = {type, dependencies, "options": {singleton}};
+        this._bindings[identifier] = {type, "parameters": {dependencies, singleton}};
+        return this;
+    }
+
+    /**
+     * Remove the binding from the container.
+     *
+     * @param {String} identifier
+     * @return {DependencyContainer}
+     */
+    removeBinding(identifier) {
+        delete this._bindings[identifier];
         return this;
     }
 }
