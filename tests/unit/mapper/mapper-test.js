@@ -26,6 +26,14 @@ providers.forEach((Mapper) => {
             expect(mapper.map).to.be.a("function");
         });
 
+        it("should return this on register resolver", function() {
+            expect(mapper.registerResolver(from, to, spyResolver)).to.be.equal(mapper);
+        });
+
+        it("should return this on remove resolver", function() {
+            expect(mapper.removeResolver(from, to)).to.be.equal(mapper);
+        });
+
         it("should not throw error on register resolver with valid values", function() {
             expect(() => mapper.registerResolver(from, to, spyResolver)).to.not.throw();
         });

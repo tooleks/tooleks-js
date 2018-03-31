@@ -36,23 +36,32 @@ The purpose of the `DependencyContainer` class is to manage dependencies a lot o
 ```JavaScript
 const {DependencyContainer} = require("tooleks");
 
-const dc = new DependencyContainer();
-
-const users = [
-    { firstName: "Anna P.", lastName: "P." }
-];
-
-function DataProvider(users) {
-    this.users = users;
+function DataProvider(data) {
+    this.data = data;
 }
 
 function UserService(dataProvider) {
     this.dataProvider = dataProvider;
 }
 
+const dc = new DependencyContainer();
+
 dc.registerBinding("DataProvider", DataProvider, {
-    dependencies: [() => users],
+    dependencies: [
+        function() {
+            return [
+                {firstName: "Anna P.", lastName: "P."},
+            ];
+        },
+    ],
+    singleton: true,
 });
+
+const dataProvider = dc.get("DataProvider");
+
+console.log(dataProvider instanceof DataProvider); // true
+console.log(dataProvider === dc.get("DataProvider")); // true
+
 dc.registerBinding("UserService", UserService, {
     dependencies: ["DataProvider"],
     singleton: false,
@@ -60,7 +69,8 @@ dc.registerBinding("UserService", UserService, {
 
 const userService = dc.get("UserService");
 
-console.log(userService); // UserService { dataProvider: DataProvider { users: [ [Object] ] } }
+console.log(userService instanceof UserService); // true
+console.log(dataProvider === dc.get("UserService")); // false
 ```
 
 #### `EventEmitter` class

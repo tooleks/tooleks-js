@@ -17,7 +17,7 @@ providers.forEach((DependencyContainer) => {
                 this.first = first;
                 this.second = second;
             };
-            functionDependency = () => {
+            functionDependency = function() {
                 return {};
             };
         });

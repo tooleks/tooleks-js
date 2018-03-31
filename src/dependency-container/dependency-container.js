@@ -114,6 +114,7 @@ class DependencyContainer {
      * Find the binding of the container by its identifier and return it.
      *
      * @param {String} identifier
+     * @return {Object}
      */
     get(identifier) {
         assertIdentifierParameter(identifier);
@@ -121,11 +122,9 @@ class DependencyContainer {
             throw new Error(`The "${identifier}" binding not found.`);
         }
         const binding = this._bindings[identifier];
-        // Get a singleton instance.
         if (binding.parameters.singleton && typeof binding.instance !== "undefined") {
             return binding.instance;
         }
-        // Create a new instance.
         const instance = this._createInstance(binding);
         if (binding.parameters.singleton) {
             binding.instance = instance;
@@ -161,7 +160,9 @@ class DependencyContainer {
      * @return {DependencyContainer}
      */
     removeBinding(identifier) {
-        delete this._bindings[identifier];
+        if (this.has(identifier)) {
+            delete this._bindings[identifier];
+        }
         return this;
     }
 }

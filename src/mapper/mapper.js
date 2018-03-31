@@ -87,7 +87,11 @@ class Mapper {
      * @return {Mapper}
      */
     removeResolver(from, to) {
-        delete this._resolvers[from][to];
+        assertFromParameter(from);
+        assertToParameter(to);
+        if (this.hasResolver(from, to)) {
+            delete this._resolvers[from][to];
+        }
         return this;
     }
 
@@ -116,6 +120,8 @@ class Mapper {
      * @return {Boolean}
      */
     hasResolver(from, to) {
+        assertFromParameter(from);
+        assertToParameter(to);
         try {
             this._assertResolver(from, to);
             return true;
@@ -133,6 +139,8 @@ class Mapper {
      * @return {*}
      */
     map(value, from, to) {
+        assertFromParameter(from);
+        assertToParameter(to);
         this._assertResolver(from, to);
         const resolver = this.getResolvers()[from][to];
         return resolver(value);

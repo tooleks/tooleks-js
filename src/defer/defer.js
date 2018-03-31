@@ -36,7 +36,6 @@ class Defer {
      * @private
      */
     _callListener(listener) {
-        assertListenerParameter(listener);
         listener(this._defferedValue);
     }
 
