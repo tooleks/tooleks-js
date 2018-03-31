@@ -160,6 +160,7 @@ class DependencyContainer {
      * @return {DependencyContainer}
      */
     removeBinding(identifier) {
+        assertIdentifierParameter(identifier);
         if (this.has(identifier)) {
             delete this._bindings[identifier];
         }
