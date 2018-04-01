@@ -135,7 +135,7 @@ class DependencyContainer {
             throw new Error(`The "${identifier}" binding not found.`);
         }
         const binding = this._bindings[identifier];
-        if (binding.singleton && typeof binding.instance !== "undefined") {
+        if (typeof binding.instance !== "undefined") {
             return binding.instance;
         }
         const instance = this._createInstance(binding);

@@ -10,7 +10,7 @@ npm install --save tooleks
 
 #### `Defer` class
 
-The purpose of the `Defer` class is to expose the associated `Promise` instance that can be used for retrieving the result of the task.
+The `Defer` class exposes the associated `Promise` instance that can be used for retrieving the result of the task.
 
 ```JavaScript
 const {Defer} = require("tooleks");
@@ -31,7 +31,7 @@ defer.promisify().then((user) => {
 
 #### `DependencyContainer` class
 
-The purpose of the `DependencyContainer` class is to manage dependencies a lot of different objects with a lot of dependencies.
+The `DependencyContainer` class is a tool for managing class dependencies and performing dependency injection.
 
 ```JavaScript
 const {DependencyContainer} = require("tooleks");
@@ -75,7 +75,7 @@ console.log(dataProvider === dc.get("UserService")); // false
 
 #### `EventEmitter` class
 
-The purpose of the `EventEmitter` class is to notify listeners when the event occurs.
+The `EventEmitter` class notifies listeners when the event occurs.
 
 ```JavaScript
 const {EventEmitter} = require("tooleks");
@@ -98,7 +98,7 @@ off();
 
 #### `Mapper` class
 
-The purpose of the `Mapper` class is to transform the initial data formats into the desired data formats.
+The `Mapper` class transforms the initial data formats into the desired data formats.
 
 ```JavaScript
 const {Mapper} = require("tooleks");
@@ -123,7 +123,7 @@ console.log(mappedUser); // { fullName: "Anna P." }
 
 #### `clone` extension
 
-The purpose of `clone` extension is to provide a handy mechanism for objects deep cloning. It supports `Boolean`, `Number`, `String`, `Array`, `Map`, `Date`, `Object`, `Function` types.
+The `clone` extension provides the mechanism for objects deep cloning. It supports `Boolean`, `Number`, `String`, `Array`, `Map`, `Date`, `Object`, `Function` types.
 
 ```JavaScript
 require("tooleks/ext-clone").enable();
@@ -168,7 +168,7 @@ console.log(JSON.stringify(clonedUser) !== JSON.stringify(user)); // true
 
 #### `optional` function
 
-The purpose of the `optional` function is to suppress errors while calling callback function and return the default value instead.
+The `optional` function suppresses errors while calling callback function and return the default value instead.
 
 ```JavaScript
 const {optional} = require("tooleks");
