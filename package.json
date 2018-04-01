@@ -4,6 +4,10 @@
   "description": "A set of tools for JavaScript development",
   "keywords": [
     "defer",
+    "dependency",
+    "container",
+    "dependency-container",
+    "injection",
     "event",
     "emitter",
     "event-emitter",
