@@ -58,6 +58,19 @@ function assertSingletonParameter(singleton) {
 }
 
 /**
+ * Assert "instance" parameter.
+ *
+ * @param {*} instance
+ * @return {void}
+ * @throws TypeError
+ */
+function assertInstanceParameter(instance) {
+    if (typeof instance === "undefined") {
+        throw new TypeError("The \"instance\" parameter should not be an undefined.");
+    }
+}
+
+/**
  * DependencyContainer class.
  */
 class DependencyContainer {
@@ -150,6 +163,20 @@ class DependencyContainer {
             throw new Error(`Invalid number of dependencies were specified for ${identifier}.`);
         }
         this._bindings[identifier] = {type, "parameters": {dependencies, singleton}};
+        return this;
+    }
+
+    /**
+     * Register an instance in the container.
+     *
+     * @param {String} identifier
+     * @param {*} instance
+     * @return {DependencyContainer}
+     */
+    registerInstance(identifier, instance) {
+        assertIdentifierParameter(identifier);
+        assertInstanceParameter(instance);
+        this._bindings[identifier] = {instance, "parameters": {"singleton": true}};
         return this;
     }
 

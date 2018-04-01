@@ -6,7 +6,7 @@ const providers = [require("../../../src").DependencyContainer, require("../../.
 
 providers.forEach((DependencyContainer) => {
     describe("DependencyContainer class test", function() {
-        let dc, NoDependency, TwoDependencies, functionDependency;
+        let dc, NoDependency, TwoDependencies, functionDependency, instance;
 
         beforeEach(function() {
             dc = new DependencyContainer();
@@ -20,6 +20,7 @@ providers.forEach((DependencyContainer) => {
             functionDependency = function() {
                 return {};
             };
+            instance = {};
         });
 
         it("should have a proper api", function() {
@@ -32,6 +33,10 @@ providers.forEach((DependencyContainer) => {
 
         it("should return this on register binding", function() {
             expect(dc.registerBinding("NoDependency", NoDependency)).to.be.equal(dc);
+        });
+
+        it("should return this on register instance", function() {
+            expect(dc.registerInstance("Instance", instance)).to.be.equal(dc);
         });
 
         it("should return this on remove binding", function() {
@@ -75,6 +80,10 @@ providers.forEach((DependencyContainer) => {
             expect(() => dc.registerBinding("TwoDependencies", TwoDependencies)).to.throw();
         });
 
+        it("should throw an error on register instance when instance is not a valid type", function() {
+            expect(() => dc.registerInstance("Instance", undefined)).to.throw();
+        });
+
         it("should register binding and remove binding", function() {
             expect(dc.has("NoDependency")).to.be.equal(false);
             dc.registerBinding("NoDependency", NoDependency);
@@ -88,8 +97,8 @@ providers.forEach((DependencyContainer) => {
         it("should register binding and get every time a new instance", function() {
             dc.registerBinding("NoDependency", NoDependency);
             const noDependencyFirst = dc.get("NoDependency");
-            expect(noDependencyFirst).to.be.an.instanceof(NoDependency);
             const noDependencySecond = dc.get("NoDependency");
+            expect(noDependencyFirst).to.be.an.instanceof(NoDependency);
             expect(noDependencySecond).to.be.an.instanceof(NoDependency);
             expect(noDependencyFirst).to.be.not.equal(noDependencySecond);
         });
@@ -99,8 +108,8 @@ providers.forEach((DependencyContainer) => {
                 singleton: true,
             });
             const noDependencyFirstCall = dc.get("NoDependency");
-            expect(noDependencyFirstCall).to.be.an.instanceof(NoDependency);
             const noDependencySecondCall = dc.get("NoDependency");
+            expect(noDependencyFirstCall).to.be.an.instanceof(NoDependency);
             expect(noDependencySecondCall).to.be.an.instanceof(NoDependency);
             expect(noDependencyFirstCall).to.be.equal(noDependencySecondCall);
         });
@@ -110,21 +119,26 @@ providers.forEach((DependencyContainer) => {
             dc.registerBinding("TwoDependencies", TwoDependencies, {
                 dependencies: ["NoDependency", functionDependency],
             });
-
             const twoDependenciesFirstCall = dc.get("TwoDependencies");
             const twoDependenciesSecondCall = dc.get("TwoDependencies");
-
             expect(twoDependenciesFirstCall).to.be.not.equal(twoDependenciesSecondCall);
             expect(twoDependenciesFirstCall).to.be.an.instanceof(TwoDependencies);
             expect(twoDependenciesSecondCall).to.be.an.instanceof(TwoDependencies);
-
             expect(twoDependenciesFirstCall.first).to.be.not.equal(twoDependenciesSecondCall.first);
             expect(twoDependenciesFirstCall.first).to.be.an.instanceof(NoDependency);
             expect(twoDependenciesSecondCall.first).to.be.an.instanceof(NoDependency);
-
             expect(twoDependenciesFirstCall.second).to.be.not.equal(twoDependenciesSecondCall.second);
-            expect(twoDependenciesFirstCall.second).to.be.an(typeof functionDependency());
-            expect(twoDependenciesSecondCall.second).to.be.an(typeof functionDependency());
+            expect(twoDependenciesFirstCall.second).to.be.a(typeof functionDependency());
+            expect(twoDependenciesSecondCall.second).to.be.a(typeof functionDependency());
+        });
+
+        it("should register instance and get every time the same instance", function() {
+            dc.registerInstance("Instance", instance);
+            const instanceFirstCall = dc.get("Instance");
+            const instanceSecondCall = dc.get("Instance");
+            expect(instanceFirstCall).to.be.a(typeof instance);
+            expect(instanceSecondCall).to.be.a(typeof instance);
+            expect(instanceFirstCall).to.be.equal(instanceSecondCall);
         });
     });
 });
