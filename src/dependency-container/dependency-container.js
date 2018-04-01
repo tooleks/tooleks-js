@@ -90,7 +90,7 @@ class DependencyContainer {
      * @private
      */
     _createInstance(binding) {
-        const dependencies = this._resolveDependencies(binding.parameters.dependencies);
+        const dependencies = this._resolveDependencies(binding.dependencies);
         return new binding.type(...dependencies);
     }
 
@@ -135,11 +135,11 @@ class DependencyContainer {
             throw new Error(`The "${identifier}" binding not found.`);
         }
         const binding = this._bindings[identifier];
-        if (binding.parameters.singleton && typeof binding.instance !== "undefined") {
+        if (binding.singleton && typeof binding.instance !== "undefined") {
             return binding.instance;
         }
         const instance = this._createInstance(binding);
-        if (binding.parameters.singleton) {
+        if (binding.singleton) {
             binding.instance = instance;
         }
         return instance;
@@ -160,23 +160,9 @@ class DependencyContainer {
         assertDependenciesParameter(dependencies);
         assertSingletonParameter(singleton);
         if (type.length !== dependencies.length) {
-            throw new Error(`Invalid number of dependencies were specified for ${identifier}.`);
+            throw new Error(`Invalid number of dependencies were specified for "${identifier}".`);
         }
-        this._bindings[identifier] = {type, "parameters": {dependencies, singleton}};
-        return this;
-    }
-
-    /**
-     * Register an instance in the container.
-     *
-     * @param {String} identifier
-     * @param {*} instance
-     * @return {DependencyContainer}
-     */
-    registerInstance(identifier, instance) {
-        assertIdentifierParameter(identifier);
-        assertInstanceParameter(instance);
-        this._bindings[identifier] = {instance, "parameters": {"singleton": true}};
+        this._bindings[identifier] = {type, dependencies, singleton};
         return this;
     }
 
@@ -192,6 +178,32 @@ class DependencyContainer {
             delete this._bindings[identifier];
         }
         return this;
+    }
+
+    /**
+     * Register an instance in the container.
+     *
+     * @param {String} identifier
+     * @param {*} instance
+     * @return {DependencyContainer}
+     */
+    registerInstance(identifier, instance) {
+        assertIdentifierParameter(identifier);
+        assertInstanceParameter(instance);
+        this._bindings[identifier] = {instance, singleton: true};
+        return this;
+    }
+
+    /**
+     * Remove an instance from the container.
+     *
+     * @see removeBinding
+     * @param {String} identifier
+     * @return {DependencyContainer}
+     */
+    removeInstance(identifier) {
+        assertIdentifierParameter(identifier);
+        return this.removeBinding(identifier);
     }
 }
 

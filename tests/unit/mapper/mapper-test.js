@@ -26,11 +26,8 @@ providers.forEach((Mapper) => {
             expect(mapper.map).to.be.a("function");
         });
 
-        it("should return this on register resolver", function() {
+        it("should return this on register/remove resolver", function() {
             expect(mapper.registerResolver(from, to, spyResolver)).to.be.equal(mapper);
-        });
-
-        it("should return this on remove resolver", function() {
             expect(mapper.removeResolver(from, to)).to.be.equal(mapper);
         });
 
