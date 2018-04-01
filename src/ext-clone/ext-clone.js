@@ -1,6 +1,11 @@
 /* eslint-disable */
 "use strict";
 
+/**
+ * Enable clone extension.
+ *
+ * @return {void}
+ */
 function enable() {
     Boolean.prototype.clone = function() {
         return Boolean(this);
@@ -69,19 +74,36 @@ function enable() {
     };
 }
 
+/**
+ * Disable clone extension.
+ *
+ * @return {void}
+ */
 function disable() {
-    Boolean.prototype.clone = undefined;
-    Number.prototype.clone = undefined;
-    String.prototype.clone = undefined;
-    Array.prototype.clone = undefined;
-    Map.prototype.clone = undefined;
-    Date.prototype.clone = undefined;
-    Object.prototype.clone = undefined;
-    Function.prototype.clone = undefined;
+    getTypes().forEach((type) => {
+        type.prototype.clone = undefined;
+    });
 }
 
+/**
+ * Return true if clone extension is enabled.
+ * Return false otherwise.
+ *
+ * @return {Boolean}
+ */
+function isEnabled() {
+    return getTypes().reduce((isEnabled, type) => {
+        return isEnabled && typeof type.prototype.clone !== "undefined";
+    }, true);
+}
+
+/**
+ * Get an array of types supported by clone extension.
+ *
+ * @return {Array<Function>}
+ */
 function getTypes() {
     return [Boolean, Number, String, Array, Map, Date, Object, Function];
 }
 
-module.exports = Object.freeze({enable, disable, getTypes});
+module.exports = Object.freeze({enable, disable, isEnabled, getTypes});

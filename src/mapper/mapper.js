@@ -1,6 +1,45 @@
 "use strict";
 
 /**
+ * Assert "from" parameter.
+ *
+ * @param {*} from
+ * @return {void}
+ * @throws TypeError
+ */
+function assertFromParameter(from) {
+    if (typeof from !== "string") {
+        throw new TypeError("The \"from\" parameter should be a string.");
+    }
+}
+
+/**
+ * Assert "to" parameter.
+ *
+ * @param {*} to
+ * @return {void}
+ * @throws TypeError
+ */
+function assertToParameter(to) {
+    if (typeof to !== "string") {
+        throw new TypeError("The \"to\" parameter should be a string.");
+    }
+}
+
+/**
+ * Assert "resolver" parameter.
+ *
+ * @param {*} resolver
+ * @return {void}
+ * @throws TypeError
+ */
+function assertResolverParameter(resolver) {
+    if (typeof resolver !== "function") {
+        throw new TypeError("The \"resolver\" parameter should be a function.");
+    }
+}
+
+/**
  * Mapper class.
  */
 class Mapper {
@@ -27,22 +66,17 @@ class Mapper {
      * @param {String} from
      * @param {String} to
      * @param {Function} resolver
-     * @return {void}
+     * @return {Mapper}
      */
     registerResolver(from, to, resolver) {
-        if (typeof from !== "string") {
-            throw new TypeError("The \"from\" parameter should be a string.");
-        }
-        if (typeof to !== "string") {
-            throw new TypeError("The \"to\" parameter should be a string.");
-        }
-        if (typeof resolver !== "function") {
-            throw new TypeError("The \"resolver\" parameter should be a function.");
-        }
+        assertFromParameter(from);
+        assertToParameter(to);
+        assertResolverParameter(resolver);
         if (typeof this._resolvers[from] === "undefined") {
             this._resolvers[from] = {};
         }
         this._resolvers[from][to] = resolver;
+        return this;
     }
 
     /**
@@ -50,10 +84,15 @@ class Mapper {
      *
      * @param {String} from
      * @param {String} to
-     * @return {void}
+     * @return {Mapper}
      */
     removeResolver(from, to) {
-        delete this._resolvers[from][to];
+        assertFromParameter(from);
+        assertToParameter(to);
+        if (this.hasResolver(from, to)) {
+            delete this._resolvers[from][to];
+        }
+        return this;
     }
 
     /**
@@ -81,6 +120,8 @@ class Mapper {
      * @return {Boolean}
      */
     hasResolver(from, to) {
+        assertFromParameter(from);
+        assertToParameter(to);
         try {
             this._assertResolver(from, to);
             return true;
@@ -98,6 +139,8 @@ class Mapper {
      * @return {*}
      */
     map(value, from, to) {
+        assertFromParameter(from);
+        assertToParameter(to);
         this._assertResolver(from, to);
         const resolver = this.getResolvers()[from][to];
         return resolver(value);

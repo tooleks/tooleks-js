@@ -3,7 +3,9 @@
 const expect = require("chai").expect;
 const sinon = require("sinon");
 
-[require("../../../src").Mapper, require("../../../dist").Mapper].forEach((Mapper) => {
+const providers = [require("../../../src").Mapper, require("../../../dist").Mapper];
+
+providers.forEach((Mapper) => {
     describe("Mapper class test", function() {
         let mapper, from, to, spyResolver, value;
 
@@ -22,6 +24,11 @@ const sinon = require("sinon");
             expect(mapper.removeResolver).to.be.a("function");
             expect(mapper.hasResolver).to.be.a("function");
             expect(mapper.map).to.be.a("function");
+        });
+
+        it("should return this on register/remove resolver", function() {
+            expect(mapper.registerResolver(from, to, spyResolver)).to.be.equal(mapper);
+            expect(mapper.removeResolver(from, to)).to.be.equal(mapper);
         });
 
         it("should not throw error on register resolver with valid values", function() {

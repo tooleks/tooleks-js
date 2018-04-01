@@ -3,7 +3,9 @@
 const expect = require("chai").expect;
 const sinon = require("sinon");
 
-[require("../../../src").Defer, require("../../../dist").Defer].forEach((Defer) => {
+const providers = [require("../../../src").Defer, require("../../../dist").Defer];
+
+providers.forEach((Defer) => {
     describe("Defer class test", function() {
         let defer, resolvedValue, rejectedValue, spyOnResolveListener, spyOnRejectListener;
 

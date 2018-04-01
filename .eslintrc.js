@@ -117,7 +117,7 @@ module.exports = {
         "max-statements-per-line": "error",
         "multiline-comment-style": "error",
         "multiline-ternary": "error",
-        "new-cap": "error",
+        "new-cap": "off",
         "new-parens": "error",
         "newline-after-var": "off",
         "newline-before-return": "off",
@@ -235,7 +235,10 @@ module.exports = {
         "prefer-rest-params": "error",
         "prefer-spread": "error",
         "prefer-template": "error",
-        "quote-props": "error",
+        "quote-props": [
+            "error",
+            "consistent"
+        ],
         "quotes": [
             "error",
             "double"
@@ -251,10 +254,7 @@ module.exports = {
             "last"
         ],
         "sort-imports": "error",
-        "sort-keys": [
-            "error",
-            "asc"
-        ],
+        "sort-keys": "off",
         "sort-vars": "error",
         "space-before-blocks": "error",
         "space-before-function-paren": "off",
