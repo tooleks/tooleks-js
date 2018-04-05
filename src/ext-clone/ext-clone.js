@@ -65,9 +65,14 @@ function enable() {
         const clone = function() {
             return self.apply(this, arguments);
         };
-        for (let key in this) {
-            if (this.hasOwnProperty(key)) {
-                clone[key] = this[key];
+        for (let propertyName in this) {
+            if (this.hasOwnProperty(propertyName)) {
+                const property = this[propertyName];
+                if (typeof property !== "undefined" && property !== null) {
+                    clone[propertyName] = property.clone();
+                } else {
+                    clone[propertyName] = property;
+                }
             }
         }
         return clone;
