@@ -58,6 +58,19 @@ function assertSingletonParameter(singleton) {
 }
 
 /**
+ * Assert "factory" parameter.
+ *
+ * @param {*} factory
+ * @return {void}
+ * @throws TypeError
+ */
+function assertFactoryParameter(factory) {
+    if (typeof factory !== "boolean") {
+        throw new TypeError("The \"factory\" parameter should be a boolean.");
+    }
+}
+
+/**
  * Assert "instance" parameter.
  *
  * @param {*} instance
@@ -83,19 +96,25 @@ class DependencyContainer {
     }
 
     /**
-     * Create a new instance of a binding.
+     * Create an instance for a binding.
      *
      * @param {Object} binding
-     * @return {Object}
+     * @return {*}
      * @private
      */
     _createInstance(binding) {
         const dependencies = this._resolveDependencies(binding.dependencies);
-        return new binding.type(...dependencies);
+        let instance = null;
+        if (binding.factory) {
+            instance = binding.type(...dependencies);
+        } else {
+            instance = new binding.type(...dependencies);
+        }
+        return instance;
     }
 
     /**
-     * Resolve all of the dependencies from a binding.
+     * Resolve all of dependencies for a binding.
      *
      * @param {Array<String|Function>} dependencies
      * @private
@@ -150,19 +169,22 @@ class DependencyContainer {
      *
      * @param {String} identifier
      * @param {Function} type
-     * @param {Array<String|Function>} dependencies
-     * @param {Boolean} singleton
+     * @param {Object} options
+     * @param {Array<String|Function>} options.dependencies
+     * @param {Boolean} options.singleton
+     * @param {Boolean} options.factory
      * @return {DependencyContainer}
      */
-    registerBinding(identifier, type, {dependencies = [], singleton = false} = {}) {
+    registerBinding(identifier, type, {dependencies = [], singleton = false, factory = false} = {}) {
         assertIdentifierParameter(identifier);
         assertTypeParameter(type);
         assertDependenciesParameter(dependencies);
         assertSingletonParameter(singleton);
+        assertFactoryParameter(factory);
         if (type.length !== dependencies.length) {
             throw new Error(`Invalid number of dependencies were specified for "${identifier}".`);
         }
-        this._bindings[identifier] = {type, dependencies, singleton};
+        this._bindings[identifier] = {type, dependencies, singleton, factory};
         return this;
     }
 
@@ -190,7 +212,7 @@ class DependencyContainer {
     registerInstance(identifier, instance) {
         assertIdentifierParameter(identifier);
         assertInstanceParameter(instance);
-        this._bindings[identifier] = {instance, singleton: true};
+        this._bindings[identifier] = {instance, singleton: true, factory: false};
         return this;
     }
 
