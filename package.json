@@ -1,6 +1,6 @@
 {
   "name": "tooleks",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A set of tools for JavaScript development",
   "keywords": [
     "defer",
@@ -9,6 +9,10 @@
     "dependency-container",
     "injection",
     "dependency-injection",
+    "binding",
+    "singleton",
+    "factory",
+    "instance",
     "event",
     "emitter",
     "event-emitter",
