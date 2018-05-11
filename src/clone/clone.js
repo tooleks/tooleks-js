@@ -3,7 +3,7 @@
 "use strict";
 
 /**
- * Clone undefined.
+ * Clone undefined value.
  *
  * @param {undefined} value
  * @returns {undefined}
@@ -13,7 +13,7 @@ function cloneUndefined(value) {
 }
 
 /**
- * Clone null.
+ * Clone null value.
  *
  * @param {null} value
  * @returns {null}
@@ -23,7 +23,7 @@ function cloneNull(value) {
 }
 
 /**
- * Clone Boolean.
+ * Clone Boolean value.
  *
  * @param {Boolean} value
  * @returns {Boolean}
@@ -33,7 +33,7 @@ function cloneBoolean(value) {
 }
 
 /**
- * Clone Number.
+ * Clone Number value.
  *
  * @param {Number} value
  * @returns {Number}
@@ -43,7 +43,7 @@ function cloneNumber(value) {
 }
 
 /**
- * Clone String.
+ * Clone String value.
  *
  * @param {String} value
  * @returns {String}
@@ -53,7 +53,7 @@ function cloneString(value) {
 }
 
 /**
- * Clone Array.
+ * Clone Array value.
  *
  * @param {Array} value
  * @returns {Array}
@@ -68,7 +68,7 @@ function cloneArray(value) {
 }
 
 /**
- * Clone Map.
+ * Clone Map value.
  *
  * @param {Map} value
  * @returns {Map}
@@ -78,7 +78,7 @@ function cloneMap(value) {
 }
 
 /**
- * Clone Date.
+ * Clone Date value.
  *
  * @param {Date} value
  * @returns {Date}
@@ -88,7 +88,7 @@ function cloneDate(value) {
 }
 
 /**
- * Clone Object.
+ * Clone Object value.
  *
  * @param {Object} value
  * @returns {Object}
@@ -116,6 +116,12 @@ function cloneObject(value) {
     throw new Error("Unable to clone the object. Implement the 'clone' method manually.");
 }
 
+/**
+ * Clone Function value.
+ *
+ * @param {Function} value
+ * @returns {Function}
+ */
 function cloneFunction(value) {
     const clonedFunction = function() {
         return value.apply(value, arguments);
