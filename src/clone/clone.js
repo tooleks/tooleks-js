@@ -107,11 +107,7 @@ function cloneObject(value) {
         for (const propertyName in value) {
             if (Object.prototype.hasOwnProperty.call(value, propertyName)) {
                 const property = value[propertyName];
-                if (typeof property !== "undefined" && property !== null) {
-                    clonedObject[propertyName] = clone(property);
-                } else {
-                    clonedObject[propertyName] = property;
-                }
+                clonedObject[propertyName] = clone(property);
             }
         }
         return clonedObject;
@@ -127,11 +123,7 @@ function cloneFunction(value) {
     for (const propertyName in value) {
         if (Object.prototype.hasOwnProperty.call(value, propertyName)) {
             const property = value[propertyName];
-            if (typeof property !== "undefined" && property !== null) {
-                clonedFunction[propertyName] = clone(property);
-            } else {
-                clonedFunction[propertyName] = property;
-            }
+            clonedFunction[propertyName] = clone(property);
         }
     }
     return clonedFunction;
