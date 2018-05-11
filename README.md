@@ -121,7 +121,7 @@ const mappedUser = mapper.map(user, "api.v1.user", "app.user");
 console.log(mappedUser); // { fullName: "Anna P." }
 ```
 
-#### `clone` extension
+#### `clone` function
 
 The `clone` function provides the mechanism for objects deep cloning. It supports `Boolean`, `Number`, `String`, `Array`, `Map`, `Date`, `Object`, `Function` types.
 
