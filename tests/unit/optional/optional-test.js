@@ -22,10 +22,12 @@ providers.forEach((optional) => {
         });
 
         it("should return default value on an undefined property call", function() {
+            expect(optional(() => object.propertyName1)).to.be.undefined;
             expect(optional(() => object.propertyName1.propertyName2)).to.be.undefined;
         });
 
         it("should return custom value on an undefined property call", function() {
+            expect(optional(() => object.propertyName1, customValue)).to.be.deep.equal(customValue);
             expect(optional(() => object.propertyName1.propertyName2, customValue)).to.be.deep.equal(customValue);
         });
 

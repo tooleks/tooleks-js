@@ -123,42 +123,41 @@ console.log(mappedUser); // { fullName: "Anna P." }
 
 #### `clone` extension
 
-The `clone` extension provides the mechanism for objects deep cloning. It supports `Boolean`, `Number`, `String`, `Array`, `Map`, `Date`, `Object`, `Function` types.
+The `clone` function provides the mechanism for objects deep cloning. It supports `Boolean`, `Number`, `String`, `Array`, `Map`, `Date`, `Object`, `Function` types.
 
 ```JavaScript
-require("tooleks/ext-clone").enable();
+const {clone} = require("tooleks");
 
 const user = {
     firstName: "Anna",
     lastName: "P.",
 };
 
-const clonedUser = user.clone();
+const clonedUser = clone(user);
 
 clonedUser.lastName = "Po.";
 
 console.log(JSON.stringify(clonedUser) !== JSON.stringify(user)); // true
 ```
 
-To customize the default behavior of `clone` extension for your class initialize the `clone` method.
+To customize the default behavior of `clone` function for your class create the `clone` method.
 
 ```JavaScript
-require("tooleks/ext-clone").enable();
+const {clone} = require("tooleks");
 
 function User(firstName, lastName) {
     this.firstName = firstName;
     this.lastName = lastName;
+    this.clone = () => {
+        const firstName = clone(this.firstName);
+        const lastName = clone(this.lastName);
+        return new User(firstName, lastName);
+    };
 }
-
-User.prototype.clone = function() {
-    const firstName = this.firstName.clone();
-    const lastName = this.lastName.clone();
-    return new User(firstName, lastName);
-};
 
 const user = new User("Anna", "P.");
 
-const clonedUser = user.clone();
+const clonedUser = clone(user);
 
 clonedUser.lastName = "Po.";
 
@@ -168,7 +167,7 @@ console.log(JSON.stringify(clonedUser) !== JSON.stringify(user)); // true
 
 #### `optional` function
 
-The `optional` function suppresses errors while calling callback function and return the default value instead.
+The `optional` function retrieves the result of callback call. If an error occurred or result is `undefined` returns a default value instead.
 
 ```JavaScript
 const {optional} = require("tooleks");
