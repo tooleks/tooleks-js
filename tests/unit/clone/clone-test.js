@@ -2,11 +2,13 @@
 
 const expect = require("chai").expect;
 
-const providers = [require("../../../src/ext-clone"), require("../../../dist/ext-clone")];
+const providers = [require("../../../src").clone, require("../../../dist").clone];
 
-providers.forEach((extClone) => {
+providers.forEach((clone) => {
     describe("clone function test", function() {
-        let originalBoolean,
+        let originalUndefined,
+            originalNull,
+            originalBoolean,
             originalNumber,
             originalString,
             originalDate,
@@ -14,10 +16,12 @@ providers.forEach((extClone) => {
             originalArrayOfObjectLiterals,
             originalMap,
             originalObjectLiteral,
-            originalFunction;
+            originalFunction,
+            OriginalClass;
 
         beforeEach(function() {
-            extClone.enable();
+            originalUndefined = undefined;
+            originalNull = null;
             originalBoolean = false;
             originalNumber = 42;
             originalString = "string";
@@ -28,99 +32,94 @@ providers.forEach((extClone) => {
             originalMap.set("value", 1);
             originalObjectLiteral = {value: 1};
             originalFunction = (value) => value;
-        });
-
-        afterEach(function() {
-            extClone.disable();
+            OriginalClass = function(value) {
+                this.value = value;
+                this.clone = () => {
+                    const value = clone(this.value);
+                    return new OriginalClass(value);
+                };
+            };
         });
 
         it("should have a proper api", function() {
-            expect(extClone).to.be.an("object");
-            expect(extClone.enable).to.be.a("function");
-            expect(extClone.disable).to.be.a("function");
-            expect(extClone.isEnabled).to.be.a("function");
-            expect(extClone.getTypes).to.be.a("function");
+            expect(clone).to.be.a("function");
         });
 
-        it("should get types", function() {
-            expect(extClone.getTypes()).to.be.an.instanceof(Array);
+        it("should clone undefined", function() {
+            let clonedUndefined = clone(originalUndefined);
+            expect(clonedUndefined).to.be.an("undefined");
         });
 
-        it("should enable/disable api", function() {
-            expect(extClone.isEnabled()).to.be.equal(true);
-            extClone.disable();
-            expect(extClone.isEnabled()).to.be.equal(false);
-            extClone.getTypes().forEach((type) => {
-                expect(type.prototype.clone).to.be.undefined;
-            });
-            extClone.enable();
-            expect(extClone.isEnabled()).to.be.equal(true);
-            extClone.getTypes().forEach((type) => {
-                expect(type.prototype.clone).to.be.a("function");
-            });
-            extClone.disable();
-            expect(extClone.isEnabled()).to.be.equal(false);
-            extClone.getTypes().forEach((type) => {
-                expect(type.prototype.clone).to.be.undefined;
-            });
+        it("should clone null", function() {
+            let clonedNull = clone(originalNull);
+            expect(clonedNull).to.be.a("null");
         });
 
         it("should clone boolean", function() {
-            let clonedBoolean = originalBoolean.clone();
+            let clonedBoolean = clone(originalBoolean);
             expect(clonedBoolean).to.be.a("boolean");
             clonedBoolean = !originalBoolean;
             expect(clonedBoolean).to.not.equal(originalBoolean);
         });
 
         it("should clone number", function() {
-            let clonedNumber = originalNumber.clone();
+            let clonedNumber = clone(originalNumber);
             expect(clonedNumber).to.be.a("number");
             clonedNumber++;
             expect(clonedNumber).to.not.equal(originalNumber);
         });
 
         it("should clone string", function() {
-            let clonedString = originalString.clone();
+            let clonedString = clone(originalString);
             expect(clonedString).to.be.a("string");
             clonedString += "Suffix";
             expect(clonedString).to.not.equal(originalString);
         });
 
         it("should clone Array (of primitives)", function() {
-            const clonedArrayOfPrimitives = originalArrayOfPrimitives.clone();
+            const clonedArrayOfPrimitives = clone(originalArrayOfPrimitives);
             expect(clonedArrayOfPrimitives).to.be.an.instanceof(Array);
             expect(clonedArrayOfPrimitives).to.not.equal(originalArrayOfPrimitives);
         });
 
         it("should clone Array (of Object literals)", function() {
-            const clonedArrayOfObjectLiterals = originalArrayOfObjectLiterals.clone();
+            const clonedArrayOfObjectLiterals = clone(originalArrayOfObjectLiterals);
             expect(clonedArrayOfObjectLiterals).to.be.an.instanceof(Array);
             expect(clonedArrayOfObjectLiterals).to.not.equal(originalArrayOfObjectLiterals);
         });
 
         it("should clone Map", function() {
-            const clonedMap = originalMap.clone();
+            const clonedMap = clone(originalMap);
             expect(clonedMap).to.be.an.instanceof(Map);
             expect(clonedMap).to.not.equal(originalMap);
         });
 
         it("should clone Date", function() {
-            const clonedDate = originalDate.clone();
+            const clonedDate = clone(originalDate);
             expect(clonedDate).to.be.an.instanceof(Date);
             expect(clonedDate).to.not.equal(originalDate);
         });
 
         it("should clone Object literal", function() {
-            const clonedObject = originalObjectLiteral.clone();
+            const clonedObject = clone(originalObjectLiteral);
             expect(clonedObject).to.be.an("object");
             expect(clonedObject).to.not.equal(originalObjectLiteral);
         });
 
         it("should clone Function", function() {
-            const clonedFunction = originalFunction.clone();
+            const clonedFunction = clone(originalFunction);
             expect(clonedFunction).to.be.a("function");
             expect(clonedFunction).to.not.equal(originalFunction);
             expect(clonedFunction(originalString)).to.equal(originalFunction(originalString));
+        });
+
+        it("should clone class instance", function() {
+            const originalClassInstance = new OriginalClass(originalObjectLiteral);
+            const clonedClassInstance = clone(originalClassInstance);
+            expect(clonedClassInstance).to.be.an.instanceof(OriginalClass);
+            expect(clonedClassInstance).to.not.equal(originalClassInstance);
+            expect(clonedClassInstance.value).to.not.equal(originalClassInstance.value);
+            expect(clonedClassInstance.clone).to.not.equal(originalClassInstance.clone);
         });
     });
 });
