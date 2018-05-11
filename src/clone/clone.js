@@ -92,6 +92,7 @@ function cloneDate(value) {
  *
  * @param {Object} value
  * @returns {Object}
+ * @throws Error
  */
 function cloneObject(value) {
     if (typeof value.clone === "function") {
@@ -136,6 +137,13 @@ function cloneFunction(value) {
     return clonedFunction;
 }
 
+/**
+ * Clone value.
+ *
+ * @param {*} value
+ * @returns {*}
+ * @throws Error
+ */
 function clone(value) {
     if (typeof value === "undefined") {
         return cloneUndefined(value);
