@@ -110,9 +110,11 @@ return /******/ (function(modules) { // webpackBootstrap
  * @return {*}
  */
 
-function optional(callback, defaultValue = undefined) {
+function optional(callback) {
+    var defaultValue = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
+
     try {
-        const value = callback();
+        var value = callback();
         return typeof value !== "undefined" ? value : defaultValue;
     } catch (error) {
         return defaultValue;
@@ -128,7 +130,7 @@ module.exports = optional;
 "use strict";
 
 
-const optional = __webpack_require__(0);
+var optional = __webpack_require__(0);
 
 module.exports = optional;
 
@@ -146,6 +148,10 @@ module.exports = optional;
  * @return {void}
  * @throws TypeError
  */
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function assertFromParameter(from) {
     if (typeof from !== "string") {
@@ -182,11 +188,14 @@ function assertResolverParameter(resolver) {
 /**
  * Mapper class.
  */
-class Mapper {
+
+var Mapper = function () {
     /**
      * Mapper constructor.
      */
-    constructor() {
+    function Mapper() {
+        _classCallCheck(this, Mapper);
+
         this._resolvers = {};
     }
 
@@ -195,96 +204,118 @@ class Mapper {
      *
      * @return {Object}
      */
-    getResolvers() {
-        return this._resolvers;
-    }
 
-    /**
-     * Register the resolver function for from-to mapping.
-     *
-     * @param {String} from
-     * @param {String} to
-     * @param {Function} resolver
-     * @return {Mapper}
-     */
-    registerResolver(from, to, resolver) {
-        assertFromParameter(from);
-        assertToParameter(to);
-        assertResolverParameter(resolver);
-        if (typeof this._resolvers[from] === "undefined") {
-            this._resolvers[from] = {};
-        }
-        this._resolvers[from][to] = resolver;
-        return this;
-    }
 
-    /**
-     * Remove the resolver function for from-to mapping.
-     *
-     * @param {String} from
-     * @param {String} to
-     * @return {Mapper}
-     */
-    removeResolver(from, to) {
-        assertFromParameter(from);
-        assertToParameter(to);
-        if (this.hasResolver(from, to)) {
-            delete this._resolvers[from][to];
+    _createClass(Mapper, [{
+        key: "getResolvers",
+        value: function getResolvers() {
+            return this._resolvers;
         }
-        return this;
-    }
 
-    /**
-     * Assert that the resolver function for from-to mapping exists.
-     *
-     * @param {String} from
-     * @param {String} to
-     * @return {void}
-     * @private
-     */
-    _assertResolver(from, to) {
-        if (typeof this.getResolvers()[from] === "undefined") {
-            throw new Error(`Resolver for "${from}" not found.`);
-        }
-        if (typeof this.getResolvers()[from][to] === "undefined") {
-            throw new Error(`Resolver for "${to}" not found.`);
-        }
-    }
+        /**
+         * Register the resolver function for from-to mapping.
+         *
+         * @param {String} from
+         * @param {String} to
+         * @param {Function} resolver
+         * @return {Mapper}
+         */
 
-    /**
-     * Determine that the resolver function for from-to mapping is registered.
-     *
-     * @param {String} from
-     * @param {String} to
-     * @return {Boolean}
-     */
-    hasResolver(from, to) {
-        assertFromParameter(from);
-        assertToParameter(to);
-        try {
+    }, {
+        key: "registerResolver",
+        value: function registerResolver(from, to, resolver) {
+            assertFromParameter(from);
+            assertToParameter(to);
+            assertResolverParameter(resolver);
+            if (typeof this._resolvers[from] === "undefined") {
+                this._resolvers[from] = {};
+            }
+            this._resolvers[from][to] = resolver;
+            return this;
+        }
+
+        /**
+         * Remove the resolver function for from-to mapping.
+         *
+         * @param {String} from
+         * @param {String} to
+         * @return {Mapper}
+         */
+
+    }, {
+        key: "removeResolver",
+        value: function removeResolver(from, to) {
+            assertFromParameter(from);
+            assertToParameter(to);
+            if (this.hasResolver(from, to)) {
+                delete this._resolvers[from][to];
+            }
+            return this;
+        }
+
+        /**
+         * Assert that the resolver function for from-to mapping exists.
+         *
+         * @param {String} from
+         * @param {String} to
+         * @return {void}
+         * @private
+         */
+
+    }, {
+        key: "_assertResolver",
+        value: function _assertResolver(from, to) {
+            if (typeof this.getResolvers()[from] === "undefined") {
+                throw new Error("Resolver for \"" + from + "\" not found.");
+            }
+            if (typeof this.getResolvers()[from][to] === "undefined") {
+                throw new Error("Resolver for \"" + to + "\" not found.");
+            }
+        }
+
+        /**
+         * Determine that the resolver function for from-to mapping is registered.
+         *
+         * @param {String} from
+         * @param {String} to
+         * @return {Boolean}
+         */
+
+    }, {
+        key: "hasResolver",
+        value: function hasResolver(from, to) {
+            assertFromParameter(from);
+            assertToParameter(to);
+            try {
+                this._assertResolver(from, to);
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        /**
+         * Map value by using from-to resolver function.
+         *
+         * @param {*} value
+         * @param {String} from
+         * @param {String} to
+         * @return {*}
+         */
+
+    }, {
+        key: "map",
+        value: function map(value, from, to) {
+            assertFromParameter(from);
+            assertToParameter(to);
             this._assertResolver(from, to);
-            return true;
-        } catch (error) {
-            return false;
+            var resolver = this.getResolvers()[from][to];
+            return resolver(value);
         }
-    }
+    }]);
 
-    /**
-     * Map value by using from-to resolver function.
-     *
-     * @param {*} value
-     * @param {String} from
-     * @param {String} to
-     * @return {*}
-     */
-    map(value, from, to) {
-        assertFromParameter(from);
-        assertToParameter(to);
-        this._assertResolver(from, to);
-        const resolver = this.getResolvers()[from][to];
-        return resolver(value);
-    }
-}
+    return Mapper;
+}();
 
 module.exports = Mapper;
 
@@ -295,7 +326,7 @@ module.exports = Mapper;
 "use strict";
 
 
-const Mapper = __webpack_require__(2);
+var Mapper = __webpack_require__(2);
 
 module.exports = Mapper;
 
@@ -313,6 +344,10 @@ module.exports = Mapper;
  * @return {void}
  * @throws TypeError
  */
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function assertEventNameParameter(eventName) {
     if (typeof eventName !== "string") {
@@ -336,11 +371,14 @@ function assertListenerParameter(listener) {
 /**
  * EventEmitter class.
  */
-class EventEmitter {
+
+var EventEmitter = function () {
     /**
      * EventEmitter constructor.
      */
-    constructor() {
+    function EventEmitter() {
+        _classCallCheck(this, EventEmitter);
+
         this._events = {};
     }
 
@@ -351,33 +389,49 @@ class EventEmitter {
      * @param {*} payload
      * @return {void}
      */
-    emit(eventName, payload) {
-        assertEventNameParameter(eventName);
-        const event = this._events[eventName];
-        if (typeof event !== "undefined") {
-            event.forEach(listener => listener(payload));
-        }
-    }
 
-    /**
-     * Add the listener function to the end of the listeners array for the event named eventName.
-     *
-     * @param {String} eventName
-     * @param {Function} listener
-     * @return {Function} - A function to remove the listener function from the listeners array for the event named eventName.
-     */
-    on(eventName, listener) {
-        assertEventNameParameter(eventName);
-        assertListenerParameter(listener);
-        if (typeof this._events[eventName] === "undefined") {
-            this._events[eventName] = [];
+
+    _createClass(EventEmitter, [{
+        key: "emit",
+        value: function emit(eventName, payload) {
+            assertEventNameParameter(eventName);
+            var event = this._events[eventName];
+            if (typeof event !== "undefined") {
+                event.forEach(function (listener) {
+                    return listener(payload);
+                });
+            }
         }
-        this._events[eventName].push(listener);
-        return () => {
-            this._events[eventName] = this._events[eventName].filter(eventListener => eventListener !== listener);
-        };
-    }
-}
+
+        /**
+         * Add the listener function to the end of the listeners array for the event named eventName.
+         *
+         * @param {String} eventName
+         * @param {Function} listener
+         * @return {Function} - A function to remove the listener function from the listeners array for the event named eventName.
+         */
+
+    }, {
+        key: "on",
+        value: function on(eventName, listener) {
+            var _this = this;
+
+            assertEventNameParameter(eventName);
+            assertListenerParameter(listener);
+            if (typeof this._events[eventName] === "undefined") {
+                this._events[eventName] = [];
+            }
+            this._events[eventName].push(listener);
+            return function () {
+                _this._events[eventName] = _this._events[eventName].filter(function (eventListener) {
+                    return eventListener !== listener;
+                });
+            };
+        }
+    }]);
+
+    return EventEmitter;
+}();
 
 module.exports = EventEmitter;
 
@@ -388,7 +442,7 @@ module.exports = EventEmitter;
 "use strict";
 
 
-const EventEmitter = __webpack_require__(4);
+var EventEmitter = __webpack_require__(4);
 
 module.exports = EventEmitter;
 
@@ -406,6 +460,12 @@ module.exports = EventEmitter;
  * @return {void}
  * @throws TypeError
  */
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function assertIdentifierParameter(identifier) {
     if (typeof identifier !== "string") {
@@ -437,7 +497,7 @@ function assertDependenciesParameter(dependencies) {
     if (!Array.isArray(dependencies)) {
         throw new TypeError('The "dependencies" parameter should be an array.');
     }
-    dependencies.forEach(dependency => {
+    dependencies.forEach(function (dependency) {
         if (typeof dependency !== "string" && typeof dependency !== "function") {
             throw new TypeError('The "dependencies" parameter should be an array of strings or functions.');
         }
@@ -486,11 +546,14 @@ function assertInstanceParameter(instance) {
 /**
  * DependencyContainer class.
  */
-class DependencyContainer {
+
+var DependencyContainer = function () {
     /**
      * DependencyContainer constructor.
      */
-    constructor() {
+    function DependencyContainer() {
+        _classCallCheck(this, DependencyContainer);
+
         this._bindings = {};
     }
 
@@ -501,132 +564,170 @@ class DependencyContainer {
      * @return {*}
      * @private
      */
-    _createInstance(binding) {
-        const dependencies = this._resolveDependencies(binding.dependencies);
-        let instance = null;
-        if (binding.factory) {
-            instance = binding.type(...dependencies);
-        } else {
-            instance = new binding.type(...dependencies);
-        }
-        return instance;
-    }
 
-    /**
-     * Resolve all of dependencies for a binding.
-     *
-     * @param {Array<String|Function>} dependencies
-     * @private
-     */
-    _resolveDependencies(dependencies) {
-        return dependencies.map(dependency => {
-            if (typeof dependency === "string") {
-                return this.get(dependency);
-            } else if (typeof dependency === "function") {
-                return dependency();
+
+    _createClass(DependencyContainer, [{
+        key: "_createInstance",
+        value: function _createInstance(binding) {
+            var dependencies = this._resolveDependencies(binding.dependencies);
+            var instance = null;
+            if (binding.factory) {
+                instance = binding.type.apply(binding, _toConsumableArray(dependencies));
+            } else {
+                instance = new (Function.prototype.bind.apply(binding.type, [null].concat(_toConsumableArray(dependencies))))();
             }
-            throw new TypeError("Invalid dependency type.");
-        });
-    }
-
-    /**
-     * Return true if the container can return the binding for the given identifier.
-     * Return false otherwise.
-     *
-     * @param {String} identifier
-     * @return {Boolean}
-     */
-    has(identifier) {
-        assertIdentifierParameter(identifier);
-        return Object.prototype.hasOwnProperty.call(this._bindings, identifier);
-    }
-
-    /**
-     * Find the binding of the container by its identifier and return it.
-     *
-     * @param {String} identifier
-     * @return {Object}
-     */
-    get(identifier) {
-        assertIdentifierParameter(identifier);
-        if (!this.has(identifier)) {
-            throw new Error(`The "${identifier}" binding not found.`);
+            return instance;
         }
-        const binding = this._bindings[identifier];
-        if (typeof binding.instance !== "undefined") {
-            return binding.instance;
-        }
-        const instance = this._createInstance(binding);
-        if (binding.singleton) {
-            binding.instance = instance;
-        }
-        return instance;
-    }
 
-    /**
-     * Register a new binding in the container.
-     *
-     * @param {String} identifier
-     * @param {Function} type
-     * @param {Object} options
-     * @param {Array<String|Function>} options.dependencies
-     * @param {Boolean} options.singleton
-     * @param {Boolean} options.factory
-     * @return {DependencyContainer}
-     */
-    registerBinding(identifier, type, { dependencies = [], singleton = false, factory = false } = {}) {
-        assertIdentifierParameter(identifier);
-        assertTypeParameter(type);
-        assertDependenciesParameter(dependencies);
-        assertSingletonParameter(singleton);
-        assertFactoryParameter(factory);
-        if (type.length !== dependencies.length) {
-            throw new Error(`Invalid number of dependencies were specified for "${identifier}".`);
+        /**
+         * Resolve all of dependencies for a binding.
+         *
+         * @param {Array<String|Function>} dependencies
+         * @private
+         */
+
+    }, {
+        key: "_resolveDependencies",
+        value: function _resolveDependencies(dependencies) {
+            var _this = this;
+
+            return dependencies.map(function (dependency) {
+                if (typeof dependency === "string") {
+                    return _this.get(dependency);
+                } else if (typeof dependency === "function") {
+                    return dependency();
+                }
+                throw new TypeError("Invalid dependency type.");
+            });
         }
-        this._bindings[identifier] = { type, dependencies, singleton, factory };
-        return this;
-    }
 
-    /**
-     * Remove the binding from the container.
-     *
-     * @param {String} identifier
-     * @return {DependencyContainer}
-     */
-    removeBinding(identifier) {
-        assertIdentifierParameter(identifier);
-        if (this.has(identifier)) {
-            delete this._bindings[identifier];
+        /**
+         * Return true if the container can return the binding for the given identifier.
+         * Return false otherwise.
+         *
+         * @param {String} identifier
+         * @return {Boolean}
+         */
+
+    }, {
+        key: "has",
+        value: function has(identifier) {
+            assertIdentifierParameter(identifier);
+            return Object.prototype.hasOwnProperty.call(this._bindings, identifier);
         }
-        return this;
-    }
 
-    /**
-     * Register an instance in the container.
-     *
-     * @param {String} identifier
-     * @param {*} instance
-     * @return {DependencyContainer}
-     */
-    registerInstance(identifier, instance) {
-        assertIdentifierParameter(identifier);
-        assertInstanceParameter(instance);
-        this._bindings[identifier] = { instance, singleton: true, factory: false };
-        return this;
-    }
+        /**
+         * Find the binding of the container by its identifier and return it.
+         *
+         * @param {String} identifier
+         * @return {Object}
+         */
 
-    /**
-     * Remove an instance from the container.
-     *
-     * @see removeBinding
-     * @param {String} identifier
-     * @return {DependencyContainer}
-     */
-    removeInstance(identifier) {
-        assertIdentifierParameter(identifier);
-        return this.removeBinding(identifier);
-    }
-}
+    }, {
+        key: "get",
+        value: function get(identifier) {
+            assertIdentifierParameter(identifier);
+            if (!this.has(identifier)) {
+                throw new Error("The \"" + identifier + "\" binding not found.");
+            }
+            var binding = this._bindings[identifier];
+            if (typeof binding.instance !== "undefined") {
+                return binding.instance;
+            }
+            var instance = this._createInstance(binding);
+            if (binding.singleton) {
+                binding.instance = instance;
+            }
+            return instance;
+        }
+
+        /**
+         * Register a new binding in the container.
+         *
+         * @param {String} identifier
+         * @param {Function} type
+         * @param {Object} options
+         * @param {Array<String|Function>} options.dependencies
+         * @param {Boolean} options.singleton
+         * @param {Boolean} options.factory
+         * @return {DependencyContainer}
+         */
+
+    }, {
+        key: "registerBinding",
+        value: function registerBinding(identifier, type) {
+            var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+                _ref$dependencies = _ref.dependencies,
+                dependencies = _ref$dependencies === undefined ? [] : _ref$dependencies,
+                _ref$singleton = _ref.singleton,
+                singleton = _ref$singleton === undefined ? false : _ref$singleton,
+                _ref$factory = _ref.factory,
+                factory = _ref$factory === undefined ? false : _ref$factory;
+
+            assertIdentifierParameter(identifier);
+            assertTypeParameter(type);
+            assertDependenciesParameter(dependencies);
+            assertSingletonParameter(singleton);
+            assertFactoryParameter(factory);
+            if (type.length !== dependencies.length) {
+                throw new Error("Invalid number of dependencies were specified for \"" + identifier + "\".");
+            }
+            this._bindings[identifier] = { type: type, dependencies: dependencies, singleton: singleton, factory: factory };
+            return this;
+        }
+
+        /**
+         * Remove the binding from the container.
+         *
+         * @param {String} identifier
+         * @return {DependencyContainer}
+         */
+
+    }, {
+        key: "removeBinding",
+        value: function removeBinding(identifier) {
+            assertIdentifierParameter(identifier);
+            if (this.has(identifier)) {
+                delete this._bindings[identifier];
+            }
+            return this;
+        }
+
+        /**
+         * Register an instance in the container.
+         *
+         * @param {String} identifier
+         * @param {*} instance
+         * @return {DependencyContainer}
+         */
+
+    }, {
+        key: "registerInstance",
+        value: function registerInstance(identifier, instance) {
+            assertIdentifierParameter(identifier);
+            assertInstanceParameter(instance);
+            this._bindings[identifier] = { instance: instance, singleton: true, factory: false };
+            return this;
+        }
+
+        /**
+         * Remove an instance from the container.
+         *
+         * @see removeBinding
+         * @param {String} identifier
+         * @return {DependencyContainer}
+         */
+
+    }, {
+        key: "removeInstance",
+        value: function removeInstance(identifier) {
+            assertIdentifierParameter(identifier);
+            return this.removeBinding(identifier);
+        }
+    }]);
+
+    return DependencyContainer;
+}();
 
 module.exports = DependencyContainer;
 
@@ -637,7 +738,7 @@ module.exports = DependencyContainer;
 "use strict";
 
 
-const DependencyContainer = __webpack_require__(6);
+var DependencyContainer = __webpack_require__(6);
 
 module.exports = DependencyContainer;
 
@@ -652,14 +753,22 @@ module.exports = DependencyContainer;
  * Defer class.
  */
 
-class Defer {
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Defer = function () {
     /**
      * Defer constructor.
      */
-    constructor() {
-        this._promise = new Promise((resolve, reject) => {
-            this.resolve = resolve;
-            this.reject = reject;
+    function Defer() {
+        var _this = this;
+
+        _classCallCheck(this, Defer);
+
+        this._promise = new Promise(function (resolve, reject) {
+            _this.resolve = resolve;
+            _this.reject = reject;
         });
     }
 
@@ -668,10 +777,17 @@ class Defer {
      *
      * @return {Promise<any>}
      */
-    promisify() {
-        return this._promise;
-    }
-}
+
+
+    _createClass(Defer, [{
+        key: "promisify",
+        value: function promisify() {
+            return this._promise;
+        }
+    }]);
+
+    return Defer;
+}();
 
 module.exports = Defer;
 
@@ -682,7 +798,7 @@ module.exports = Defer;
 "use strict";
 
 
-const Defer = __webpack_require__(8);
+var Defer = __webpack_require__(8);
 
 module.exports = Defer;
 
@@ -701,6 +817,8 @@ module.exports = Defer;
  * @param {undefined} value
  * @returns {undefined}
  */
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 function cloneUndefined(value) {
     return undefined;
@@ -753,7 +871,7 @@ function cloneString(value) {
  * @returns {Array}
  */
 function cloneArray(value) {
-    return value.map(item => {
+    return value.map(function (item) {
         if (typeof item !== "undefined" && item !== null) {
             return clone(item);
         }
@@ -797,10 +915,10 @@ function cloneObject(value) {
         return value.cloneNode(true);
     } else if (!value.prototype) {
         // Object literal.
-        const clonedObject = {};
-        for (const propertyName in value) {
+        var clonedObject = {};
+        for (var propertyName in value) {
             if (Object.prototype.hasOwnProperty.call(value, propertyName)) {
-                const property = value[propertyName];
+                var property = value[propertyName];
                 clonedObject[propertyName] = clone(property);
             }
         }
@@ -817,12 +935,12 @@ function cloneObject(value) {
  * @returns {Function}
  */
 function cloneFunction(value) {
-    const clonedFunction = function () {
+    var clonedFunction = function clonedFunction() {
         return value.apply(value, arguments);
     };
-    for (const propertyName in value) {
+    for (var propertyName in value) {
         if (Object.prototype.hasOwnProperty.call(value, propertyName)) {
-            const property = value[propertyName];
+            var property = value[propertyName];
             clonedFunction[propertyName] = clone(property);
         }
     }
@@ -853,12 +971,12 @@ function clone(value) {
         return cloneMap(value);
     } else if (value instanceof Date) {
         return cloneDate(value);
-    } else if (typeof value === "object") {
+    } else if ((typeof value === "undefined" ? "undefined" : _typeof(value)) === "object") {
         return cloneObject(value);
     } else if (typeof value === "function") {
         return cloneFunction(value);
     }
-    throw new Error(`Unable to clone the ${typeof value}.`);
+    throw new Error("Unable to clone the " + (typeof value === "undefined" ? "undefined" : _typeof(value)) + ".");
 }
 
 module.exports = clone;
@@ -870,7 +988,7 @@ module.exports = clone;
 "use strict";
 
 
-const clone = __webpack_require__(10);
+var clone = __webpack_require__(10);
 
 module.exports = clone;
 
@@ -881,14 +999,14 @@ module.exports = clone;
 "use strict";
 
 
-const clone = __webpack_require__(11);
-const Defer = __webpack_require__(9);
-const DependencyContainer = __webpack_require__(7);
-const EventEmitter = __webpack_require__(5);
-const Mapper = __webpack_require__(3);
-const optional = __webpack_require__(1);
+var clone = __webpack_require__(11);
+var Defer = __webpack_require__(9);
+var DependencyContainer = __webpack_require__(7);
+var EventEmitter = __webpack_require__(5);
+var Mapper = __webpack_require__(3);
+var optional = __webpack_require__(1);
 
-module.exports = Object.freeze({ clone, Defer, DependencyContainer, EventEmitter, Mapper, optional });
+module.exports = Object.freeze({ clone: clone, Defer: Defer, DependencyContainer: DependencyContainer, EventEmitter: EventEmitter, Mapper: Mapper, optional: optional });
 
 /***/ })
 /******/ ]);

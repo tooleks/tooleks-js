@@ -1,0 +1,11 @@
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "browsers": ["last 2 versions", "safari >= 7"]
+      },
+      "debug": true
+    }]
+  ],
+  "plugins": ["transform-es2015-spread", "transform-object-rest-spread"]
+}
