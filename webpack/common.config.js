@@ -10,6 +10,9 @@ module.exports = {
         // Note: The following line is needed to be able to build "umd" module compatible with Node.js.
         globalObject: `typeof self !== "undefined" ? self : this`,
     },
+    optimization: {
+        minimize: false,
+    },
     module: {
         rules: [
             {
