@@ -215,8 +215,8 @@ var Mapper = function () {
         /**
          * Register the resolver function for from-to mapping.
          *
-         * @param {String} from
-         * @param {String} to
+         * @param {string} from
+         * @param {string} to
          * @param {Function} resolver
          * @return {Mapper}
          */
@@ -237,8 +237,8 @@ var Mapper = function () {
         /**
          * Remove the resolver function for from-to mapping.
          *
-         * @param {String} from
-         * @param {String} to
+         * @param {string} from
+         * @param {string} to
          * @return {Mapper}
          */
 
@@ -256,8 +256,8 @@ var Mapper = function () {
         /**
          * Assert that the resolver function for from-to mapping exists.
          *
-         * @param {String} from
-         * @param {String} to
+         * @param {string} from
+         * @param {string} to
          * @return {void}
          * @private
          */
@@ -276,9 +276,9 @@ var Mapper = function () {
         /**
          * Determine that the resolver function for from-to mapping is registered.
          *
-         * @param {String} from
-         * @param {String} to
-         * @return {Boolean}
+         * @param {string} from
+         * @param {string} to
+         * @return {boolean}
          */
 
     }, {
@@ -298,8 +298,8 @@ var Mapper = function () {
          * Map value by using from-to resolver function.
          *
          * @param {*} value
-         * @param {String} from
-         * @param {String} to
+         * @param {string} from
+         * @param {string} to
          * @return {*}
          */
 
@@ -385,7 +385,7 @@ var EventEmitter = function () {
     /**
      * Synchronously call each of the listeners registered for the event named eventName.
      *
-     * @param {String} eventName
+     * @param {string} eventName
      * @param {*} payload
      * @return {void}
      */
@@ -406,7 +406,7 @@ var EventEmitter = function () {
         /**
          * Add the listener function to the end of the listeners array for the event named eventName.
          *
-         * @param {String} eventName
+         * @param {string} eventName
          * @param {Function} listener
          * @return {Function} - A function to remove the listener function from the listeners array for the event named eventName.
          */
@@ -582,7 +582,7 @@ var DependencyContainer = function () {
         /**
          * Resolve all of dependencies for a binding.
          *
-         * @param {Array<String|Function>} dependencies
+         * @param {Array<string|Function>} dependencies
          * @private
          */
 
@@ -605,8 +605,8 @@ var DependencyContainer = function () {
          * Return true if the container can return the binding for the given identifier.
          * Return false otherwise.
          *
-         * @param {String} identifier
-         * @return {Boolean}
+         * @param {string} identifier
+         * @return {boolean}
          */
 
     }, {
@@ -619,7 +619,7 @@ var DependencyContainer = function () {
         /**
          * Find the binding of the container by its identifier and return it.
          *
-         * @param {String} identifier
+         * @param {string} identifier
          * @return {Object}
          */
 
@@ -644,12 +644,12 @@ var DependencyContainer = function () {
         /**
          * Register a new binding in the container.
          *
-         * @param {String} identifier
+         * @param {string} identifier
          * @param {Function} type
          * @param {Object} options
-         * @param {Array<String|Function>} options.dependencies
-         * @param {Boolean} options.singleton
-         * @param {Boolean} options.factory
+         * @param {Array<string|Function>} options.dependencies
+         * @param {boolean} options.singleton
+         * @param {boolean} options.factory
          * @return {DependencyContainer}
          */
 
@@ -679,7 +679,7 @@ var DependencyContainer = function () {
         /**
          * Remove the binding from the container.
          *
-         * @param {String} identifier
+         * @param {string} identifier
          * @return {DependencyContainer}
          */
 
@@ -696,7 +696,7 @@ var DependencyContainer = function () {
         /**
          * Register an instance in the container.
          *
-         * @param {String} identifier
+         * @param {string} identifier
          * @param {*} instance
          * @return {DependencyContainer}
          */
@@ -714,7 +714,7 @@ var DependencyContainer = function () {
          * Remove an instance from the container.
          *
          * @see removeBinding
-         * @param {String} identifier
+         * @param {string} identifier
          * @return {DependencyContainer}
          */
 
@@ -835,30 +835,30 @@ function cloneNull(value) {
 }
 
 /**
- * Clone Boolean value.
+ * Clone boolean value.
  *
- * @param {Boolean} value
- * @returns {Boolean}
+ * @param {boolean} value
+ * @returns {boolean}
  */
 function cloneBoolean(value) {
     return Boolean(value);
 }
 
 /**
- * Clone Number value.
+ * Clone number value.
  *
- * @param {Number} value
- * @returns {Number}
+ * @param {number} value
+ * @returns {number}
  */
 function cloneNumber(value) {
     return Number(value);
 }
 
 /**
- * Clone String value.
+ * Clone string value.
  *
- * @param {String} value
- * @returns {String}
+ * @param {string} value
+ * @returns {string}
  */
 function cloneString(value) {
     return String(value);

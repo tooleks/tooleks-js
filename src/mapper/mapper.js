@@ -63,8 +63,8 @@ class Mapper {
     /**
      * Register the resolver function for from-to mapping.
      *
-     * @param {String} from
-     * @param {String} to
+     * @param {string} from
+     * @param {string} to
      * @param {Function} resolver
      * @return {Mapper}
      */
@@ -82,8 +82,8 @@ class Mapper {
     /**
      * Remove the resolver function for from-to mapping.
      *
-     * @param {String} from
-     * @param {String} to
+     * @param {string} from
+     * @param {string} to
      * @return {Mapper}
      */
     removeResolver(from, to) {
@@ -98,8 +98,8 @@ class Mapper {
     /**
      * Assert that the resolver function for from-to mapping exists.
      *
-     * @param {String} from
-     * @param {String} to
+     * @param {string} from
+     * @param {string} to
      * @return {void}
      * @private
      */
@@ -115,9 +115,9 @@ class Mapper {
     /**
      * Determine that the resolver function for from-to mapping is registered.
      *
-     * @param {String} from
-     * @param {String} to
-     * @return {Boolean}
+     * @param {string} from
+     * @param {string} to
+     * @return {boolean}
      */
     hasResolver(from, to) {
         assertFromParameter(from);
@@ -134,8 +134,8 @@ class Mapper {
      * Map value by using from-to resolver function.
      *
      * @param {*} value
-     * @param {String} from
-     * @param {String} to
+     * @param {string} from
+     * @param {string} to
      * @return {*}
      */
     map(value, from, to) {
