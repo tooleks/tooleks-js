@@ -23,30 +23,30 @@ function cloneNull(value) {
 }
 
 /**
- * Clone Boolean value.
+ * Clone boolean value.
  *
- * @param {Boolean} value
- * @returns {Boolean}
+ * @param {boolean} value
+ * @returns {boolean}
  */
 function cloneBoolean(value) {
     return Boolean(value);
 }
 
 /**
- * Clone Number value.
+ * Clone number value.
  *
- * @param {Number} value
- * @returns {Number}
+ * @param {number} value
+ * @returns {number}
  */
 function cloneNumber(value) {
     return Number(value);
 }
 
 /**
- * Clone String value.
+ * Clone string value.
  *
- * @param {String} value
- * @returns {String}
+ * @param {string} value
+ * @returns {string}
  */
 function cloneString(value) {
     return String(value);

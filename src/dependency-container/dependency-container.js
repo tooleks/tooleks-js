@@ -116,7 +116,7 @@ class DependencyContainer {
     /**
      * Resolve all of dependencies for a binding.
      *
-     * @param {Array<String|Function>} dependencies
+     * @param {Array<string|Function>} dependencies
      * @private
      */
     _resolveDependencies(dependencies) {
@@ -134,8 +134,8 @@ class DependencyContainer {
      * Return true if the container can return the binding for the given identifier.
      * Return false otherwise.
      *
-     * @param {String} identifier
-     * @return {Boolean}
+     * @param {string} identifier
+     * @return {boolean}
      */
     has(identifier) {
         assertIdentifierParameter(identifier);
@@ -145,7 +145,7 @@ class DependencyContainer {
     /**
      * Find the binding of the container by its identifier and return it.
      *
-     * @param {String} identifier
+     * @param {string} identifier
      * @return {Object}
      */
     get(identifier) {
@@ -167,12 +167,12 @@ class DependencyContainer {
     /**
      * Register a new binding in the container.
      *
-     * @param {String} identifier
+     * @param {string} identifier
      * @param {Function} type
      * @param {Object} options
-     * @param {Array<String|Function>} options.dependencies
-     * @param {Boolean} options.singleton
-     * @param {Boolean} options.factory
+     * @param {Array<string|Function>} options.dependencies
+     * @param {boolean} options.singleton
+     * @param {boolean} options.factory
      * @return {DependencyContainer}
      */
     registerBinding(identifier, type, {dependencies = [], singleton = false, factory = false} = {}) {
@@ -191,7 +191,7 @@ class DependencyContainer {
     /**
      * Remove the binding from the container.
      *
-     * @param {String} identifier
+     * @param {string} identifier
      * @return {DependencyContainer}
      */
     removeBinding(identifier) {
@@ -205,7 +205,7 @@ class DependencyContainer {
     /**
      * Register an instance in the container.
      *
-     * @param {String} identifier
+     * @param {string} identifier
      * @param {*} instance
      * @return {DependencyContainer}
      */
@@ -220,7 +220,7 @@ class DependencyContainer {
      * Remove an instance from the container.
      *
      * @see removeBinding
-     * @param {String} identifier
+     * @param {string} identifier
      * @return {DependencyContainer}
      */
     removeInstance(identifier) {

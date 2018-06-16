@@ -41,7 +41,7 @@ class EventEmitter {
     /**
      * Synchronously call each of the listeners registered for the event named eventName.
      *
-     * @param {String} eventName
+     * @param {string} eventName
      * @param {*} payload
      * @return {void}
      */
@@ -56,7 +56,7 @@ class EventEmitter {
     /**
      * Add the listener function to the end of the listeners array for the event named eventName.
      *
-     * @param {String} eventName
+     * @param {string} eventName
      * @param {Function} listener
      * @return {Function} - A function to remove the listener function from the listeners array for the event named eventName.
      */
