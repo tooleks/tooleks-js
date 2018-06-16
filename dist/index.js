@@ -1,4 +1,4 @@
-/*! Copyright (C) 2018 Oleksandr Tolochko. */
+/*! Copyright (c) Oleksandr Tolochko. */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
