@@ -1,5 +1,5 @@
 "use strict";
 
-const Defer = require("./defer");
+const Defer = require("./Defer");
 
 module.exports = Defer;
