@@ -34,5 +34,5 @@ module.exports = {
             },
         ],
     },
-    plugins: [new webpack.BannerPlugin("Copyright (C) 2018 Oleksandr Tolochko.")],
+    plugins: [new webpack.BannerPlugin("Copyright (c) Oleksandr Tolochko.")],
 };
