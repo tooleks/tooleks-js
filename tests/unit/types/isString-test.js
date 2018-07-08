@@ -8,6 +8,7 @@ describe("isString function test", function() {
     it("should return true", function() {
         assert(isString(String(faker.random.number())));
         assert(isString(faker.lorem.word()));
+        assert(isString(new String(faker.lorem.word())));
     });
 
     it("should return false", function() {

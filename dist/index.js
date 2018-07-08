@@ -1,4 +1,4 @@
-/*! Copyright (c) Oleksandr Tolochko. */
+/*! tooleks v1.2.1. Copyright (c) Oleksandr Tolochko. */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -895,7 +895,7 @@ module.exports = isUndefined;
  */
 
 function isString(value) {
-  return typeof value === "string";
+  return typeof value === "string" || value instanceof String;
 }
 
 module.exports = isString;
@@ -958,7 +958,7 @@ module.exports = isNumeric;
  */
 
 function isNumber(value) {
-  return typeof value === "number";
+  return typeof value === "number" || value instanceof Number;
 }
 
 module.exports = isNumber;
@@ -1019,7 +1019,7 @@ module.exports = isFunction;
  */
 
 function isBoolean(value) {
-  return typeof value === "boolean";
+  return typeof value === "boolean" || value instanceof Boolean;
 }
 
 module.exports = isBoolean;
