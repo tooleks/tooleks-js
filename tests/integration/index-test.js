@@ -10,5 +10,14 @@ describe("index module test", function() {
         expect(require("../../dist").EventEmitter).to.be.a("function");
         expect(require("../../dist").Mapper).to.be.a("function");
         expect(require("../../dist").optional).to.be.a("function");
+        expect(require("../../dist").isArray).to.be.a("function");
+        expect(require("../../dist").isBoolean).to.be.a("function");
+        expect(require("../../dist").isFunction).to.be.a("function");
+        expect(require("../../dist").isNull).to.be.a("function");
+        expect(require("../../dist").isNumber).to.be.a("function");
+        expect(require("../../dist").isNumeric).to.be.a("function");
+        expect(require("../../dist").isObject).to.be.a("function");
+        expect(require("../../dist").isString).to.be.a("function");
+        expect(require("../../dist").isUndefined).to.be.a("function");
     });
 });

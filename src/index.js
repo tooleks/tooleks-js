@@ -6,5 +6,6 @@ const DependencyContainer = require("./DependencyContainer");
 const EventEmitter = require("./EventEmitter");
 const Mapper = require("./Mapper");
 const optional = require("./optional");
+const types = require("./types");
 
-module.exports = Object.freeze({clone, Defer, DependencyContainer, EventEmitter, Mapper, optional});
+module.exports = Object.freeze({clone, Defer, DependencyContainer, EventEmitter, Mapper, optional, ...types});

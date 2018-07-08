@@ -123,7 +123,7 @@ console.log(mappedUser); // { fullName: "Anna P." }
 
 #### `clone` function
 
-The `clone` function provides the mechanism for objects deep cloning. It supports `Boolean`, `Number`, `String`, `Array`, `Map`, `Date`, `Object`, `Function` types.
+The `clone` function provides the mechanism for objects deep cloning. It supports `Array`, `Boolean`, `Date`, `Function`, `Map`, `Number`, `Object`, `RegExp`, `String` types.
 
 ```JavaScript
 const {clone} = require("tooleks");

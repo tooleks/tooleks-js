@@ -1,6 +1,6 @@
 {
   "name": "tooleks",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "A set of tools for JavaScript development",
   "keywords": [
     "defer",
@@ -43,12 +43,14 @@
   "homepage": "https://github.com/tooleks/tooleks-js#readme",
   "devDependencies": {
     "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.5",
     "babel-loader": "^7.1.4",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "chai": "^4.1.2",
     "eslint": "^4.19.1",
     "eslint-loader": "^2.0.0",
+    "faker": "^4.1.0",
     "mocha": "^5.2.0",
     "nyc": "^11.9.0",
     "prettier": "^1.13.5",

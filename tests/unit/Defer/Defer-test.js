@@ -1,75 +1,74 @@
 "use strict";
 
-const expect = require("chai").expect;
+const assert = require("assert");
 const sinon = require("sinon");
+const faker = require("faker");
+const {Defer} = require("../../../src");
 
-const providers = [require("../../../src").Defer, require("../../../dist").Defer];
+describe("Defer class test", function() {
+    let defer, resolvedValue, rejectedValue, resolve, reject;
 
-providers.forEach((Defer) => {
-    describe("Defer class test", function() {
-        let defer, resolvedValue, rejectedValue, spyOnResolveListener, spyOnRejectListener;
+    beforeEach(function() {
+        defer = new Defer();
+        resolvedValue = faker.lorem.word();
+        rejectedValue = new Error(faker.lorem.sentence());
+        resolve = sinon.spy();
+        reject = sinon.spy();
+    });
 
-        beforeEach(function() {
-            defer = new Defer();
-            resolvedValue = "resolvedValue";
-            rejectedValue = new Error("rejectedValue");
-            spyOnResolveListener = sinon.spy();
-            spyOnRejectListener = sinon.spy();
-        });
+    it("should resolve a valid value before resolving via promisify", function(done) {
+        defer
+            .promisify()
+            .then(resolve)
+            .then(() => {
+                assert(resolve.calledOnce);
+                assert(resolve.calledWith(resolvedValue));
+                done();
+            })
+            .catch(() => assert(false, "Should not throw error."));
 
-        it("should have a proper api", function() {
-            expect(defer).to.be.an.instanceof(Defer);
-            expect(defer.resolve).to.be.a("function");
-            expect(defer.reject).to.be.a("function");
-            expect(defer.promisify).to.be.a("function");
-        });
+        defer.resolve(resolvedValue);
+    });
 
-        it("should resolve a valid value before resolving via promisify", function(done) {
-            defer
-                .promisify()
-                .then(spyOnResolveListener)
-                .then(() => {
-                    sinon.assert.calledOnce(spyOnResolveListener);
-                    sinon.assert.calledWith(spyOnResolveListener, resolvedValue);
-                    done();
-                });
-            defer.resolve(resolvedValue);
-        });
+    it("should resolve a valid value after resolving via promisify", function(done) {
+        defer.resolve(resolvedValue);
 
-        it("should resolve a valid value after resolving via promisify", function(done) {
-            defer.resolve(resolvedValue);
-            defer
-                .promisify()
-                .then(spyOnResolveListener)
-                .then(() => {
-                    sinon.assert.calledOnce(spyOnResolveListener);
-                    sinon.assert.calledWith(spyOnResolveListener, resolvedValue);
-                    done();
-                });
-        });
+        defer
+            .promisify()
+            .then(resolve)
+            .then(() => {
+                assert(resolve.calledOnce);
+                assert(resolve.calledWith(resolvedValue));
+                done();
+            })
+            .catch(() => assert(false, "Should not throw error."));
+    });
 
-        it("should reject a valid value before rejecting via promisify", function(done) {
-            defer
-                .promisify()
-                .catch(spyOnRejectListener)
-                .then(() => {
-                    sinon.assert.calledOnce(spyOnRejectListener);
-                    sinon.assert.calledWith(spyOnRejectListener, resolvedValue);
-                    done();
-                });
-            defer.reject(resolvedValue);
-        });
+    it("should reject a valid value before rejecting via promisify", function(done) {
+        defer
+            .promisify()
+            .catch(reject)
+            .then(() => {
+                assert(reject.calledOnce);
+                assert(reject.calledWith(rejectedValue));
+                done();
+            })
+            .catch(() => assert(false, "Should not throw error."));
 
-        it("should reject a valid value after rejecting via promisify", function(done) {
-            defer.reject(resolvedValue);
-            defer
-                .promisify()
-                .catch(spyOnRejectListener)
-                .then(() => {
-                    sinon.assert.calledOnce(spyOnRejectListener);
-                    sinon.assert.calledWith(spyOnRejectListener, resolvedValue);
-                    done();
-                });
-        });
+        defer.reject(rejectedValue);
+    });
+
+    it("should reject a valid value after rejecting via promisify", function(done) {
+        defer.reject(rejectedValue);
+
+        defer
+            .promisify()
+            .catch(reject)
+            .then(() => {
+                assert(reject.calledOnce);
+                assert(reject.calledWith(rejectedValue));
+                done();
+            })
+            .catch(() => assert(false, "Should not throw error."));
     });
 });

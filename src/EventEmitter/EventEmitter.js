@@ -1,5 +1,7 @@
 "use strict";
 
+const {isFunction, isString, isUndefined} = require("../types");
+
 /**
  * Assert "eventName" parameter.
  *
@@ -8,7 +10,7 @@
  * @throws TypeError
  */
 function assertEventNameParameter(eventName) {
-    if (typeof eventName !== "string") {
+    if (!isString(eventName)) {
         throw new TypeError("The \"eventName\" parameter should be a string.");
     }
 }
@@ -21,7 +23,7 @@ function assertEventNameParameter(eventName) {
  * @throws TypeError
  */
 function assertListenerParameter(listener) {
-    if (typeof listener !== "function") {
+    if (!isFunction(listener)) {
         throw new TypeError("The \"listener\" parameter should be a function.");
     }
 }
@@ -36,6 +38,8 @@ class EventEmitter {
      */
     constructor() {
         this._events = {};
+        this.emit = this.emit.bind(this);
+        this.on = this.on.bind(this);
     }
 
     /**
@@ -48,7 +52,7 @@ class EventEmitter {
     emit(eventName, payload) {
         assertEventNameParameter(eventName);
         const event = this._events[eventName];
-        if (typeof event !== "undefined") {
+        if (!isUndefined(event)) {
             event.forEach((listener) => listener(payload));
         }
     }
@@ -63,7 +67,7 @@ class EventEmitter {
     on(eventName, listener) {
         assertEventNameParameter(eventName);
         assertListenerParameter(listener);
-        if (typeof this._events[eventName] === "undefined") {
+        if (isUndefined(this._events[eventName])) {
             this._events[eventName] = [];
         }
         this._events[eventName].push(listener);

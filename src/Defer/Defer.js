@@ -13,6 +13,7 @@ class Defer {
             this.resolve = resolve;
             this.reject = reject;
         });
+        this.promisify = this.promisify.bind(this);
     }
 
     /**
