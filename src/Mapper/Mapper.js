@@ -1,5 +1,7 @@
 "use strict";
 
+const {isFunction, isString, isUndefined} = require("../types");
+
 /**
  * Assert "from" parameter.
  *
@@ -8,7 +10,7 @@
  * @throws TypeError
  */
 function assertFromParameter(from) {
-    if (typeof from !== "string") {
+    if (!isString(from)) {
         throw new TypeError("The \"from\" parameter should be a string.");
     }
 }
@@ -21,7 +23,7 @@ function assertFromParameter(from) {
  * @throws TypeError
  */
 function assertToParameter(to) {
-    if (typeof to !== "string") {
+    if (!isString(to)) {
         throw new TypeError("The \"to\" parameter should be a string.");
     }
 }
@@ -34,7 +36,7 @@ function assertToParameter(to) {
  * @throws TypeError
  */
 function assertResolverParameter(resolver) {
-    if (typeof resolver !== "function") {
+    if (!isFunction(resolver)) {
         throw new TypeError("The \"resolver\" parameter should be a function.");
     }
 }
@@ -49,15 +51,28 @@ class Mapper {
      */
     constructor() {
         this._resolvers = {};
+        this._assertResolver = this._assertResolver.bind(this);
+        this.registerResolver = this.registerResolver.bind(this);
+        this.hasResolver = this.hasResolver.bind(this);
+        this.removeResolver = this.removeResolver.bind(this);
+        this.map = this.map.bind(this);
     }
 
     /**
-     * Get a list of resolvers.
+     * Assert that the resolver function for from-to mapping exists.
      *
-     * @return {Object}
+     * @param {string} from
+     * @param {string} to
+     * @return {void}
+     * @private
      */
-    getResolvers() {
-        return this._resolvers;
+    _assertResolver(from, to) {
+        if (isUndefined(this._resolvers[from])) {
+            throw new Error(`Resolver for "${from}" not found.`);
+        }
+        if (isUndefined(this._resolvers[from][to])) {
+            throw new Error(`Resolver for "${to}" not found.`);
+        }
     }
 
     /**
@@ -72,44 +87,11 @@ class Mapper {
         assertFromParameter(from);
         assertToParameter(to);
         assertResolverParameter(resolver);
-        if (typeof this._resolvers[from] === "undefined") {
+        if (isUndefined(this._resolvers[from])) {
             this._resolvers[from] = {};
         }
         this._resolvers[from][to] = resolver;
         return this;
-    }
-
-    /**
-     * Remove the resolver function for from-to mapping.
-     *
-     * @param {string} from
-     * @param {string} to
-     * @return {Mapper}
-     */
-    removeResolver(from, to) {
-        assertFromParameter(from);
-        assertToParameter(to);
-        if (this.hasResolver(from, to)) {
-            delete this._resolvers[from][to];
-        }
-        return this;
-    }
-
-    /**
-     * Assert that the resolver function for from-to mapping exists.
-     *
-     * @param {string} from
-     * @param {string} to
-     * @return {void}
-     * @private
-     */
-    _assertResolver(from, to) {
-        if (typeof this.getResolvers()[from] === "undefined") {
-            throw new Error(`Resolver for "${from}" not found.`);
-        }
-        if (typeof this.getResolvers()[from][to] === "undefined") {
-            throw new Error(`Resolver for "${to}" not found.`);
-        }
     }
 
     /**
@@ -131,6 +113,22 @@ class Mapper {
     }
 
     /**
+     * Remove the resolver function for from-to mapping.
+     *
+     * @param {string} from
+     * @param {string} to
+     * @return {Mapper}
+     */
+    removeResolver(from, to) {
+        assertFromParameter(from);
+        assertToParameter(to);
+        if (this.hasResolver(from, to)) {
+            delete this._resolvers[from][to];
+        }
+        return this;
+    }
+
+    /**
      * Map value by using from-to resolver function.
      *
      * @param {*} value
@@ -142,7 +140,7 @@ class Mapper {
         assertFromParameter(from);
         assertToParameter(to);
         this._assertResolver(from, to);
-        const resolver = this.getResolvers()[from][to];
+        const resolver = this._resolvers[from][to];
         return resolver(value);
     }
 }

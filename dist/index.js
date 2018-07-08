@@ -92,11 +92,40 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 12);
+/******/ 	return __webpack_require__(__webpack_require__.s = 22);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var isArray = __webpack_require__(19);
+var isBoolean = __webpack_require__(18);
+var isFunction = __webpack_require__(17);
+var isNull = __webpack_require__(16);
+var isNumber = __webpack_require__(15);
+var isNumeric = __webpack_require__(14);
+var isObject = __webpack_require__(13);
+var isString = __webpack_require__(12);
+var isUndefined = __webpack_require__(11);
+
+module.exports = Object.freeze({
+    isArray: isArray,
+    isBoolean: isBoolean,
+    isFunction: isFunction,
+    isNull: isNull,
+    isNumber: isNumber,
+    isNumeric: isNumeric,
+    isObject: isObject,
+    isString: isString,
+    isUndefined: isUndefined
+});
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -124,22 +153,31 @@ function optional(callback) {
 module.exports = optional;
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var optional = __webpack_require__(0);
-
-module.exports = optional;
-
-/***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+
+var optional = __webpack_require__(1);
+
+module.exports = optional;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _require = __webpack_require__(0),
+    isFunction = _require.isFunction,
+    isString = _require.isString,
+    isUndefined = _require.isUndefined;
 
 /**
  * Assert "from" parameter.
@@ -149,12 +187,9 @@ module.exports = optional;
  * @throws TypeError
  */
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function assertFromParameter(from) {
-    if (typeof from !== "string") {
+    if (!isString(from)) {
         throw new TypeError('The "from" parameter should be a string.');
     }
 }
@@ -167,7 +202,7 @@ function assertFromParameter(from) {
  * @throws TypeError
  */
 function assertToParameter(to) {
-    if (typeof to !== "string") {
+    if (!isString(to)) {
         throw new TypeError('The "to" parameter should be a string.');
     }
 }
@@ -180,7 +215,7 @@ function assertToParameter(to) {
  * @throws TypeError
  */
 function assertResolverParameter(resolver) {
-    if (typeof resolver !== "function") {
+    if (!isFunction(resolver)) {
         throw new TypeError('The "resolver" parameter should be a function.');
     }
 }
@@ -197,19 +232,32 @@ var Mapper = function () {
         _classCallCheck(this, Mapper);
 
         this._resolvers = {};
+        this._assertResolver = this._assertResolver.bind(this);
+        this.registerResolver = this.registerResolver.bind(this);
+        this.hasResolver = this.hasResolver.bind(this);
+        this.removeResolver = this.removeResolver.bind(this);
+        this.map = this.map.bind(this);
     }
 
     /**
-     * Get a list of resolvers.
+     * Assert that the resolver function for from-to mapping exists.
      *
-     * @return {Object}
+     * @param {string} from
+     * @param {string} to
+     * @return {void}
+     * @private
      */
 
 
     _createClass(Mapper, [{
-        key: "getResolvers",
-        value: function getResolvers() {
-            return this._resolvers;
+        key: "_assertResolver",
+        value: function _assertResolver(from, to) {
+            if (isUndefined(this._resolvers[from])) {
+                throw new Error("Resolver for \"" + from + "\" not found.");
+            }
+            if (isUndefined(this._resolvers[from][to])) {
+                throw new Error("Resolver for \"" + to + "\" not found.");
+            }
         }
 
         /**
@@ -227,50 +275,11 @@ var Mapper = function () {
             assertFromParameter(from);
             assertToParameter(to);
             assertResolverParameter(resolver);
-            if (typeof this._resolvers[from] === "undefined") {
+            if (isUndefined(this._resolvers[from])) {
                 this._resolvers[from] = {};
             }
             this._resolvers[from][to] = resolver;
             return this;
-        }
-
-        /**
-         * Remove the resolver function for from-to mapping.
-         *
-         * @param {string} from
-         * @param {string} to
-         * @return {Mapper}
-         */
-
-    }, {
-        key: "removeResolver",
-        value: function removeResolver(from, to) {
-            assertFromParameter(from);
-            assertToParameter(to);
-            if (this.hasResolver(from, to)) {
-                delete this._resolvers[from][to];
-            }
-            return this;
-        }
-
-        /**
-         * Assert that the resolver function for from-to mapping exists.
-         *
-         * @param {string} from
-         * @param {string} to
-         * @return {void}
-         * @private
-         */
-
-    }, {
-        key: "_assertResolver",
-        value: function _assertResolver(from, to) {
-            if (typeof this.getResolvers()[from] === "undefined") {
-                throw new Error("Resolver for \"" + from + "\" not found.");
-            }
-            if (typeof this.getResolvers()[from][to] === "undefined") {
-                throw new Error("Resolver for \"" + to + "\" not found.");
-            }
         }
 
         /**
@@ -295,6 +304,25 @@ var Mapper = function () {
         }
 
         /**
+         * Remove the resolver function for from-to mapping.
+         *
+         * @param {string} from
+         * @param {string} to
+         * @return {Mapper}
+         */
+
+    }, {
+        key: "removeResolver",
+        value: function removeResolver(from, to) {
+            assertFromParameter(from);
+            assertToParameter(to);
+            if (this.hasResolver(from, to)) {
+                delete this._resolvers[from][to];
+            }
+            return this;
+        }
+
+        /**
          * Map value by using from-to resolver function.
          *
          * @param {*} value
@@ -309,7 +337,7 @@ var Mapper = function () {
             assertFromParameter(from);
             assertToParameter(to);
             this._assertResolver(from, to);
-            var resolver = this.getResolvers()[from][to];
+            var resolver = this._resolvers[from][to];
             return resolver(value);
         }
     }]);
@@ -320,22 +348,31 @@ var Mapper = function () {
 module.exports = Mapper;
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var Mapper = __webpack_require__(2);
-
-module.exports = Mapper;
-
-/***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+
+var Mapper = __webpack_require__(3);
+
+module.exports = Mapper;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _require = __webpack_require__(0),
+    isFunction = _require.isFunction,
+    isString = _require.isString,
+    isUndefined = _require.isUndefined;
 
 /**
  * Assert "eventName" parameter.
@@ -345,12 +382,9 @@ module.exports = Mapper;
  * @throws TypeError
  */
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function assertEventNameParameter(eventName) {
-    if (typeof eventName !== "string") {
+    if (!isString(eventName)) {
         throw new TypeError('The "eventName" parameter should be a string.');
     }
 }
@@ -363,7 +397,7 @@ function assertEventNameParameter(eventName) {
  * @throws TypeError
  */
 function assertListenerParameter(listener) {
-    if (typeof listener !== "function") {
+    if (!isFunction(listener)) {
         throw new TypeError('The "listener" parameter should be a function.');
     }
 }
@@ -380,6 +414,8 @@ var EventEmitter = function () {
         _classCallCheck(this, EventEmitter);
 
         this._events = {};
+        this.emit = this.emit.bind(this);
+        this.on = this.on.bind(this);
     }
 
     /**
@@ -396,7 +432,7 @@ var EventEmitter = function () {
         value: function emit(eventName, payload) {
             assertEventNameParameter(eventName);
             var event = this._events[eventName];
-            if (typeof event !== "undefined") {
+            if (!isUndefined(event)) {
                 event.forEach(function (listener) {
                     return listener(payload);
                 });
@@ -418,7 +454,7 @@ var EventEmitter = function () {
 
             assertEventNameParameter(eventName);
             assertListenerParameter(listener);
-            if (typeof this._events[eventName] === "undefined") {
+            if (isUndefined(this._events[eventName])) {
                 this._events[eventName] = [];
             }
             this._events[eventName].push(listener);
@@ -436,22 +472,35 @@ var EventEmitter = function () {
 module.exports = EventEmitter;
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var EventEmitter = __webpack_require__(4);
-
-module.exports = EventEmitter;
-
-/***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+
+var EventEmitter = __webpack_require__(5);
+
+module.exports = EventEmitter;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _require = __webpack_require__(0),
+    isArray = _require.isArray,
+    isBoolean = _require.isBoolean,
+    isFunction = _require.isFunction,
+    isString = _require.isString,
+    isUndefined = _require.isUndefined;
 
 /**
  * Assert "identifier" parameter.
@@ -461,14 +510,9 @@ module.exports = EventEmitter;
  * @throws TypeError
  */
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function assertIdentifierParameter(identifier) {
-    if (typeof identifier !== "string") {
+    if (!isString(identifier)) {
         throw new TypeError('The "identifier" parameter should be a string.');
     }
 }
@@ -481,7 +525,7 @@ function assertIdentifierParameter(identifier) {
  * @throws TypeError
  */
 function assertTypeParameter(type) {
-    if (typeof type !== "function") {
+    if (!isFunction(type)) {
         throw new TypeError('The "type" parameter should be a function.');
     }
 }
@@ -494,11 +538,11 @@ function assertTypeParameter(type) {
  * @throws TypeError
  */
 function assertDependenciesParameter(dependencies) {
-    if (!Array.isArray(dependencies)) {
+    if (!isArray(dependencies)) {
         throw new TypeError('The "dependencies" parameter should be an array.');
     }
     dependencies.forEach(function (dependency) {
-        if (typeof dependency !== "string" && typeof dependency !== "function") {
+        if (!isString(dependency) && !isFunction(dependency)) {
             throw new TypeError('The "dependencies" parameter should be an array of strings or functions.');
         }
     });
@@ -512,7 +556,7 @@ function assertDependenciesParameter(dependencies) {
  * @throws TypeError
  */
 function assertSingletonParameter(singleton) {
-    if (typeof singleton !== "boolean") {
+    if (!isBoolean(singleton)) {
         throw new TypeError('The "singleton" parameter should be a boolean.');
     }
 }
@@ -525,7 +569,7 @@ function assertSingletonParameter(singleton) {
  * @throws TypeError
  */
 function assertFactoryParameter(factory) {
-    if (typeof factory !== "boolean") {
+    if (!isBoolean(factory)) {
         throw new TypeError('The "factory" parameter should be a boolean.');
     }
 }
@@ -538,7 +582,7 @@ function assertFactoryParameter(factory) {
  * @throws TypeError
  */
 function assertInstanceParameter(instance) {
-    if (typeof instance === "undefined") {
+    if (isUndefined(instance)) {
         throw new TypeError('The "instance" parameter should not be an undefined.');
     }
 }
@@ -555,6 +599,13 @@ var DependencyContainer = function () {
         _classCallCheck(this, DependencyContainer);
 
         this._bindings = {};
+        this._createInstance = this._createInstance.bind(this);
+        this._resolveDependencies = this._resolveDependencies.bind(this);
+        this.registerBinding = this.registerBinding.bind(this);
+        this.registerInstance = this.registerInstance.bind(this);
+        this.removeBinding = this.removeBinding.bind(this);
+        this.has = this.has.bind(this);
+        this.get = this.get.bind(this);
     }
 
     /**
@@ -592,9 +643,9 @@ var DependencyContainer = function () {
             var _this = this;
 
             return dependencies.map(function (dependency) {
-                if (typeof dependency === "string") {
+                if (isString(dependency)) {
                     return _this.get(dependency);
-                } else if (typeof dependency === "function") {
+                } else if (isFunction(dependency)) {
                     return dependency();
                 }
                 throw new TypeError("Invalid dependency type.");
@@ -602,50 +653,10 @@ var DependencyContainer = function () {
         }
 
         /**
-         * Return true if the container can return the binding for the given identifier.
-         * Return false otherwise.
-         *
-         * @param {string} identifier
-         * @return {boolean}
-         */
-
-    }, {
-        key: "has",
-        value: function has(identifier) {
-            assertIdentifierParameter(identifier);
-            return Object.prototype.hasOwnProperty.call(this._bindings, identifier);
-        }
-
-        /**
-         * Find the binding of the container by its identifier and return it.
-         *
-         * @param {string} identifier
-         * @return {Object}
-         */
-
-    }, {
-        key: "get",
-        value: function get(identifier) {
-            assertIdentifierParameter(identifier);
-            if (!this.has(identifier)) {
-                throw new Error("The \"" + identifier + "\" binding not found.");
-            }
-            var binding = this._bindings[identifier];
-            if (typeof binding.instance !== "undefined") {
-                return binding.instance;
-            }
-            var instance = this._createInstance(binding);
-            if (binding.singleton) {
-                binding.instance = instance;
-            }
-            return instance;
-        }
-
-        /**
          * Register a new binding in the container.
          *
          * @param {string} identifier
-         * @param {Function} type
+         * @param {Function|*} type
          * @param {Object} options
          * @param {Array<string|Function>} options.dependencies
          * @param {boolean} options.singleton
@@ -656,6 +667,8 @@ var DependencyContainer = function () {
     }, {
         key: "registerBinding",
         value: function registerBinding(identifier, type) {
+            var _this2 = this;
+
             var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
                 _ref$dependencies = _ref.dependencies,
                 dependencies = _ref$dependencies === undefined ? [] : _ref$dependencies,
@@ -669,10 +682,46 @@ var DependencyContainer = function () {
             assertDependenciesParameter(dependencies);
             assertSingletonParameter(singleton);
             assertFactoryParameter(factory);
+
+            // Check dependencies list length.
             if (type.length !== dependencies.length) {
                 throw new Error("Invalid number of dependencies were specified for \"" + identifier + "\".");
             }
+
+            // Check for circular dependencies.
+            dependencies.forEach(function (dependency) {
+                if (dependency === identifier) {
+                    throw new Error("Circular dependency detected. " + identifier + " depends on itself.");
+                }
+
+                if (!isUndefined(_this2._bindings[dependency])) {
+                    _this2._bindings[dependency].dependencies.forEach(function (innerDependency) {
+                        if (innerDependency === identifier) {
+                            throw new Error("Circular dependency detected. " + ("\"" + identifier + "\" depends on \"" + dependency + "\" and vise versa."));
+                        }
+                    });
+                }
+            });
+
             this._bindings[identifier] = { type: type, dependencies: dependencies, singleton: singleton, factory: factory };
+
+            return this;
+        }
+
+        /**
+         * Register an instance in the container.
+         *
+         * @param {string} identifier
+         * @param {*} instance
+         * @return {DependencyContainer}
+         */
+
+    }, {
+        key: "registerInstance",
+        value: function registerInstance(identifier, instance) {
+            assertIdentifierParameter(identifier);
+            assertInstanceParameter(instance);
+            this._bindings[identifier] = { instance: instance, dependencies: [], singleton: true, factory: false };
             return this;
         }
 
@@ -694,35 +743,43 @@ var DependencyContainer = function () {
         }
 
         /**
-         * Register an instance in the container.
+         * Return true if the container can return the binding for the given identifier.
+         * Return false otherwise.
          *
          * @param {string} identifier
-         * @param {*} instance
-         * @return {DependencyContainer}
+         * @return {boolean}
          */
 
     }, {
-        key: "registerInstance",
-        value: function registerInstance(identifier, instance) {
+        key: "has",
+        value: function has(identifier) {
             assertIdentifierParameter(identifier);
-            assertInstanceParameter(instance);
-            this._bindings[identifier] = { instance: instance, singleton: true, factory: false };
-            return this;
+            return Object.prototype.hasOwnProperty.call(this._bindings, identifier);
         }
 
         /**
-         * Remove an instance from the container.
+         * Find the binding of the container by its identifier and return it.
          *
-         * @see removeBinding
          * @param {string} identifier
-         * @return {DependencyContainer}
+         * @return {*}
          */
 
     }, {
-        key: "removeInstance",
-        value: function removeInstance(identifier) {
+        key: "get",
+        value: function get(identifier) {
             assertIdentifierParameter(identifier);
-            return this.removeBinding(identifier);
+            if (!this.has(identifier)) {
+                throw new Error("The \"" + identifier + "\" binding not found.");
+            }
+            var binding = this._bindings[identifier];
+            if (!isUndefined(binding.instance)) {
+                return binding.instance;
+            }
+            var instance = this._createInstance(binding);
+            if (binding.singleton) {
+                binding.instance = instance;
+            }
+            return instance;
         }
     }]);
 
@@ -732,18 +789,18 @@ var DependencyContainer = function () {
 module.exports = DependencyContainer;
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var DependencyContainer = __webpack_require__(6);
+var DependencyContainer = __webpack_require__(7);
 
 module.exports = DependencyContainer;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -770,6 +827,7 @@ var Defer = function () {
             _this.resolve = resolve;
             _this.reject = reject;
         });
+        this.promisify = this.promisify.bind(this);
     }
 
     /**
@@ -792,24 +850,220 @@ var Defer = function () {
 module.exports = Defer;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Defer = __webpack_require__(8);
+var Defer = __webpack_require__(9);
 
 module.exports = Defer;
 
 /***/ }),
-/* 10 */
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is an undefined.
+ *
+ * @param {*} value
+ * @return {boolean}
+ */
+
+function isUndefined(value) {
+  return typeof value === "undefined";
+}
+
+module.exports = isUndefined;
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is a string.
+ *
+ * @param {*} value
+ * @return {boolean}
+ */
+
+function isString(value) {
+  return typeof value === "string";
+}
+
+module.exports = isString;
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is an object and not null.
+ *
+ * @param {*} value
+ * @param {boolean} value
+ * @return {boolean}
+ */
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+function isObject(value) {
+  return (typeof value === "undefined" ? "undefined" : _typeof(value)) === "object" && value !== null;
+}
+
+module.exports = isObject;
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is a number or numeric string.
+ *
+ * @param {*} value
+ * @return {boolean}
+ */
+
+function isNumeric(value) {
+  return !isNaN(parseFloat(value)) && isFinite(value);
+}
+
+module.exports = isNumeric;
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is a number.
+ *
+ * @param {*} value
+ * @return {boolean}
+ */
+
+function isNumber(value) {
+  return typeof value === "number";
+}
+
+module.exports = isNumber;
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is a null.
+ *
+ * @param {*} value
+ * @return {boolean}
+ */
+
+function isNull(value) {
+  return value === null;
+}
+
+module.exports = isNull;
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is a function.
+ *
+ * @param {*} value
+ * @param {boolean} value
+ * @return {boolean}
+ */
+
+function isFunction(value) {
+  return typeof value === "function";
+}
+
+module.exports = isFunction;
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is a boolean.
+ *
+ * @param {*} value
+ * @return {boolean}
+ */
+
+function isBoolean(value) {
+  return typeof value === "boolean";
+}
+
+module.exports = isBoolean;
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is an array.
+ *
+ * @param {*} value
+ * @return {boolean}
+ */
+
+function isArray(value) {
+  return Array.isArray(value) || value instanceof Array;
+}
+
+module.exports = isArray;
+
+/***/ }),
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* eslint-disable */
 
 
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _require = __webpack_require__(0),
+    isArray = _require.isArray,
+    isBoolean = _require.isBoolean,
+    isFunction = _require.isFunction,
+    isNull = _require.isNull,
+    isNumber = _require.isNumber,
+    isObject = _require.isObject,
+    isString = _require.isString,
+    isUndefined = _require.isUndefined;
 
 /**
  * Clone undefined value.
@@ -818,7 +1072,6 @@ module.exports = Defer;
  * @returns {undefined}
  */
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 function cloneUndefined(value) {
     return undefined;
@@ -900,6 +1153,27 @@ function cloneDate(value) {
 }
 
 /**
+ * Clone RegExp value.
+ *
+ * @param {RegExp} value
+ * @returns {RegExp}
+ */
+function cloneRegExp(value) {
+    var pattern = value.source;
+    var flags = "";
+    if (value.global) {
+        flags += "g";
+    }
+    if (value.ignoreCase) {
+        flags += "i";
+    }
+    if (value.multiline) {
+        flags += "m";
+    }
+    return new RegExp(pattern, flags);
+}
+
+/**
  * Clone Object value.
  *
  * @param {Object} value
@@ -955,25 +1229,27 @@ function cloneFunction(value) {
  * @throws Error
  */
 function clone(value) {
-    if (typeof value === "undefined") {
+    if (isUndefined(value)) {
         return cloneUndefined(value);
-    } else if (value === null) {
+    } else if (isNull(value)) {
         return cloneNull(value);
-    } else if (typeof value === "boolean") {
+    } else if (isBoolean(value)) {
         return cloneBoolean(value);
-    } else if (typeof value === "number") {
+    } else if (isNumber(value)) {
         return cloneNumber(value);
-    } else if (typeof value === "string") {
+    } else if (isString(value)) {
         return cloneString(value);
-    } else if (Array.isArray(value) || value instanceof Array) {
+    } else if (isArray(value)) {
         return cloneArray(value);
     } else if (value instanceof Map) {
         return cloneMap(value);
     } else if (value instanceof Date) {
         return cloneDate(value);
-    } else if ((typeof value === "undefined" ? "undefined" : _typeof(value)) === "object") {
+    } else if (value instanceof RegExp) {
+        return cloneRegExp(value);
+    } else if (isObject(value)) {
         return cloneObject(value);
-    } else if (typeof value === "function") {
+    } else if (isFunction(value)) {
         return cloneFunction(value);
     }
     throw new Error("Unable to clone the " + (typeof value === "undefined" ? "undefined" : _typeof(value)) + ".");
@@ -982,31 +1258,34 @@ function clone(value) {
 module.exports = clone;
 
 /***/ }),
-/* 11 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var clone = __webpack_require__(10);
+var clone = __webpack_require__(20);
 
 module.exports = clone;
 
 /***/ }),
-/* 12 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var clone = __webpack_require__(11);
-var Defer = __webpack_require__(9);
-var DependencyContainer = __webpack_require__(7);
-var EventEmitter = __webpack_require__(5);
-var Mapper = __webpack_require__(3);
-var optional = __webpack_require__(1);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-module.exports = Object.freeze({ clone: clone, Defer: Defer, DependencyContainer: DependencyContainer, EventEmitter: EventEmitter, Mapper: Mapper, optional: optional });
+var clone = __webpack_require__(21);
+var Defer = __webpack_require__(10);
+var DependencyContainer = __webpack_require__(8);
+var EventEmitter = __webpack_require__(6);
+var Mapper = __webpack_require__(4);
+var optional = __webpack_require__(2);
+var types = __webpack_require__(0);
+
+module.exports = Object.freeze(_extends({ clone: clone, Defer: Defer, DependencyContainer: DependencyContainer, EventEmitter: EventEmitter, Mapper: Mapper, optional: optional }, types));
 
 /***/ })
 /******/ ]);

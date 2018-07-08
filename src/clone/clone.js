@@ -2,6 +2,8 @@
 
 "use strict";
 
+const {isArray, isBoolean, isFunction, isNull, isNumber, isObject, isString, isUndefined} = require("../types");
+
 /**
  * Clone undefined value.
  *
@@ -88,6 +90,27 @@ function cloneDate(value) {
 }
 
 /**
+ * Clone RegExp value.
+ *
+ * @param {RegExp} value
+ * @returns {RegExp}
+ */
+function cloneRegExp(value) {
+    let pattern = value.source;
+    let flags = "";
+    if (value.global) {
+        flags += "g";
+    }
+    if (value.ignoreCase) {
+        flags += "i";
+    }
+    if (value.multiline) {
+        flags += "m";
+    }
+    return new RegExp(pattern, flags);
+}
+
+/**
  * Clone Object value.
  *
  * @param {Object} value
@@ -143,25 +166,27 @@ function cloneFunction(value) {
  * @throws Error
  */
 function clone(value) {
-    if (typeof value === "undefined") {
+    if (isUndefined(value)) {
         return cloneUndefined(value);
-    } else if (value === null) {
+    } else if (isNull(value)) {
         return cloneNull(value);
-    } else if (typeof value === "boolean") {
+    } else if (isBoolean(value)) {
         return cloneBoolean(value);
-    } else if (typeof value === "number") {
+    } else if (isNumber(value)) {
         return cloneNumber(value);
-    } else if (typeof value === "string") {
+    } else if (isString(value)) {
         return cloneString(value);
-    } else if (Array.isArray(value) || value instanceof Array) {
+    } else if (isArray(value)) {
         return cloneArray(value);
     } else if (value instanceof Map) {
         return cloneMap(value);
     } else if (value instanceof Date) {
         return cloneDate(value);
-    } else if (typeof value === "object") {
+    } else if (value instanceof RegExp) {
+        return cloneRegExp(value);
+    } else if (isObject(value)) {
         return cloneObject(value);
-    } else if (typeof value === "function") {
+    } else if (isFunction(value)) {
         return cloneFunction(value);
     }
     throw new Error(`Unable to clone the ${typeof value}.`);

@@ -1,46 +1,40 @@
 "use strict";
 
-const expect = require("chai").expect;
+const {expect} = require("chai");
+const faker = require("faker");
+const {optional} = require("../../../src");
 
-const providers = [require("../../../src").optional, require("../../../dist").optional];
+describe("optional function test", function() {
+    let target, defaultValue;
 
-providers.forEach((optional) => {
-    describe("optional function test", function() {
-        let object, customValue;
+    beforeEach(function() {
+        target = {};
+        defaultValue = faker.lorem.word();
+    });
 
-        beforeEach(function() {
-            object = {};
-            customValue = "value";
-        });
+    it("should throw an Error on an undefined property call", function() {
+        expect(() => optional(() => target.undefinedProperty.undefinedProperty)).to.not.throw();
+    });
 
-        it("should have a proper api", function() {
-            expect(optional).to.be.a("function");
-        });
+    it("should return default value on an undefined property call", function() {
+        expect(optional(() => target.undefinedProperty)).to.be.undefined;
+        expect(optional(() => target.undefinedProperty.undefinedProperty)).to.be.undefined;
+    });
 
-        it("should throw an Error on an undefined property call", function() {
-            expect(() => optional(() => object.propertyName1.propertyName2)).to.not.throw();
-        });
+    it("should return custom value on an undefined property call", function() {
+        expect(optional(() => target.undefinedProperty, defaultValue)).to.be.equal(defaultValue);
+        expect(optional(() => target.undefinedProperty.undefinedProperty, defaultValue)).to.be.equal(defaultValue);
+    });
 
-        it("should return default value on an undefined property call", function() {
-            expect(optional(() => object.propertyName1)).to.be.undefined;
-            expect(optional(() => object.propertyName1.propertyName2)).to.be.undefined;
-        });
+    it("should throw an Error on an undefined function call", function() {
+        expect(() => optional(() => target.undefinedFunction())).to.not.throw();
+    });
 
-        it("should return custom value on an undefined property call", function() {
-            expect(optional(() => object.propertyName1, customValue)).to.be.deep.equal(customValue);
-            expect(optional(() => object.propertyName1.propertyName2, customValue)).to.be.deep.equal(customValue);
-        });
+    it("should return default value on an undefined function call", function() {
+        expect(optional(() => target.undefinedFunction())).to.be.undefined;
+    });
 
-        it("should throw an Error on an undefined function call", function() {
-            expect(() => optional(() => object.functionName())).to.not.throw();
-        });
-
-        it("should return default value on an undefined function call", function() {
-            expect(optional(() => object.functionName())).to.be.undefined;
-        });
-
-        it("should return custom value on an undefined function call", function() {
-            expect(optional(() => object.functionName(), customValue)).to.be.deep.equal(customValue);
-        });
+    it("should return custom value on an undefined function call", function() {
+        expect(optional(() => target.undefinedFunction(), defaultValue)).to.be.equal(defaultValue);
     });
 });

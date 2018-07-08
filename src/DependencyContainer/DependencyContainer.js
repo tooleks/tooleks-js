@@ -1,5 +1,7 @@
 "use strict";
 
+const {isArray, isBoolean, isFunction, isString, isUndefined} = require("../types");
+
 /**
  * Assert "identifier" parameter.
  *
@@ -8,7 +10,7 @@
  * @throws TypeError
  */
 function assertIdentifierParameter(identifier) {
-    if (typeof identifier !== "string") {
+    if (!isString(identifier)) {
         throw new TypeError("The \"identifier\" parameter should be a string.");
     }
 }
@@ -21,7 +23,7 @@ function assertIdentifierParameter(identifier) {
  * @throws TypeError
  */
 function assertTypeParameter(type) {
-    if (typeof type !== "function") {
+    if (!isFunction(type)) {
         throw new TypeError("The \"type\" parameter should be a function.");
     }
 }
@@ -34,11 +36,11 @@ function assertTypeParameter(type) {
  * @throws TypeError
  */
 function assertDependenciesParameter(dependencies) {
-    if (!Array.isArray(dependencies)) {
+    if (!isArray(dependencies)) {
         throw new TypeError("The \"dependencies\" parameter should be an array.");
     }
     dependencies.forEach((dependency) => {
-        if (typeof dependency !== "string" && typeof dependency !== "function") {
+        if (!isString(dependency) && !isFunction(dependency)) {
             throw new TypeError("The \"dependencies\" parameter should be an array of strings or functions.");
         }
     });
@@ -52,7 +54,7 @@ function assertDependenciesParameter(dependencies) {
  * @throws TypeError
  */
 function assertSingletonParameter(singleton) {
-    if (typeof singleton !== "boolean") {
+    if (!isBoolean(singleton)) {
         throw new TypeError("The \"singleton\" parameter should be a boolean.");
     }
 }
@@ -65,7 +67,7 @@ function assertSingletonParameter(singleton) {
  * @throws TypeError
  */
 function assertFactoryParameter(factory) {
-    if (typeof factory !== "boolean") {
+    if (!isBoolean(factory)) {
         throw new TypeError("The \"factory\" parameter should be a boolean.");
     }
 }
@@ -78,7 +80,7 @@ function assertFactoryParameter(factory) {
  * @throws TypeError
  */
 function assertInstanceParameter(instance) {
-    if (typeof instance === "undefined") {
+    if (isUndefined(instance)) {
         throw new TypeError("The \"instance\" parameter should not be an undefined.");
     }
 }
@@ -93,6 +95,13 @@ class DependencyContainer {
      */
     constructor() {
         this._bindings = {};
+        this._createInstance = this._createInstance.bind(this);
+        this._resolveDependencies = this._resolveDependencies.bind(this);
+        this.registerBinding = this.registerBinding.bind(this);
+        this.registerInstance = this.registerInstance.bind(this);
+        this.removeBinding = this.removeBinding.bind(this);
+        this.has = this.has.bind(this);
+        this.get = this.get.bind(this);
     }
 
     /**
@@ -121,9 +130,9 @@ class DependencyContainer {
      */
     _resolveDependencies(dependencies) {
         return dependencies.map((dependency) => {
-            if (typeof dependency === "string") {
+            if (isString(dependency)) {
                 return this.get(dependency);
-            } else if (typeof dependency === "function") {
+            } else if (isFunction(dependency)) {
                 return dependency();
             }
             throw new TypeError("Invalid dependency type.");
@@ -131,44 +140,10 @@ class DependencyContainer {
     }
 
     /**
-     * Return true if the container can return the binding for the given identifier.
-     * Return false otherwise.
-     *
-     * @param {string} identifier
-     * @return {boolean}
-     */
-    has(identifier) {
-        assertIdentifierParameter(identifier);
-        return Object.prototype.hasOwnProperty.call(this._bindings, identifier);
-    }
-
-    /**
-     * Find the binding of the container by its identifier and return it.
-     *
-     * @param {string} identifier
-     * @return {Object}
-     */
-    get(identifier) {
-        assertIdentifierParameter(identifier);
-        if (!this.has(identifier)) {
-            throw new Error(`The "${identifier}" binding not found.`);
-        }
-        const binding = this._bindings[identifier];
-        if (typeof binding.instance !== "undefined") {
-            return binding.instance;
-        }
-        const instance = this._createInstance(binding);
-        if (binding.singleton) {
-            binding.instance = instance;
-        }
-        return instance;
-    }
-
-    /**
      * Register a new binding in the container.
      *
      * @param {string} identifier
-     * @param {Function} type
+     * @param {Function|*} type
      * @param {Object} options
      * @param {Array<string|Function>} options.dependencies
      * @param {boolean} options.singleton
@@ -181,10 +156,44 @@ class DependencyContainer {
         assertDependenciesParameter(dependencies);
         assertSingletonParameter(singleton);
         assertFactoryParameter(factory);
+
+        // Check dependencies list length.
         if (type.length !== dependencies.length) {
             throw new Error(`Invalid number of dependencies were specified for "${identifier}".`);
         }
+
+        // Check for circular dependencies.
+        dependencies.forEach((dependency) => {
+            if (dependency === identifier) {
+                throw new Error(`Circular dependency detected. ${identifier} depends on itself.`);
+            }
+
+            if (!isUndefined(this._bindings[dependency])) {
+                this._bindings[dependency].dependencies.forEach((innerDependency) => {
+                    if (innerDependency === identifier) {
+                        throw new Error("Circular dependency detected. " +
+                                `"${identifier}" depends on "${dependency}" and vise versa.`, );
+                    }
+                });
+            }
+        });
+
         this._bindings[identifier] = {type, dependencies, singleton, factory};
+
+        return this;
+    }
+
+    /**
+     * Register an instance in the container.
+     *
+     * @param {string} identifier
+     * @param {*} instance
+     * @return {DependencyContainer}
+     */
+    registerInstance(identifier, instance) {
+        assertIdentifierParameter(identifier);
+        assertInstanceParameter(instance);
+        this._bindings[identifier] = {instance, dependencies: [], singleton: true, factory: false};
         return this;
     }
 
@@ -203,29 +212,37 @@ class DependencyContainer {
     }
 
     /**
-     * Register an instance in the container.
+     * Return true if the container can return the binding for the given identifier.
+     * Return false otherwise.
      *
      * @param {string} identifier
-     * @param {*} instance
-     * @return {DependencyContainer}
+     * @return {boolean}
      */
-    registerInstance(identifier, instance) {
+    has(identifier) {
         assertIdentifierParameter(identifier);
-        assertInstanceParameter(instance);
-        this._bindings[identifier] = {instance, singleton: true, factory: false};
-        return this;
+        return Object.prototype.hasOwnProperty.call(this._bindings, identifier);
     }
 
     /**
-     * Remove an instance from the container.
+     * Find the binding of the container by its identifier and return it.
      *
-     * @see removeBinding
      * @param {string} identifier
-     * @return {DependencyContainer}
+     * @return {*}
      */
-    removeInstance(identifier) {
+    get(identifier) {
         assertIdentifierParameter(identifier);
-        return this.removeBinding(identifier);
+        if (!this.has(identifier)) {
+            throw new Error(`The "${identifier}" binding not found.`);
+        }
+        const binding = this._bindings[identifier];
+        if (!isUndefined(binding.instance)) {
+            return binding.instance;
+        }
+        const instance = this._createInstance(binding);
+        if (binding.singleton) {
+            binding.instance = instance;
+        }
+        return instance;
     }
 }
 
