@@ -7,6 +7,7 @@ const {isBoolean} = require("../../../src");
 describe("isBoolean function test", function() {
     it("should return true", function() {
         assert(isBoolean(faker.random.boolean()));
+        assert(isBoolean(new Boolean(faker.random.boolean())));
     });
 
     it("should return false", function() {

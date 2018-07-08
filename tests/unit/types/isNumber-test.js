@@ -7,6 +7,7 @@ const {isNumber} = require("../../../src");
 describe("isNumber function test", function() {
     it("should return true", function() {
         assert(isNumber(faker.random.number()));
+        assert(isNumber(new Number(faker.random.number())));
     });
 
     it("should return false", function() {

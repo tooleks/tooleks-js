@@ -1,6 +1,7 @@
 "use strict";
 
 const webpack = require("webpack");
+const info = require("../package");
 
 module.exports = {
     mode: process.env.NODE_ENV || "production",
@@ -34,5 +35,5 @@ module.exports = {
             },
         ],
     },
-    plugins: [new webpack.BannerPlugin("Copyright (c) Oleksandr Tolochko.")],
+    plugins: [new webpack.BannerPlugin(`${info.name} v${info.version}. Copyright (c) Oleksandr Tolochko.`)],
 };
