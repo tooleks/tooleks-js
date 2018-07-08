@@ -181,3 +181,24 @@ const phoneNumber = optional(() => user.profile.phoneNumber, null);
 
 console.log(phoneNumber); // null, damn it.
 ```
+
+#### `types` functions
+
+`types` functions are shortcut functions to check variable type.
+
+```JavaScript
+const {isArray, isBoolean, isFunction, isNull, isNumber, isNumeric, isObject, isString, isUndefined} = require("tooleks");
+
+console.log(isArray([])); // true
+console.log(isBoolean(false)); // true
+console.log(isFunction(() => {})); // true
+console.log(isNull(null)); // true
+console.log(isNumber(42)); // true
+console.log(isNumeric('42')); // true
+console.log(isNumeric(NaN)); // false
+console.log(isNumeric(Infinity)); // false
+console.log(isObject({})); // true
+console.log(isObject(null)); // false
+console.log(isString('Forty two')); // true
+console.log(isUndefined(undefined)); // true
+```
