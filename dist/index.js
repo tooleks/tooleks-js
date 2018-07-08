@@ -656,7 +656,7 @@ var DependencyContainer = function () {
          * Register a new binding in the container.
          *
          * @param {string} identifier
-         * @param {Function} type
+         * @param {Function|*} type
          * @param {Object} options
          * @param {Array<string|Function>} options.dependencies
          * @param {boolean} options.singleton
@@ -667,6 +667,8 @@ var DependencyContainer = function () {
     }, {
         key: "registerBinding",
         value: function registerBinding(identifier, type) {
+            var _this2 = this;
+
             var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
                 _ref$dependencies = _ref.dependencies,
                 dependencies = _ref$dependencies === undefined ? [] : _ref$dependencies,
@@ -680,10 +682,29 @@ var DependencyContainer = function () {
             assertDependenciesParameter(dependencies);
             assertSingletonParameter(singleton);
             assertFactoryParameter(factory);
+
+            // Check dependencies list length.
             if (type.length !== dependencies.length) {
                 throw new Error("Invalid number of dependencies were specified for \"" + identifier + "\".");
             }
+
+            // Check for circular dependencies.
+            dependencies.forEach(function (dependency) {
+                if (dependency === identifier) {
+                    throw new Error("Circular dependency detected. " + identifier + " depends on itself.");
+                }
+
+                if (!isUndefined(_this2._bindings[dependency])) {
+                    _this2._bindings[dependency].dependencies.forEach(function (innerDependency) {
+                        if (innerDependency === identifier) {
+                            throw new Error("Circular dependency detected. " + ("\"" + identifier + "\" depends on \"" + dependency + "\" and vise versa."));
+                        }
+                    });
+                }
+            });
+
             this._bindings[identifier] = { type: type, dependencies: dependencies, singleton: singleton, factory: factory };
+
             return this;
         }
 
@@ -700,7 +721,7 @@ var DependencyContainer = function () {
         value: function registerInstance(identifier, instance) {
             assertIdentifierParameter(identifier);
             assertInstanceParameter(instance);
-            this._bindings[identifier] = { instance: instance, singleton: true, factory: false };
+            this._bindings[identifier] = { instance: instance, dependencies: [], singleton: true, factory: false };
             return this;
         }
 
@@ -740,7 +761,7 @@ var DependencyContainer = function () {
          * Find the binding of the container by its identifier and return it.
          *
          * @param {string} identifier
-         * @return {Object}
+         * @return {*}
          */
 
     }, {

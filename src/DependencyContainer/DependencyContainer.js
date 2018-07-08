@@ -143,7 +143,7 @@ class DependencyContainer {
      * Register a new binding in the container.
      *
      * @param {string} identifier
-     * @param {Function} type
+     * @param {Function|*} type
      * @param {Object} options
      * @param {Array<string|Function>} options.dependencies
      * @param {boolean} options.singleton
@@ -156,10 +156,30 @@ class DependencyContainer {
         assertDependenciesParameter(dependencies);
         assertSingletonParameter(singleton);
         assertFactoryParameter(factory);
+
+        // Check dependencies list length.
         if (type.length !== dependencies.length) {
             throw new Error(`Invalid number of dependencies were specified for "${identifier}".`);
         }
+
+        // Check for circular dependencies.
+        dependencies.forEach((dependency) => {
+            if (dependency === identifier) {
+                throw new Error(`Circular dependency detected. ${identifier} depends on itself.`);
+            }
+
+            if (!isUndefined(this._bindings[dependency])) {
+                this._bindings[dependency].dependencies.forEach((innerDependency) => {
+                    if (innerDependency === identifier) {
+                        throw new Error("Circular dependency detected. " +
+                                `"${identifier}" depends on "${dependency}" and vise versa.`, );
+                    }
+                });
+            }
+        });
+
         this._bindings[identifier] = {type, dependencies, singleton, factory};
+
         return this;
     }
 
@@ -173,7 +193,7 @@ class DependencyContainer {
     registerInstance(identifier, instance) {
         assertIdentifierParameter(identifier);
         assertInstanceParameter(instance);
-        this._bindings[identifier] = {instance, singleton: true, factory: false};
+        this._bindings[identifier] = {instance, dependencies: [], singleton: true, factory: false};
         return this;
     }
 
@@ -207,7 +227,7 @@ class DependencyContainer {
      * Find the binding of the container by its identifier and return it.
      *
      * @param {string} identifier
-     * @return {Object}
+     * @return {*}
      */
     get(identifier) {
         assertIdentifierParameter(identifier);

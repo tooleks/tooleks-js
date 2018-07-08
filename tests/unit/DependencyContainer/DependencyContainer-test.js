@@ -1,5 +1,6 @@
 "use strict";
 
+const assert = require("assert");
 const {expect} = require("chai");
 const {DependencyContainer} = require("../../../src");
 
@@ -41,81 +42,180 @@ describe("DependencyContainer class test", function() {
     });
 
     it("should throw an error on get when type wasn't registered", function() {
-        expect(() => dc.get(NoDepsClass.name)).to.throw();
+        try {
+            dc.get(NoDepsClass.name);
+            assert(false, "Whoops! An error should be thrown here.");
+        } catch (error) {
+            expect(error).to.be.an.instanceof(Error);
+            expect(error.message).to.be.equal(`The "${NoDepsClass.name}" binding not found.`);
+        }
     });
 
     it("should throw an error on register binding when identifier is not a valid type", function() {
-        expect(() => dc.registerBinding(null, NoDepsClass)).to.throw();
+        try {
+            dc.get(null, NoDepsClass);
+            assert(false, "Whoops! An error should be thrown here.");
+        } catch (error) {
+            expect(error).to.be.an.instanceof(Error);
+            expect(error.message).to.be.equal('The "identifier" parameter should be a string.');
+        }
     });
 
     it("should throw an error on register binding when type is not a valid type", function() {
-        expect(() => dc.registerBinding(NoDepsClass.name, null)).to.throw();
+        try {
+            dc.registerBinding(NoDepsClass.name, null);
+            assert(false, "Whoops! An error should be thrown here.");
+        } catch (error) {
+            expect(error).to.be.an.instanceof(Error);
+            expect(error.message).to.be.equal('The "type" parameter should be a function.');
+        }
     });
 
     it("should throw an error on register binding when dependencies is not a valid type", function() {
-        expect(() => {
+        try {
             dc.registerBinding(NoDepsClass.name, NoDepsClass, {
                 dependencies: null,
             });
-        }).to.throw();
-        expect(() => {
+            assert(false, "Whoops! An error should be thrown here.");
+        } catch (error) {
+            expect(error).to.be.an.instanceof(TypeError);
+            expect(error.message).to.be.equal('The "dependencies" parameter should be an array.');
+        }
+
+        try {
             dc.registerBinding(NoDepsClass.name, NoDepsClass, {
                 dependencies: [null],
             });
-        }).to.throw();
+            assert(false, "Whoops! An error should be thrown here.");
+        } catch (error) {
+            expect(error).to.be.an.instanceof(TypeError);
+            expect(error.message).to.be.equal(
+                'The "dependencies" parameter should be an array of strings or functions.',
+            );
+        }
     });
 
     it("should throw an error on register binding when singleton is not a valid type", function() {
-        expect(() => {
+        try {
             dc.registerBinding(NoDepsClass.name, NoDepsClass, {
                 singleton: null,
             });
-        }).to.throw();
+            assert(false, "Whoops! An error should be thrown here.");
+        } catch (error) {
+            expect(error).to.be.an.instanceof(TypeError);
+            expect(error.message).to.be.equal('The "singleton" parameter should be a boolean.');
+        }
     });
 
     it("should throw an error on register binding when factory is not a valid type", function() {
-        expect(() => {
+        try {
             dc.registerBinding(noDepsFactory.name, noDepsFactory, {
                 factory: null,
             });
-        }).to.throw();
+            assert(false, "Whoops! An error should be thrown here.");
+        } catch (error) {
+            expect(error).to.be.an.instanceof(TypeError);
+            expect(error.message).to.be.equal('The "factory" parameter should be a boolean.');
+        }
     });
 
     it("should throw an error on register binding when dependencies were not specified", function() {
-        expect(() => dc.registerBinding(TwoDepsClass.name, TwoDepsClass)).to.throw();
+        try {
+            dc.registerBinding(TwoDepsClass.name, TwoDepsClass);
+            assert(false, "Whoops! An error should be thrown here.");
+        } catch (error) {
+            expect(error).to.be.an.instanceof(Error);
+            expect(error.message).to.be.equal(
+                `Invalid number of dependencies were specified for "${TwoDepsClass.name}".`,
+            );
+        }
+    });
+
+    it("should throw an error on register binding when circular dependency was detected", function() {
+        dc.registerBinding(NoDepsClass.name, NoDepsClass);
+        dc.registerBinding(`First${TwoDepsClass.name}`, TwoDepsClass, {
+            dependencies: [NoDepsClass.name, `Second${TwoDepsClass.name}`],
+        });
+
+        try {
+            dc.registerBinding(`Second${TwoDepsClass.name}`, TwoDepsClass, {
+                dependencies: [NoDepsClass.name, `First${TwoDepsClass.name}`],
+            });
+            assert(false, "Whoops! An error should be thrown here.");
+        } catch (error) {
+            expect(error).to.be.an.instanceof(Error);
+            expect(error.message).to.be.equal(
+                "Circular dependency detected. " +
+                    `"Second${TwoDepsClass.name}" depends on "First${TwoDepsClass.name}" and vise versa.`,
+            );
+        }
+
+        try {
+            dc.registerBinding(TwoDepsClass.name, TwoDepsClass, {
+                dependencies: [NoDepsClass.name, TwoDepsClass.name],
+            });
+            assert(false, "Whoops! An error should be thrown here.");
+        } catch (error) {
+            expect(error).to.be.an.instanceof(Error);
+            expect(error.message).to.be.equal(`Circular dependency detected. ${TwoDepsClass.name} depends on itself.`);
+        }
     });
 
     it("should throw an error on register factory binding when dependencies were not specified", function() {
-        expect(() =>
+        try {
             dc.registerBinding(twoDepsFactory.name, twoDepsFactory, {
                 factory: true,
-            }),
-        ).to.throw();
+            });
+            assert(false, "Whoops! An error should be thrown here.");
+        } catch (error) {
+            expect(error).to.be.an.instanceof(Error);
+            expect(error.message).to.be.equal(
+                `Invalid number of dependencies were specified for "${twoDepsFactory.name}".`,
+            );
+        }
     });
 
     it("should throw an error on register instance when instance is not a valid type", function() {
-        expect(() => dc.registerInstance("Instance", undefined)).to.throw();
+        try {
+            dc.registerInstance("Instance", undefined);
+            assert(false, "Whoops! An error should be thrown here.");
+        } catch (error) {
+            expect(error).to.be.an.instanceof(TypeError);
+            expect(error.message).to.be.equal('The "instance" parameter should not be an undefined.');
+        }
     });
 
     it("should register no dependencies binding and remove binding", function() {
-        expect(dc.has(NoDepsClass.name)).to.be.equal(false);
+        assert(!dc.has(NoDepsClass.name));
         dc.registerBinding(NoDepsClass.name, NoDepsClass);
-        expect(dc.has(NoDepsClass.name)).to.be.equal(true);
+        assert(dc.has(NoDepsClass.name));
         expect(dc.get(NoDepsClass.name)).to.be.an.instanceof(NoDepsClass);
         dc.removeBinding(NoDepsClass.name);
-        expect(dc.has(NoDepsClass.name)).to.be.equal(false);
-        expect(() => dc.get(NoDepsClass.name)).to.throw();
+        assert(!dc.has(NoDepsClass.name));
+        try {
+            dc.get(NoDepsClass.name);
+            assert(false, "Whoops! An error should be thrown here.");
+        } catch (error) {
+            expect(error).to.be.an.instanceof(Error);
+            expect(error.message).to.be.equal(`The "${NoDepsClass.name}" binding not found.`);
+        }
     });
 
     it("should register no dependencies factory binding and remove binding", function() {
-        expect(dc.has(noDepsFactory.name)).to.be.equal(false);
+        assert(!dc.has(noDepsFactory.name));
         dc.registerBinding(noDepsFactory.name, noDepsFactory, {factory: true});
-        expect(dc.has(noDepsFactory.name)).to.be.equal(true);
+        assert(dc.has(noDepsFactory.name));
         expect(dc.get(noDepsFactory.name).prototype).to.be.an("undefined");
         expect(dc.get(noDepsFactory.name)).to.be.deep.equal({});
         dc.removeBinding(noDepsFactory.name);
-        expect(dc.has(noDepsFactory.name)).to.be.equal(false);
-        expect(() => dc.get(noDepsFactory.name)).to.throw();
+        assert(!dc.has(noDepsFactory.name));
+        try {
+            dc.get(noDepsFactory.name);
+            assert(false, "Whoops! An error should be thrown here.");
+        } catch (error) {
+            expect(error).to.be.an.instanceof(Error);
+            expect(error.message).to.be.equal(`The "${noDepsFactory.name}" binding not found.`);
+        }
     });
 
     it("should register binding and get every time a new instance", function() {
@@ -152,13 +252,19 @@ describe("DependencyContainer class test", function() {
     });
 
     it("should register instance and remove instance", function() {
-        expect(dc.has("Instance")).to.be.equal(false);
+        assert(!dc.has("Instance"));
         dc.registerInstance("Instance", instance);
-        expect(dc.has("Instance")).to.be.equal(true);
+        assert(dc.has("Instance"));
         expect(dc.get("Instance")).to.be.a(typeof instance);
         dc.removeBinding("Instance");
-        expect(dc.has("Instance")).to.be.equal(false);
-        expect(() => dc.get("Instance")).to.throw();
+        assert(!dc.has("Instance"));
+        try {
+            dc.get("Instance");
+            assert(false, "Whoops! An error should be thrown here.");
+        } catch (error) {
+            expect(error).to.be.an.instanceof(Error);
+            expect(error.message).to.be.equal(`The "Instance" binding not found.`);
+        }
     });
 
     it("should register instance and get the same instance each time", function() {
