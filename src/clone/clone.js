@@ -61,12 +61,7 @@ function cloneString(value) {
  * @returns {Array}
  */
 function cloneArray(value) {
-    return value.map((item) => {
-        if (typeof item !== "undefined" && item !== null) {
-            return clone(item);
-        }
-        return item;
-    });
+    return value.map((item) => clone(item));
 }
 
 /**
@@ -86,7 +81,7 @@ function cloneMap(value) {
  * @returns {Date}
  */
 function cloneDate(value) {
-    return new Date(value.getTime());
+    return new Date(value.valueOf());
 }
 
 /**
@@ -118,22 +113,21 @@ function cloneRegExp(value) {
  * @throws Error
  */
 function cloneObject(value) {
-    if (typeof value.clone === "function") {
-        // Overidden clone method.
+    // Overidden clone method.
+    if (value.clone && isFunction(value.clone)) {
         return value.clone();
-    } else if (value.nodeType && typeof value.cloneNode === "function") {
-        // DOM node object.
+    }
+    // DOM node object.
+    else if (value.nodeType && isFunction(value.cloneNode)) {
         return value.cloneNode(true);
-    } else if (!value.prototype) {
-        // Object literal.
-        const clonedObject = {};
-        for (const propertyName in value) {
-            if (Object.prototype.hasOwnProperty.call(value, propertyName)) {
-                const property = value[propertyName];
-                clonedObject[propertyName] = clone(property);
-            }
-        }
-        return clonedObject;
+    }
+    // Object literal.
+    else if (isUndefined(value.prototype)) {
+        return Object.keys(value).reduce((clonedObject, key) => {
+            const property = value[key];
+            clonedObject[key] = clone(property);
+            return clonedObject;
+        }, {});
     }
 
     throw new Error("Unable to clone the object. Implement the 'clone' method manually.");
@@ -146,15 +140,17 @@ function cloneObject(value) {
  * @returns {Function}
  */
 function cloneFunction(value) {
+    // Root function.
     const clonedFunction = function() {
         return value.apply(value, arguments);
     };
-    for (const propertyName in value) {
-        if (Object.prototype.hasOwnProperty.call(value, propertyName)) {
-            const property = value[propertyName];
-            clonedFunction[propertyName] = clone(property);
-        }
-    }
+
+    // Function keys.
+    Object.keys(value).forEach((key) => {
+        const property = value[key];
+        clonedFunction[key] = clone(property);
+    });
+
     return clonedFunction;
 }
 
@@ -189,6 +185,7 @@ function clone(value) {
     } else if (isFunction(value)) {
         return cloneFunction(value);
     }
+
     throw new Error(`Unable to clone the ${typeof value}.`);
 }
 

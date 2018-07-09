@@ -92,7 +92,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 22);
+/******/ 	return __webpack_require__(__webpack_require__.s = 24);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1125,10 +1125,7 @@ function cloneString(value) {
  */
 function cloneArray(value) {
     return value.map(function (item) {
-        if (typeof item !== "undefined" && item !== null) {
-            return clone(item);
-        }
-        return item;
+        return clone(item);
     });
 }
 
@@ -1149,7 +1146,7 @@ function cloneMap(value) {
  * @returns {Date}
  */
 function cloneDate(value) {
-    return new Date(value.getTime());
+    return new Date(value.valueOf());
 }
 
 /**
@@ -1181,23 +1178,22 @@ function cloneRegExp(value) {
  * @throws Error
  */
 function cloneObject(value) {
-    if (typeof value.clone === "function") {
-        // Overidden clone method.
+    // Overidden clone method.
+    if (value.clone && isFunction(value.clone)) {
         return value.clone();
-    } else if (value.nodeType && typeof value.cloneNode === "function") {
-        // DOM node object.
-        return value.cloneNode(true);
-    } else if (!value.prototype) {
-        // Object literal.
-        var clonedObject = {};
-        for (var propertyName in value) {
-            if (Object.prototype.hasOwnProperty.call(value, propertyName)) {
-                var property = value[propertyName];
-                clonedObject[propertyName] = clone(property);
-            }
-        }
-        return clonedObject;
     }
+    // DOM node object.
+    else if (value.nodeType && isFunction(value.cloneNode)) {
+            return value.cloneNode(true);
+        }
+        // Object literal.
+        else if (isUndefined(value.prototype)) {
+                return Object.keys(value).reduce(function (clonedObject, key) {
+                    var property = value[key];
+                    clonedObject[key] = clone(property);
+                    return clonedObject;
+                }, {});
+            }
 
     throw new Error("Unable to clone the object. Implement the 'clone' method manually.");
 }
@@ -1209,15 +1205,17 @@ function cloneObject(value) {
  * @returns {Function}
  */
 function cloneFunction(value) {
+    // Root function.
     var clonedFunction = function clonedFunction() {
         return value.apply(value, arguments);
     };
-    for (var propertyName in value) {
-        if (Object.prototype.hasOwnProperty.call(value, propertyName)) {
-            var property = value[propertyName];
-            clonedFunction[propertyName] = clone(property);
-        }
-    }
+
+    // Function keys.
+    Object.keys(value).forEach(function (key) {
+        var property = value[key];
+        clonedFunction[key] = clone(property);
+    });
+
     return clonedFunction;
 }
 
@@ -1252,6 +1250,7 @@ function clone(value) {
     } else if (isFunction(value)) {
         return cloneFunction(value);
     }
+
     throw new Error("Unable to clone the " + (typeof value === "undefined" ? "undefined" : _typeof(value)) + ".");
 }
 
@@ -1275,8 +1274,45 @@ module.exports = clone;
 "use strict";
 
 
+var DEFAULT_TIMEOUT = 0;
+
+/**
+ * Provide promise that will be resolved after timeout.
+ *
+ * @param {number} [timeout=0]
+ * @return {Promise}
+ */
+function timeout() {
+  var timeout = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_TIMEOUT;
+
+  return new Promise(function (resolve) {
+    return setTimeout(resolve, timeout);
+  });
+}
+
+module.exports = timeout;
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var timeout = __webpack_require__(22);
+
+module.exports = Object.freeze({ timeout: timeout });
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+var async = __webpack_require__(23);
 var clone = __webpack_require__(21);
 var Defer = __webpack_require__(10);
 var DependencyContainer = __webpack_require__(8);
@@ -1285,7 +1321,7 @@ var Mapper = __webpack_require__(4);
 var optional = __webpack_require__(2);
 var types = __webpack_require__(0);
 
-module.exports = Object.freeze(_extends({ clone: clone, Defer: Defer, DependencyContainer: DependencyContainer, EventEmitter: EventEmitter, Mapper: Mapper, optional: optional }, types));
+module.exports = Object.freeze(_extends({}, async, { clone: clone, Defer: Defer, DependencyContainer: DependencyContainer, EventEmitter: EventEmitter, Mapper: Mapper, optional: optional }, types));
 
 /***/ })
 /******/ ]);

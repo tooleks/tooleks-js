@@ -1,5 +1,6 @@
 "use strict";
 
+const async = require("./async");
 const clone = require("./clone");
 const Defer = require("./Defer");
 const DependencyContainer = require("./DependencyContainer");
@@ -8,4 +9,4 @@ const Mapper = require("./Mapper");
 const optional = require("./optional");
 const types = require("./types");
 
-module.exports = Object.freeze({clone, Defer, DependencyContainer, EventEmitter, Mapper, optional, ...types});
+module.exports = Object.freeze({...async, clone, Defer, DependencyContainer, EventEmitter, Mapper, optional, ...types});
