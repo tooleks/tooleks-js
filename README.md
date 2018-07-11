@@ -37,9 +37,9 @@ The `timeout` function returns `Promise` that will be resolved after a specified
 const {timeout} = require("tooleks");
 
 (async () => {
-    console.log('Waiting (2s)...');
+    console.log("Waiting (2s)...");
     await timeout(2000);
-    console.log('Done!');
+    console.log("Done!");
 })();
 ```
 
@@ -53,12 +53,15 @@ const {waitUntil} = require("tooleks");
 let externalLibrary;
 
 waitUntil(() => externalLibrary).then((externalLibrary) => {
-    console.log('Done!');
+    console.log("Done!");
+    externalLibrary.helloWorld(); // "Hello, world!"
 });
 
-console.log('Loading (2s)...');
+console.log("Loading (2s)...");
 setTimeout(() => {
-    externalLibrary = {};
+    externalLibrary = {
+        helloWorld: () => console.log("Hello, world!"),
+    };
 }, 2000);
 ```
 
@@ -227,11 +230,11 @@ console.log(isBoolean(false)); // true
 console.log(isFunction(() => {})); // true
 console.log(isNull(null)); // true
 console.log(isNumber(42)); // true
-console.log(isNumeric('42')); // true
+console.log(isNumeric("42")); // true
 console.log(isNumeric(NaN)); // false
 console.log(isNumeric(Infinity)); // false
 console.log(isObject({})); // true
 console.log(isObject(null)); // false
-console.log(isString('Forty two')); // true
+console.log(isString("Forty two")); // true
 console.log(isUndefined(undefined)); // true
 ```
