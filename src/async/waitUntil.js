@@ -23,7 +23,7 @@ function assertCallbackParameter(callback) {
  *
  * @param {function} callback
  * @param {number} {timeInterval=0}
- * @return {Promise}
+ * @return {Promise<*>}
  */
 function waitUntil(callback, timeInterval = DEFAULT_TIME_INTERVAL) {
     assertCallbackParameter(callback);
