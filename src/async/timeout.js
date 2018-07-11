@@ -1,15 +1,19 @@
 "use strict";
 
-const DEFAULT_TIMEOUT = 0;
+const Defer = require("./Defer");
+
+const DEFAULT_TIME_INTERVAL = 0;
 
 /**
- * Provide promise that will be resolved after timeout.
+ * Provide promise that will be resolved after time interval.
  *
- * @param {number} [timeout=0]
+ * @param {number} [timeInterval=0]
  * @return {Promise}
  */
-function timeout(timeout = DEFAULT_TIMEOUT) {
-    return new Promise((resolve) => setTimeout(resolve, timeout));
+function timeout(timeInterval = DEFAULT_TIME_INTERVAL) {
+    const defer = new Defer();
+    setTimeout(() => defer.resolve(), timeInterval);
+    return defer.promisify();
 }
 
 module.exports = timeout;

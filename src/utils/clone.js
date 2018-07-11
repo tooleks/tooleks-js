@@ -2,7 +2,7 @@
 
 "use strict";
 
-const {isArray, isBoolean, isFunction, isNull, isNumber, isObject, isString, isUndefined} = require("../types");
+const {isArray, isBoolean, isFunction, isNull, isNumber, isObject, isString, isUndefined} = require("./types");
 
 /**
  * Clone undefined value.

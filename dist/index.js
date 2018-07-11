@@ -1,4 +1,4 @@
-/*! tooleks v1.2.1. Copyright (c) Oleksandr Tolochko. */
+/*! tooleks v1.3.0. Copyright (c) Oleksandr Tolochko. */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -92,7 +92,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ 	return __webpack_require__(__webpack_require__.s = 23);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -132,39 +132,50 @@ module.exports = Object.freeze({
 
 
 /**
- * Retrieve the result of callback call. If an error occurred or result is undefined return a default value instead.
- *
- * @param {Function} callback
- * @param {*} defaultValue
- * @return {*}
+ * Defer class.
  */
 
-function optional(callback) {
-    var defaultValue = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-    try {
-        var value = callback();
-        return typeof value !== "undefined" ? value : defaultValue;
-    } catch (error) {
-        return defaultValue;
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Defer = function () {
+    /**
+     * Defer constructor.
+     */
+    function Defer() {
+        var _this = this;
+
+        _classCallCheck(this, Defer);
+
+        this._promise = new Promise(function (resolve, reject) {
+            _this.resolve = resolve;
+            _this.reject = reject;
+        });
+        this.promisify = this.promisify.bind(this);
     }
-}
 
-module.exports = optional;
+    /**
+     * Get a promise which will be resolved or rejected with a deferred value.
+     *
+     * @return {Promise<any>}
+     */
+
+
+    _createClass(Defer, [{
+        key: "promisify",
+        value: function promisify() {
+            return this._promise;
+        }
+    }]);
+
+    return Defer;
+}();
+
+module.exports = Defer;
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var optional = __webpack_require__(1);
-
-module.exports = optional;
-
-/***/ }),
-/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -348,18 +359,18 @@ var Mapper = function () {
 module.exports = Mapper;
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Mapper = __webpack_require__(3);
+var Mapper = __webpack_require__(2);
 
 module.exports = Mapper;
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -472,18 +483,18 @@ var EventEmitter = function () {
 module.exports = EventEmitter;
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var EventEmitter = __webpack_require__(5);
+var EventEmitter = __webpack_require__(4);
 
 module.exports = EventEmitter;
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -789,263 +800,53 @@ var DependencyContainer = function () {
 module.exports = DependencyContainer;
 
 /***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var DependencyContainer = __webpack_require__(6);
+
+module.exports = DependencyContainer;
+
+/***/ }),
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var DependencyContainer = __webpack_require__(7);
+var _require = __webpack_require__(0),
+    isUndefined = _require.isUndefined;
 
-module.exports = DependencyContainer;
+/**
+ * Retrieve the result of callback call. If an error occurred or result is undefined return a default value instead.
+ *
+ * @param {Function} callback
+ * @param {*} defaultValue
+ * @return {*}
+ */
+
+
+function optional(callback) {
+    var defaultValue = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
+
+    try {
+        var value = callback();
+        if (!isUndefined(value)) {
+            return value;
+        }
+        return defaultValue;
+    } catch (error) {
+        return defaultValue;
+    }
+}
+
+module.exports = optional;
 
 /***/ }),
 /* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Defer class.
- */
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Defer = function () {
-    /**
-     * Defer constructor.
-     */
-    function Defer() {
-        var _this = this;
-
-        _classCallCheck(this, Defer);
-
-        this._promise = new Promise(function (resolve, reject) {
-            _this.resolve = resolve;
-            _this.reject = reject;
-        });
-        this.promisify = this.promisify.bind(this);
-    }
-
-    /**
-     * Get a promise which will be resolved or rejected with a deferred value.
-     *
-     * @return {Promise<any>}
-     */
-
-
-    _createClass(Defer, [{
-        key: "promisify",
-        value: function promisify() {
-            return this._promise;
-        }
-    }]);
-
-    return Defer;
-}();
-
-module.exports = Defer;
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var Defer = __webpack_require__(9);
-
-module.exports = Defer;
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Determine if value is an undefined.
- *
- * @param {*} value
- * @return {boolean}
- */
-
-function isUndefined(value) {
-  return typeof value === "undefined";
-}
-
-module.exports = isUndefined;
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Determine if value is a string.
- *
- * @param {*} value
- * @return {boolean}
- */
-
-function isString(value) {
-  return typeof value === "string" || value instanceof String;
-}
-
-module.exports = isString;
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Determine if value is an object and not null.
- *
- * @param {*} value
- * @param {boolean} value
- * @return {boolean}
- */
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-function isObject(value) {
-  return (typeof value === "undefined" ? "undefined" : _typeof(value)) === "object" && value !== null;
-}
-
-module.exports = isObject;
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Determine if value is a number or numeric string.
- *
- * @param {*} value
- * @return {boolean}
- */
-
-function isNumeric(value) {
-  return !isNaN(parseFloat(value)) && isFinite(value);
-}
-
-module.exports = isNumeric;
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Determine if value is a number.
- *
- * @param {*} value
- * @return {boolean}
- */
-
-function isNumber(value) {
-  return typeof value === "number" || value instanceof Number;
-}
-
-module.exports = isNumber;
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Determine if value is a null.
- *
- * @param {*} value
- * @return {boolean}
- */
-
-function isNull(value) {
-  return value === null;
-}
-
-module.exports = isNull;
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Determine if value is a function.
- *
- * @param {*} value
- * @param {boolean} value
- * @return {boolean}
- */
-
-function isFunction(value) {
-  return typeof value === "function";
-}
-
-module.exports = isFunction;
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Determine if value is a boolean.
- *
- * @param {*} value
- * @return {boolean}
- */
-
-function isBoolean(value) {
-  return typeof value === "boolean" || value instanceof Boolean;
-}
-
-module.exports = isBoolean;
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Determine if value is an array.
- *
- * @param {*} value
- * @return {boolean}
- */
-
-function isArray(value) {
-  return Array.isArray(value) || value instanceof Array;
-}
-
-module.exports = isArray;
-
-/***/ }),
-/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1257,15 +1058,287 @@ function clone(value) {
 module.exports = clone;
 
 /***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var types = __webpack_require__(0);
+var clone = __webpack_require__(9);
+var optional = __webpack_require__(8);
+
+module.exports = Object.freeze(_extends({}, types, { clone: clone, optional: optional }));
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is an undefined.
+ *
+ * @param {*} value
+ * @return {boolean}
+ */
+
+function isUndefined(value) {
+  return typeof value === "undefined";
+}
+
+module.exports = isUndefined;
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is a string.
+ *
+ * @param {*} value
+ * @return {boolean}
+ */
+
+function isString(value) {
+  return typeof value === "string" || value instanceof String;
+}
+
+module.exports = isString;
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is an object and not null.
+ *
+ * @param {*} value
+ * @param {boolean} value
+ * @return {boolean}
+ */
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+function isObject(value) {
+  return (typeof value === "undefined" ? "undefined" : _typeof(value)) === "object" && value !== null;
+}
+
+module.exports = isObject;
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is a number or numeric string.
+ *
+ * @param {*} value
+ * @return {boolean}
+ */
+
+function isNumeric(value) {
+  return !isNaN(parseFloat(value)) && isFinite(value);
+}
+
+module.exports = isNumeric;
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is a number.
+ *
+ * @param {*} value
+ * @return {boolean}
+ */
+
+function isNumber(value) {
+  return typeof value === "number" || value instanceof Number;
+}
+
+module.exports = isNumber;
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is a null.
+ *
+ * @param {*} value
+ * @return {boolean}
+ */
+
+function isNull(value) {
+  return value === null;
+}
+
+module.exports = isNull;
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is a function.
+ *
+ * @param {*} value
+ * @param {boolean} value
+ * @return {boolean}
+ */
+
+function isFunction(value) {
+  return typeof value === "function";
+}
+
+module.exports = isFunction;
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is a boolean.
+ *
+ * @param {*} value
+ * @return {boolean}
+ */
+
+function isBoolean(value) {
+  return typeof value === "boolean" || value instanceof Boolean;
+}
+
+module.exports = isBoolean;
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is an array.
+ *
+ * @param {*} value
+ * @return {boolean}
+ */
+
+function isArray(value) {
+  return Array.isArray(value) || value instanceof Array;
+}
+
+module.exports = isArray;
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _require = __webpack_require__(0),
+    isFunction = _require.isFunction;
+
+var Defer = __webpack_require__(1);
+
+var DEFAULT_TIME_INTERVAL = 0;
+
+/**
+ * Assert "callback" parameter.
+ *
+ * @param {*} callback
+ * @return {void}
+ * @throws TypeError
+ */
+function assertCallbackParameter(callback) {
+    if (!isFunction(callback)) {
+        throw new TypeError('The "callback" parameter should be a function.');
+    }
+}
+
+/**
+ * Provide promise that will be resolved when callback will return truthy value.
+ *
+ * @param {function} callback
+ * @param {number} {timeInterval=0}
+ * @return {Promise}
+ */
+function waitUntil(callback) {
+    var timeInterval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : DEFAULT_TIME_INTERVAL;
+
+    assertCallbackParameter(callback);
+    var defer = new Defer();
+    var intervalId = setInterval(function () {
+        try {
+            var result = callback();
+            if (result) {
+                clearInterval(intervalId);
+                defer.resolve(result);
+            }
+        } catch (error) {
+            defer.reject(error);
+        }
+    }, timeInterval);
+    return defer.promisify();
+}
+
+module.exports = waitUntil;
+
+/***/ }),
 /* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var clone = __webpack_require__(20);
+var Defer = __webpack_require__(1);
 
-module.exports = clone;
+var DEFAULT_TIME_INTERVAL = 0;
+
+/**
+ * Provide promise that will be resolved after time interval.
+ *
+ * @param {number} [timeInterval=0]
+ * @return {Promise}
+ */
+function timeout() {
+  var timeInterval = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_TIME_INTERVAL;
+
+  var defer = new Defer();
+  setTimeout(function () {
+    return defer.resolve();
+  }, timeInterval);
+  return defer.promisify();
+}
+
+module.exports = timeout;
 
 /***/ }),
 /* 22 */
@@ -1274,23 +1347,11 @@ module.exports = clone;
 "use strict";
 
 
-var DEFAULT_TIMEOUT = 0;
+var Defer = __webpack_require__(1);
+var timeout = __webpack_require__(21);
+var waitUntil = __webpack_require__(20);
 
-/**
- * Provide promise that will be resolved after timeout.
- *
- * @param {number} [timeout=0]
- * @return {Promise}
- */
-function timeout() {
-  var timeout = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_TIMEOUT;
-
-  return new Promise(function (resolve) {
-    return setTimeout(resolve, timeout);
-  });
-}
-
-module.exports = timeout;
+module.exports = Object.freeze({ Defer: Defer, timeout: timeout, waitUntil: waitUntil });
 
 /***/ }),
 /* 23 */
@@ -1299,29 +1360,15 @@ module.exports = timeout;
 "use strict";
 
 
-var timeout = __webpack_require__(22);
-
-module.exports = Object.freeze({ timeout: timeout });
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var async = __webpack_require__(23);
-var clone = __webpack_require__(21);
-var Defer = __webpack_require__(10);
-var DependencyContainer = __webpack_require__(8);
-var EventEmitter = __webpack_require__(6);
-var Mapper = __webpack_require__(4);
-var optional = __webpack_require__(2);
-var types = __webpack_require__(0);
+var async = __webpack_require__(22);
+var utils = __webpack_require__(10);
+var DependencyContainer = __webpack_require__(7);
+var EventEmitter = __webpack_require__(5);
+var Mapper = __webpack_require__(3);
 
-module.exports = Object.freeze(_extends({}, async, { clone: clone, Defer: Defer, DependencyContainer: DependencyContainer, EventEmitter: EventEmitter, Mapper: Mapper, optional: optional }, types));
+module.exports = Object.freeze(_extends({}, async, utils, { DependencyContainer: DependencyContainer, EventEmitter: EventEmitter, Mapper: Mapper }));
 
 /***/ })
 /******/ ]);

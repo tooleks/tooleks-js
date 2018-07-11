@@ -27,14 +27,14 @@ describe("timeout function test", function() {
     });
 
     it("should resolve promise after timeout", function(done) {
-        timeout(500)
+        timeout(100)
             .then(() => {
-                expect(clock.now).to.be.equal(500);
+                expect(clock.now).to.be.equal(100);
                 done();
             })
             .catch(done);
 
-        clock.tick(250);
-        clock.tick(250);
+        clock.tick(50);
+        clock.tick(50);
     });
 });

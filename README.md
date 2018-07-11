@@ -29,6 +29,39 @@ defer.promisify().then((user) => {
 });
 ```
 
+#### `timeout` function
+
+The `timeout` function returns `Promise` that will be resolved after a specified number of milliseconds.
+
+```JavaScript
+const {timeout} = require("tooleks");
+
+(async () => {
+    console.log('Waiting (2s)...');
+    await timeout(2000);
+    console.log('Done!');
+})();
+```
+
+#### `waitUntil` function
+
+The `waitUntil` function returns `Promise` that will be resolved when the passed callback will return truthy value and rejected when the passed callback will throw an error.
+
+```JavaScript
+const {waitUntil} = require("tooleks");
+
+let externalLibrary;
+
+waitUntil(() => externalLibrary).then((externalLibrary) => {
+    console.log('Done!');
+});
+
+console.log('Loading (2s)...');
+setTimeout(() => {
+    externalLibrary = {};
+}, 2000);
+```
+
 #### `DependencyContainer` class
 
 The `DependencyContainer` class is a tool for managing class dependencies and performing dependency injection.

@@ -1,5 +1,7 @@
 "use strict";
 
+const {isUndefined} = require("./types");
+
 /**
  * Retrieve the result of callback call. If an error occurred or result is undefined return a default value instead.
  *
@@ -10,7 +12,10 @@
 function optional(callback, defaultValue = undefined) {
     try {
         const value = callback();
-        return typeof value !== "undefined" ? value : defaultValue;
+        if (!isUndefined(value)) {
+            return value;
+        }
+        return defaultValue;
     } catch (error) {
         return defaultValue;
     }
