@@ -1,4 +1,4 @@
-/*! tooleks v1.3.1. Copyright (c) Oleksandr Tolochko. */
+/*! tooleks v1.3.2. Copyright (c) Oleksandr Tolochko. */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -158,7 +158,7 @@ var Defer = function () {
     /**
      * Get a promise which will be resolved or rejected with a deferred value.
      *
-     * @return {Promise<any>}
+     * @return {Promise<*>}
      */
 
 
@@ -1288,7 +1288,7 @@ function assertCallbackParameter(callback) {
  *
  * @param {function} callback
  * @param {number} {timeInterval=0}
- * @return {Promise}
+ * @return {Promise<*>}
  */
 function waitUntil(callback) {
     var timeInterval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : DEFAULT_TIME_INTERVAL;
@@ -1326,7 +1326,7 @@ var DEFAULT_TIME_INTERVAL = 0;
  * Provide promise that will be resolved after time interval.
  *
  * @param {number} [timeInterval=0]
- * @return {Promise}
+ * @return {Promise<*>}
  */
 function timeout() {
   var timeInterval = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_TIME_INTERVAL;

@@ -19,7 +19,7 @@ class Defer {
     /**
      * Get a promise which will be resolved or rejected with a deferred value.
      *
-     * @return {Promise<any>}
+     * @return {Promise<*>}
      */
     promisify() {
         return this._promise;
