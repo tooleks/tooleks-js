@@ -1,6 +1,6 @@
 "use strict";
 
-const {isFunction, isString, isUndefined} = require("../types");
+const {isFunction, isString, isUndefined} = require("../utils/types");
 
 /**
  * Assert "eventName" parameter.

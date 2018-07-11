@@ -2,7 +2,7 @@
 
 const assert = require("assert");
 const faker = require("faker");
-const {isObject} = require("../../../src");
+const {isObject} = require("../../../../src");
 
 describe("isObject function test", function() {
     it("should return true", function() {

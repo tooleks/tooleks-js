@@ -2,7 +2,7 @@
 
 const assert = require("assert");
 const faker = require("faker");
-const {isBoolean} = require("../../../src");
+const {isBoolean} = require("../../../../src");
 
 describe("isBoolean function test", function() {
     it("should return true", function() {

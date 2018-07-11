@@ -2,7 +2,7 @@
 
 const assert = require("assert");
 const faker = require("faker");
-const {isArray} = require("../../../src");
+const {isArray} = require("../../../../src");
 
 describe("isArray function test", function() {
     it("should return true", function() {

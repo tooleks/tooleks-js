@@ -25,7 +25,7 @@ describe("Defer class test", function() {
                 assert(resolve.calledWith(resolvedValue));
                 done();
             })
-            .catch(() => assert(false, "Should not throw an error."));
+            .catch(done);
 
         defer.resolve(resolvedValue);
     });
@@ -41,7 +41,7 @@ describe("Defer class test", function() {
                 assert(resolve.calledWith(resolvedValue));
                 done();
             })
-            .catch(() => assert(false, "Should not throw an error."));
+            .catch(done);
     });
 
     it("should reject a valid value before rejecting via promisify", function(done) {
@@ -53,7 +53,7 @@ describe("Defer class test", function() {
                 assert(reject.calledWith(rejectedValue));
                 done();
             })
-            .catch(() => assert(false, "Should not throw an error."));
+            .catch(done);
 
         defer.reject(rejectedValue);
     });
@@ -69,6 +69,6 @@ describe("Defer class test", function() {
                 assert(reject.calledWith(rejectedValue));
                 done();
             })
-            .catch(() => assert(false, "Should not throw an error."));
+            .catch(done);
     });
 });

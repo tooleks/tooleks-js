@@ -1,6 +1,6 @@
 "use strict";
 
-const {isArray, isBoolean, isFunction, isString, isUndefined} = require("../types");
+const {isArray, isBoolean, isFunction, isString, isUndefined} = require("../utils/types");
 
 /**
  * Assert "identifier" parameter.
