@@ -1,4 +1,4 @@
-/*! tooleks v1.3.2. Copyright (c) Oleksandr Tolochko. */
+/*! tooleks v1.4.0. Copyright (c) Oleksandr Tolochko. */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -92,7 +92,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 23);
+/******/ 	return __webpack_require__(__webpack_require__.s = 24);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -102,19 +102,21 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var isArray = __webpack_require__(19);
-var isBoolean = __webpack_require__(18);
+var isArray = __webpack_require__(20);
+var isBoolean = __webpack_require__(19);
+var isDefined = __webpack_require__(18);
 var isFunction = __webpack_require__(17);
 var isNull = __webpack_require__(16);
 var isNumber = __webpack_require__(15);
 var isNumeric = __webpack_require__(14);
 var isObject = __webpack_require__(13);
 var isString = __webpack_require__(12);
-var isUndefined = __webpack_require__(11);
+var isUndefined = __webpack_require__(2);
 
 module.exports = Object.freeze({
     isArray: isArray,
     isBoolean: isBoolean,
+    isDefined: isDefined,
     isFunction: isFunction,
     isNull: isNull,
     isNumber: isNumber,
@@ -176,6 +178,26 @@ module.exports = Defer;
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determine if value is an undefined.
+ *
+ * @param {*} value
+ * @return {boolean}
+ */
+
+function isUndefined(value) {
+  return typeof value === "undefined";
+}
+
+module.exports = isUndefined;
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -359,18 +381,18 @@ var Mapper = function () {
 module.exports = Mapper;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Mapper = __webpack_require__(2);
+var Mapper = __webpack_require__(3);
 
 module.exports = Mapper;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -425,7 +447,9 @@ var EventEmitter = function () {
         _classCallCheck(this, EventEmitter);
 
         this._events = {};
+        this._callEventListeners = this._callEventListeners.bind(this);
         this.emit = this.emit.bind(this);
+        this.emitAsync = this.emitAsync.bind(this);
         this.on = this.on.bind(this);
     }
 
@@ -434,20 +458,50 @@ var EventEmitter = function () {
      *
      * @param {string} eventName
      * @param {*} payload
-     * @return {void}
+     * @return {Array<*>}
+     * @private
      */
 
 
     _createClass(EventEmitter, [{
-        key: "emit",
-        value: function emit(eventName, payload) {
+        key: "_callEventListeners",
+        value: function _callEventListeners(eventName, payload) {
             assertEventNameParameter(eventName);
             var event = this._events[eventName];
-            if (!isUndefined(event)) {
-                event.forEach(function (listener) {
-                    return listener(payload);
-                });
+            if (isUndefined(event)) {
+                return [];
             }
+            return event.map(function (listener) {
+                return listener(payload);
+            });
+        }
+
+        /**
+         * Synchronously call each of the listeners registered for the event named eventName.
+         *
+         * @param {string} eventName
+         * @param {*} payload
+         * @return {void}
+         */
+
+    }, {
+        key: "emit",
+        value: function emit(eventName, payload) {
+            this._callEventListeners(eventName, payload);
+        }
+
+        /**
+         * Asynchronously call each of the listeners registered for the event named eventName.
+         *
+         * @param {string} eventName
+         * @param {*} payload
+         * @return {Promise}
+         */
+
+    }, {
+        key: "emitAsync",
+        value: function emitAsync(eventName, payload) {
+            return Promise.all(this._callEventListeners(eventName, payload));
         }
 
         /**
@@ -483,18 +537,18 @@ var EventEmitter = function () {
 module.exports = EventEmitter;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var EventEmitter = __webpack_require__(4);
+var EventEmitter = __webpack_require__(5);
 
 module.exports = EventEmitter;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -509,6 +563,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var _require = __webpack_require__(0),
     isArray = _require.isArray,
     isBoolean = _require.isBoolean,
+    isDefined = _require.isDefined,
     isFunction = _require.isFunction,
     isString = _require.isString,
     isUndefined = _require.isUndefined;
@@ -705,7 +760,7 @@ var DependencyContainer = function () {
                     throw new Error("Circular dependency detected. " + identifier + " depends on itself.");
                 }
 
-                if (!isUndefined(_this2._bindings[dependency])) {
+                if (isDefined(_this2._bindings[dependency])) {
                     _this2._bindings[dependency].dependencies.forEach(function (innerDependency) {
                         if (innerDependency === identifier) {
                             throw new Error("Circular dependency detected. " + ("\"" + identifier + "\" depends on \"" + dependency + "\" and vise versa."));
@@ -783,7 +838,7 @@ var DependencyContainer = function () {
                 throw new Error("The \"" + identifier + "\" binding not found.");
             }
             var binding = this._bindings[identifier];
-            if (!isUndefined(binding.instance)) {
+            if (isDefined(binding.instance)) {
                 return binding.instance;
             }
             var instance = this._createInstance(binding);
@@ -800,25 +855,25 @@ var DependencyContainer = function () {
 module.exports = DependencyContainer;
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var DependencyContainer = __webpack_require__(6);
-
-module.exports = DependencyContainer;
-
-/***/ }),
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
+var DependencyContainer = __webpack_require__(7);
+
+module.exports = DependencyContainer;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _require = __webpack_require__(0),
-    isUndefined = _require.isUndefined;
+    isDefined = _require.isDefined;
 
 /**
  * Retrieve the result of callback call. If an error occurred or result is undefined return a default value instead.
@@ -834,7 +889,7 @@ function optional(callback) {
 
     try {
         var value = callback();
-        if (!isUndefined(value)) {
+        if (isDefined(value)) {
             return value;
         }
         return defaultValue;
@@ -846,7 +901,7 @@ function optional(callback) {
 module.exports = optional;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1058,7 +1113,7 @@ function clone(value) {
 module.exports = clone;
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1067,30 +1122,10 @@ module.exports = clone;
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var types = __webpack_require__(0);
-var clone = __webpack_require__(9);
-var optional = __webpack_require__(8);
+var clone = __webpack_require__(10);
+var optional = __webpack_require__(9);
 
 module.exports = Object.freeze(_extends({}, types, { clone: clone, optional: optional }));
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Determine if value is an undefined.
- *
- * @param {*} value
- * @return {boolean}
- */
-
-function isUndefined(value) {
-  return typeof value === "undefined";
-}
-
-module.exports = isUndefined;
 
 /***/ }),
 /* 12 */
@@ -1223,6 +1258,27 @@ module.exports = isFunction;
 "use strict";
 
 
+var isUndefined = __webpack_require__(2);
+
+/**
+ * Determine if value is not undefined.
+ *
+ * @param {*} value
+ * @return {boolean}
+ */
+function isDefined(value) {
+  return !isUndefined(value);
+}
+
+module.exports = isDefined;
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 /**
  * Determine if value is a boolean.
  *
@@ -1237,7 +1293,7 @@ function isBoolean(value) {
 module.exports = isBoolean;
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1257,7 +1313,7 @@ function isArray(value) {
 module.exports = isArray;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1312,7 +1368,7 @@ function waitUntil(callback) {
 module.exports = waitUntil;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1341,20 +1397,20 @@ function timeout() {
 module.exports = timeout;
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var Defer = __webpack_require__(1);
-var timeout = __webpack_require__(21);
-var waitUntil = __webpack_require__(20);
+var timeout = __webpack_require__(22);
+var waitUntil = __webpack_require__(21);
 
 module.exports = Object.freeze({ Defer: Defer, timeout: timeout, waitUntil: waitUntil });
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1362,11 +1418,11 @@ module.exports = Object.freeze({ Defer: Defer, timeout: timeout, waitUntil: wait
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var async = __webpack_require__(22);
-var utils = __webpack_require__(10);
-var DependencyContainer = __webpack_require__(7);
-var EventEmitter = __webpack_require__(5);
-var Mapper = __webpack_require__(3);
+var async = __webpack_require__(23);
+var utils = __webpack_require__(11);
+var DependencyContainer = __webpack_require__(8);
+var EventEmitter = __webpack_require__(6);
+var Mapper = __webpack_require__(4);
 
 module.exports = Object.freeze(_extends({}, async, utils, { DependencyContainer: DependencyContainer, EventEmitter: EventEmitter, Mapper: Mapper }));
 

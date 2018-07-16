@@ -38,8 +38,27 @@ class EventEmitter {
      */
     constructor() {
         this._events = {};
+        this._callEventListeners = this._callEventListeners.bind(this);
         this.emit = this.emit.bind(this);
+        this.emitAsync = this.emitAsync.bind(this);
         this.on = this.on.bind(this);
+    }
+
+    /**
+     * Synchronously call each of the listeners registered for the event named eventName.
+     *
+     * @param {string} eventName
+     * @param {*} payload
+     * @return {Array<*>}
+     * @private
+     */
+    _callEventListeners(eventName, payload) {
+        assertEventNameParameter(eventName);
+        const event = this._events[eventName];
+        if (isUndefined(event)) {
+            return [];
+        }
+        return event.map((listener) => listener(payload));
     }
 
     /**
@@ -50,11 +69,18 @@ class EventEmitter {
      * @return {void}
      */
     emit(eventName, payload) {
-        assertEventNameParameter(eventName);
-        const event = this._events[eventName];
-        if (!isUndefined(event)) {
-            event.forEach((listener) => listener(payload));
-        }
+        this._callEventListeners(eventName, payload);
+    }
+
+    /**
+     * Asynchronously call each of the listeners registered for the event named eventName.
+     *
+     * @param {string} eventName
+     * @param {*} payload
+     * @return {Promise}
+     */
+    emitAsync(eventName, payload) {
+        return Promise.all(this._callEventListeners(eventName, payload));
     }
 
     /**

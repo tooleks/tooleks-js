@@ -10,7 +10,7 @@ npm install --save tooleks
 
 #### `Defer` class
 
-The `Defer` class exposes the associated `Promise` instance that can be used for retrieving the result of the task.
+`Defer` class exposes the associated `Promise` instance that can be used for retrieving the result of the task.
 
 ```JavaScript
 const {Defer} = require("tooleks");
@@ -31,7 +31,7 @@ defer.promisify().then((user) => {
 
 #### `timeout` function
 
-The `timeout` function returns `Promise` that will be resolved after a specified number of milliseconds.
+`timeout` function returns `Promise` that will be resolved after a specified number of milliseconds.
 
 ```JavaScript
 const {timeout} = require("tooleks");
@@ -45,7 +45,7 @@ const {timeout} = require("tooleks");
 
 #### `waitUntil` function
 
-The `waitUntil` function returns `Promise` that will be resolved when the passed callback will return truthy value and rejected when the passed callback will throw an error.
+`waitUntil` function returns `Promise` that will be resolved when the passed callback will return truthy value and rejected when the passed callback will throw an error.
 
 ```JavaScript
 const {waitUntil} = require("tooleks");
@@ -67,7 +67,7 @@ setTimeout(() => {
 
 #### `DependencyContainer` class
 
-The `DependencyContainer` class is a tool for managing class dependencies and performing dependency injection.
+`DependencyContainer` class is a tool for managing class dependencies and performing dependency injection.
 
 ```JavaScript
 const {DependencyContainer} = require("tooleks");
@@ -111,7 +111,7 @@ console.log(dataProvider === dc.get("UserService")); // false
 
 #### `EventEmitter` class
 
-The `EventEmitter` class notifies listeners when the event occurs.
+`EventEmitter` class notifies listeners when the event occurs.
 
 ```JavaScript
 const {EventEmitter} = require("tooleks");
@@ -129,12 +129,41 @@ const user = {
 
 eventEmitter.emit("userCreated", user);
 
-off();
+off(); // Unsubscribe from the event.
+```
+
+`EventEmitter` class also exposes asynchronous method `emitAsync` that returns `Promise` that will be resolved when each of the listeners will be resolved.
+
+```JavaScript
+const {EventEmitter} = require("tooleks");
+
+const eventEmitter = new EventEmitter();
+
+const off = eventEmitter.on("userCreated", (user) => {
+    console.log("Waiting (2s)...");
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log(user); // { firstName: "Anna P.", lastName: "P." }
+            resolve();
+        }, 2000);
+    });
+});
+
+const user = {
+    firstName: "Anna",
+    lastName: "P.",
+};
+
+(async () => {
+    await eventEmitter.emitAsync("userCreated", user);
+    console.log("Done!");
+    off(); // Unsubscribe from the event.
+})();
 ```
 
 #### `Mapper` class
 
-The `Mapper` class transforms the initial data formats into the desired data formats.
+`Mapper` class transforms the initial data formats into the desired data formats.
 
 ```JavaScript
 const {Mapper} = require("tooleks");
@@ -159,7 +188,7 @@ console.log(mappedUser); // { fullName: "Anna P." }
 
 #### `clone` function
 
-The `clone` function provides the mechanism for objects deep cloning. It supports `Array`, `Boolean`, `Date`, `Function`, `Map`, `Number`, `Object`, `RegExp`, `String` types.
+`clone` function provides the mechanism for objects deep cloning. It supports `Array`, `Boolean`, `Date`, `Function`, `Map`, `Number`, `Object`, `RegExp`, `String` types.
 
 ```JavaScript
 const {clone} = require("tooleks");
@@ -203,7 +232,7 @@ console.log(JSON.stringify(clonedUser) !== JSON.stringify(user)); // true
 
 #### `optional` function
 
-The `optional` function retrieves the result of callback call. If an error occurred or result is `undefined` returns a default value instead.
+`optional` function retrieves the result of callback call. If an error occurred or result is `undefined` returns a default value instead.
 
 ```JavaScript
 const {optional} = require("tooleks");
@@ -223,10 +252,11 @@ console.log(phoneNumber); // null, damn it.
 `types` functions are shortcut functions to check variable type.
 
 ```JavaScript
-const {isArray, isBoolean, isFunction, isNull, isNumber, isNumeric, isObject, isString, isUndefined} = require("tooleks");
+const {isArray, isBoolean, isDefined, isFunction, isNull, isNumber, isNumeric, isObject, isString, isUndefined} = require("tooleks");
 
 console.log(isArray([])); // true
 console.log(isBoolean(false)); // true
+console.log(isDefined(undefined)); // false
 console.log(isFunction(() => {})); // true
 console.log(isNull(null)); // true
 console.log(isNumber(42)); // true

@@ -1,6 +1,6 @@
 {
   "name": "tooleks",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "description": "A set of tools for JavaScript development",
   "keywords": [
     "defer",
@@ -18,7 +18,10 @@
     "event-emitter",
     "mapper",
     "clone",
-    "optional"
+    "optional",
+    "utils",
+    "async",
+    "asyncronous"
   ],
   "main": "./dist/index.js",
   "directories": {
