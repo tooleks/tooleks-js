@@ -77,7 +77,7 @@ class EventEmitter {
      *
      * @param {string} eventName
      * @param {*} payload
-     * @return {Promise<Array<*>>}
+     * @return {Promise<Array<*>>} - A promise that will be resolved when each of the listeners will be resolved.
      */
     emitAsync(eventName, payload) {
         return Promise.all(this._callEventListeners(eventName, payload));
