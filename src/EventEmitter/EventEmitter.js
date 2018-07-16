@@ -77,7 +77,7 @@ class EventEmitter {
      *
      * @param {string} eventName
      * @param {*} payload
-     * @return {Promise}
+     * @return {Promise<Array<*>>}
      */
     emitAsync(eventName, payload) {
         return Promise.all(this._callEventListeners(eventName, payload));

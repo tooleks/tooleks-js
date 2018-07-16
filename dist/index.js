@@ -495,7 +495,7 @@ var EventEmitter = function () {
          *
          * @param {string} eventName
          * @param {*} payload
-         * @return {Promise}
+         * @return {Promise<Array<*>>}
          */
 
     }, {
