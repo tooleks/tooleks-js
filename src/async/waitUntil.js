@@ -1,6 +1,6 @@
 "use strict";
 
-const {isFunction} = require("../utils/types");
+const {isFunction} = require("../utils");
 const Defer = require("./Defer");
 
 const DEFAULT_TIME_INTERVAL = 0;

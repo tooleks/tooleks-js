@@ -1,6 +1,7 @@
 "use strict";
 
-const {isFunction, isString, isUndefined} = require("../utils/types");
+const {isFunction, isString, isUndefined} = require("../utils");
+const {Defer} = require("../async");
 
 /**
  * Assert "eventName" parameter.
@@ -80,7 +81,16 @@ class EventEmitter {
      * @return {Promise<Array<*>>} - A promise that will be resolved when each of the listeners will be resolved.
      */
     emitAsync(eventName, payload) {
-        return Promise.all(this._callEventListeners(eventName, payload));
+        const defer = new Defer();
+        setImmediate(async () => {
+            try {
+                const results = await this._callEventListeners(eventName, payload);
+                defer.resolve(results);
+            } catch (error) {
+                defer.reject(error);
+            }
+        });
+        return defer.promisify();
     }
 
     /**

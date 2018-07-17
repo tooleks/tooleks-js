@@ -6,9 +6,10 @@ const sinon = require("sinon");
 const {EventEmitter} = require("../../../src");
 
 describe("EventEmitter class test", function() {
-    let eventEmitter, eventName, payload, syncListener, asyncListener, asyncListenerResolve;
+    let clock, eventEmitter, eventName, payload, syncListener, asyncListener, asyncListenerResolve;
 
     beforeEach(function() {
+        clock = sinon.useFakeTimers();
         eventEmitter = new EventEmitter();
         eventName = faker.lorem.word();
         payload = {};
@@ -24,14 +25,18 @@ describe("EventEmitter class test", function() {
         });
     });
 
-    it("should synchronously emit event", function() {
+    afterEach(function() {
+        clock.restore();
+    });
+
+    it("should emit sync event", function() {
         eventEmitter.on(eventName, syncListener);
         eventEmitter.emit(eventName, payload);
         assert(syncListener.calledOnce);
         assert(syncListener.calledWith(payload));
     });
 
-    it("should synchronously unsubscribe from event", function() {
+    it("should unsubscribe from sync event", function() {
         const off = eventEmitter.on(eventName, syncListener);
         eventEmitter.emit(eventName, payload);
         assert(syncListener.calledOnce);
@@ -40,22 +45,39 @@ describe("EventEmitter class test", function() {
         assert(syncListener.calledOnce);
     });
 
-    it("should asynchronously emit event", async function() {
+    it("should emit async event", function() {
         eventEmitter.on(eventName, asyncListener);
-        await eventEmitter.emitAsync(eventName, payload);
+        eventEmitter.emitAsync(eventName, payload);
+        assert(asyncListener.notCalled);
+        assert(asyncListenerResolve.notCalled);
+        clock.tick(50);
         assert(asyncListener.calledOnce);
         assert(asyncListener.calledWith(payload));
+        assert(asyncListenerResolve.notCalled);
+        clock.tick(50);
+        assert(asyncListener.calledOnce);
         assert(asyncListenerResolve.calledOnce);
     });
 
-    it("should asynchronously unsubscribe from event", async function() {
+    it("should unsubscribe from async event", function() {
         const off = eventEmitter.on(eventName, asyncListener);
-        await eventEmitter.emitAsync(eventName, payload);
+        eventEmitter.emitAsync(eventName, payload);
+        assert(asyncListener.notCalled);
+        assert(asyncListenerResolve.notCalled);
+        clock.tick(50);
         assert(asyncListener.calledOnce);
         assert(asyncListener.calledWith(payload));
-        assert(asyncListenerResolve.calledOnce);
-        off();
+        assert(asyncListenerResolve.notCalled);
+        clock.tick(50);
         assert(asyncListener.calledOnce);
         assert(asyncListenerResolve.calledOnce);
+        off();
+        eventEmitter.emitAsync(eventName, payload);
+        clock.tick(50);
+        assert(asyncListener.calledOnce);
+        assert(asyncListener.calledOnce);
+        clock.tick(50);
+        assert(asyncListener.calledOnce);
+        assert(asyncListener.calledOnce);
     });
 });

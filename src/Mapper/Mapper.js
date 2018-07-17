@@ -1,6 +1,6 @@
 "use strict";
 
-const {isFunction, isString, isUndefined} = require("../utils/types");
+const {isFunction, isString, isUndefined} = require("../utils");
 
 /**
  * Assert "from" parameter.
