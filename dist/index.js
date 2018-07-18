@@ -1,4 +1,4 @@
-/*! tooleks v1.4.3. Copyright (c) Oleksandr Tolochko. */
+/*! tooleks v1.4.4. Copyright (c) Oleksandr Tolochko. */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
