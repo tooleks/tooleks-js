@@ -1,6 +1,7 @@
 "use strict";
 
-const {isFunction, isString, isUndefined} = require("../utils/types");
+const {isFunction, isString, isUndefined} = require("../utils");
+const {Defer} = require("../async");
 
 /**
  * Assert "eventName" parameter.
@@ -38,8 +39,27 @@ class EventEmitter {
      */
     constructor() {
         this._events = {};
+        this._callEventListeners = this._callEventListeners.bind(this);
         this.emit = this.emit.bind(this);
+        this.emitAsync = this.emitAsync.bind(this);
         this.on = this.on.bind(this);
+    }
+
+    /**
+     * Synchronously call each of the listeners registered for the event named eventName.
+     *
+     * @param {string} eventName
+     * @param {*} payload
+     * @return {Array<*>}
+     * @private
+     */
+    _callEventListeners(eventName, payload) {
+        assertEventNameParameter(eventName);
+        const listeners = this._events[eventName];
+        if (isUndefined(listeners)) {
+            return [];
+        }
+        return listeners.map((listener) => listener(payload));
     }
 
     /**
@@ -50,11 +70,27 @@ class EventEmitter {
      * @return {void}
      */
     emit(eventName, payload) {
-        assertEventNameParameter(eventName);
-        const event = this._events[eventName];
-        if (!isUndefined(event)) {
-            event.forEach((listener) => listener(payload));
-        }
+        this._callEventListeners(eventName, payload);
+    }
+
+    /**
+     * Asynchronously call each of the listeners registered for the event named eventName.
+     *
+     * @param {string} eventName
+     * @param {*} payload
+     * @return {Promise<Array<*>>} - A promise that will be resolved when each of the listeners will be resolved.
+     */
+    emitAsync(eventName, payload) {
+        const defer = new Defer();
+        setImmediate(async () => {
+            try {
+                const results = await this._callEventListeners(eventName, payload);
+                defer.resolve(results);
+            } catch (error) {
+                defer.reject(error);
+            }
+        });
+        return defer.promisify();
     }
 
     /**
@@ -73,6 +109,10 @@ class EventEmitter {
         this._events[eventName].push(listener);
         return () => {
             this._events[eventName] = this._events[eventName].filter((eventListener) => eventListener !== listener);
+            // Remove event listeners property to optimize memory usage.
+            if (!this._events[eventName].length) {
+                delete this._events[eventName];
+            }
         };
     }
 }

@@ -7,7 +7,7 @@ const faker = require("faker");
 const {Mapper} = require("../../../src");
 
 describe("Mapper class test", function() {
-    let mapper, from, to, value, resolverValue, resolver, resolverSpy;
+    let mapper, from, to, value, resolverValue, resolver;
 
     beforeEach(function() {
         mapper = new Mapper();
@@ -15,22 +15,21 @@ describe("Mapper class test", function() {
         to = faker.lorem.word();
         value = {};
         resolverValue = {};
-        resolver = () => resolverValue;
-        resolverSpy = sinon.spy(resolver);
+        resolver = sinon.spy(() => resolverValue);
     });
 
     it("should return this on register/remove resolver", function() {
-        expect(mapper.registerResolver(from, to, resolverSpy)).to.be.equal(mapper);
+        expect(mapper.registerResolver(from, to, resolver)).to.be.equal(mapper);
         expect(mapper.removeResolver(from, to)).to.be.equal(mapper);
     });
 
     it("should not throw error on register resolver with valid values", function() {
-        expect(() => mapper.registerResolver(from, to, resolverSpy)).to.not.throw();
+        expect(() => mapper.registerResolver(from, to, resolver)).to.not.throw();
     });
 
     it("should throw type error on register resolver with invalid `from` value", function() {
         try {
-            mapper.registerResolver({}, to, resolverSpy);
+            mapper.registerResolver({}, to, resolver);
             assert(false, "Whoops! An error should be thrown here.");
         } catch (error) {
             expect(error).to.be.an.instanceof(TypeError);
@@ -40,7 +39,7 @@ describe("Mapper class test", function() {
 
     it("should throw type error on register resolver with invalid `to` value", function() {
         try {
-            mapper.registerResolver(from, {}, resolverSpy);
+            mapper.registerResolver(from, {}, resolver);
             assert(false, "Whoops! An error should be thrown here.");
         } catch (error) {
             expect(error).to.be.an.instanceof(TypeError);
@@ -60,27 +59,27 @@ describe("Mapper class test", function() {
 
     it("should register resolver", function() {
         assert(!mapper.hasResolver(from, to));
-        mapper.registerResolver(from, to, resolverSpy);
+        mapper.registerResolver(from, to, resolver);
         assert(mapper.hasResolver(from, to));
     });
 
     it("should remove resolver", function() {
-        mapper.registerResolver(from, to, resolverSpy);
+        mapper.registerResolver(from, to, resolver);
         assert(mapper.hasResolver(from, to));
         mapper.removeResolver(from, to);
         assert(!mapper.hasResolver(from, to));
     });
 
     it("should map value", function() {
-        mapper.registerResolver(from, to, resolverSpy);
+        mapper.registerResolver(from, to, resolver);
         const result = mapper.map(value, from, to);
-        assert(resolverSpy.calledOnce);
-        assert(resolverSpy.calledWith(value));
+        assert(resolver.calledOnce);
+        assert(resolver.calledWith(value));
         expect(result).to.equal(resolverValue);
     });
 
     it("should throw an error on map value with invalid `from` value", function() {
-        mapper.registerResolver(from, to, resolverSpy);
+        mapper.registerResolver(from, to, resolver);
         let _from = faker.lorem.word();
         try {
             mapper.map(value, _from, to);
@@ -92,7 +91,7 @@ describe("Mapper class test", function() {
     });
 
     it("should throw an error on map value with invalid `to` value", function() {
-        mapper.registerResolver(from, to, resolverSpy);
+        mapper.registerResolver(from, to, resolver);
         let _to = faker.lorem.word();
         try {
             mapper.map(value, from, _to);

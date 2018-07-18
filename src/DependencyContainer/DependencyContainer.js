@@ -1,6 +1,6 @@
 "use strict";
 
-const {isArray, isBoolean, isFunction, isString, isUndefined} = require("../utils/types");
+const {isArray, isBoolean, isDefined, isFunction, isString, isUndefined} = require("../utils");
 
 /**
  * Assert "identifier" parameter.
@@ -168,7 +168,7 @@ class DependencyContainer {
                 throw new Error(`Circular dependency detected. ${identifier} depends on itself.`);
             }
 
-            if (!isUndefined(this._bindings[dependency])) {
+            if (isDefined(this._bindings[dependency])) {
                 this._bindings[dependency].dependencies.forEach((innerDependency) => {
                     if (innerDependency === identifier) {
                         throw new Error("Circular dependency detected. " +
@@ -235,7 +235,7 @@ class DependencyContainer {
             throw new Error(`The "${identifier}" binding not found.`);
         }
         const binding = this._bindings[identifier];
-        if (!isUndefined(binding.instance)) {
+        if (isDefined(binding.instance)) {
             return binding.instance;
         }
         const instance = this._createInstance(binding);
