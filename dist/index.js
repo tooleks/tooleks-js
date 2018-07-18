@@ -979,11 +979,11 @@ var EventEmitter = function () {
         key: "_callEventListeners",
         value: function _callEventListeners(eventName, payload) {
             assertEventNameParameter(eventName);
-            var event = this._events[eventName];
-            if (isUndefined(event)) {
+            var listeners = this._events[eventName];
+            if (isUndefined(listeners)) {
                 return [];
             }
-            return event.map(function (listener) {
+            return listeners.map(function (listener) {
                 return listener(payload);
             });
         }
@@ -1072,6 +1072,10 @@ var EventEmitter = function () {
                 _this2._events[eventName] = _this2._events[eventName].filter(function (eventListener) {
                     return eventListener !== listener;
                 });
+                // Remove event listeners property to optimize memory usage.
+                if (!_this2._events[eventName].length) {
+                    delete _this2._events[eventName];
+                }
             };
         }
     }]);

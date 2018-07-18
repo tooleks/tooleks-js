@@ -55,11 +55,11 @@ class EventEmitter {
      */
     _callEventListeners(eventName, payload) {
         assertEventNameParameter(eventName);
-        const event = this._events[eventName];
-        if (isUndefined(event)) {
+        const listeners = this._events[eventName];
+        if (isUndefined(listeners)) {
             return [];
         }
-        return event.map((listener) => listener(payload));
+        return listeners.map((listener) => listener(payload));
     }
 
     /**
@@ -109,6 +109,10 @@ class EventEmitter {
         this._events[eventName].push(listener);
         return () => {
             this._events[eventName] = this._events[eventName].filter((eventListener) => eventListener !== listener);
+            // Remove event listeners property to optimize memory usage.
+            if (!this._events[eventName].length) {
+                delete this._events[eventName];
+            }
         };
     }
 }

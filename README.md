@@ -31,7 +31,7 @@ defer.promisify().then((user) => {
 
 #### `timeout` function
 
-`timeout` function returns `Promise` that will be resolved after a specified number of milliseconds.
+`timeout` function returns `Promise` that will be resolved after a specified number of milliseconds. It's a `Promise` based alternative to a native `setTimeout` function.
 
 ```JavaScript
 const {timeout} = require("tooleks");
