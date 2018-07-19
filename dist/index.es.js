@@ -1,4 +1,4 @@
-/* tooleks v1.4.6 2018-07-19T23:15:45.837Z. Copyright (c) Oleksandr Tolochko <tooleks@gmail.com>. License: MIT. */
+/* tooleks v1.4.6 2018-07-19T23:24:42.813Z. Copyright (c) Oleksandr Tolochko <tooleks@gmail.com>. License: MIT. */
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {
@@ -302,8 +302,8 @@ function cloneRegExp(value) {
 /**
  * Clone Object value.
  *
- * @param {Object} value
- * @returns {Object}
+ * @param {object} value
+ * @returns {object}
  * @throws Error
  */
 function cloneObject(value) {
@@ -330,8 +330,8 @@ function cloneObject(value) {
 /**
  * Clone Function value.
  *
- * @param {Function} value
- * @returns {Function}
+ * @param {function} value
+ * @returns {function}
  */
 function cloneFunction(value) {
     // Root function.
@@ -386,7 +386,7 @@ function clone(value) {
 /**
  * Retrieve the result of callback call. If an error occurred or result is undefined return a default value instead.
  *
- * @param {Function} callback
+ * @param {function} callback
  * @param {*} defaultValue
  * @return {*}
  */
@@ -552,7 +552,7 @@ var DependencyContainer = function () {
     /**
      * Create an instance for a binding.
      *
-     * @param {Object} binding
+     * @param {object} binding
      * @return {*}
      * @private
      */
@@ -597,8 +597,8 @@ var DependencyContainer = function () {
          * Register a new binding in the container.
          *
          * @param {string} identifier
-         * @param {Function|*} type
-         * @param {Object} options
+         * @param {function|*} type
+         * @param {object} options
          * @param {Array<string|Function>} options.dependencies
          * @param {boolean} options.singleton
          * @param {boolean} options.factory
@@ -831,8 +831,8 @@ var EventEmitter = function () {
          * Add the listener function to the end of the listeners array for the event named eventName.
          *
          * @param {string} eventName
-         * @param {Function} listener
-         * @return {Function} - A function to remove the listener function from the listeners array for the event named eventName.
+         * @param {function} listener
+         * @return {function} - A function to remove the listener function from the listeners array for the event named eventName.
          */
 
     }, {
@@ -944,7 +944,7 @@ var Mapper = function () {
          *
          * @param {string} from
          * @param {string} to
-         * @param {Function} resolver
+         * @param {function} resolver
          * @return {Mapper}
          */
 

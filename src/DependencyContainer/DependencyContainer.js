@@ -104,7 +104,7 @@ export default class DependencyContainer {
     /**
      * Create an instance for a binding.
      *
-     * @param {Object} binding
+     * @param {object} binding
      * @return {*}
      * @private
      */
@@ -140,8 +140,8 @@ export default class DependencyContainer {
      * Register a new binding in the container.
      *
      * @param {string} identifier
-     * @param {Function|*} type
-     * @param {Object} options
+     * @param {function|*} type
+     * @param {object} options
      * @param {Array<string|Function>} options.dependencies
      * @param {boolean} options.singleton
      * @param {boolean} options.factory

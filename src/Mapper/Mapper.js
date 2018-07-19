@@ -77,7 +77,7 @@ export default class Mapper {
      *
      * @param {string} from
      * @param {string} to
-     * @param {Function} resolver
+     * @param {function} resolver
      * @return {Mapper}
      */
     registerResolver(from, to, resolver) {

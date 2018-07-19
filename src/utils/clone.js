@@ -106,8 +106,8 @@ function cloneRegExp(value) {
 /**
  * Clone Object value.
  *
- * @param {Object} value
- * @returns {Object}
+ * @param {object} value
+ * @returns {object}
  * @throws Error
  */
 function cloneObject(value) {
@@ -134,8 +134,8 @@ function cloneObject(value) {
 /**
  * Clone Function value.
  *
- * @param {Function} value
- * @returns {Function}
+ * @param {function} value
+ * @returns {function}
  */
 function cloneFunction(value) {
     // Root function.
