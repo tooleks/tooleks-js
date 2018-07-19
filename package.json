@@ -1,6 +1,6 @@
 {
   "name": "tooleks",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "description": "A set of tools for JavaScript development",
   "keywords": [
     "defer",
@@ -60,7 +60,6 @@
     "rollup": "^0.63.2",
     "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-eslint": "^4.0.0",
-    "rollup-plugin-license": "^0.7.0",
     "rollup-plugin-node-resolve": "^3.3.0",
     "sinon": "^4.5.0"
   }

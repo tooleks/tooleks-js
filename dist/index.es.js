@@ -1,7 +1,4 @@
-/**
- * tooleks v1.4.5 2018-07-19T22:36:19.398Z. Copyright (c) Oleksandr Tolochko <tooleks@gmail.com>.
- */
-
+/* tooleks v1.4.6 2018-07-19T23:15:45.837Z. Copyright (c) Oleksandr Tolochko <tooleks@gmail.com>. License: MIT. */
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {
@@ -1027,3 +1024,4 @@ var Mapper = function () {
 }();
 
 export { Defer, timeout, waitUntil, DependencyContainer, EventEmitter, Mapper, isArray, isBoolean, isDefined, isFunction, isNull, isNumber, isNumeric, isObject, isString, isUndefined, clone, optional };
+//# sourceMappingURL=index.es.js.map

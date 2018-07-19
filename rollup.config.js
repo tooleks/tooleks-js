@@ -2,18 +2,31 @@ import moment from "moment";
 import resolve from "rollup-plugin-node-resolve";
 import babel from "rollup-plugin-babel";
 import eslint from "rollup-plugin-eslint";
-import license from "rollup-plugin-license";
 import pkg from "./package.json";
+
+/**
+ * Common target output configuration.
+ *
+ * @type {object}
+ */
+const output = {
+    name: pkg.name,
+    banner:
+        `/* ${pkg.name} v${pkg.version} ${moment.utc().toISOString()}.` +
+        ` Copyright (c) ${pkg.author}. License: ${pkg.license}. */`,
+    sourcemap: true,
+};
 
 export default {
     input: "src/index.js",
     output: [
         {
+            ...output,
             file: "dist/index.js",
-            name: pkg.name,
             format: "umd",
         },
         {
+            ...output,
             file: "dist/index.es.js",
             format: "es",
         },
@@ -26,9 +39,6 @@ export default {
         }),
         babel({
             exclude: "node_modules/**",
-        }),
-        license({
-            banner: `${pkg.name} v${pkg.version} ${moment.utc().toISOString()}. Copyright (c) ${pkg.author}.`,
         }),
     ],
 };

@@ -1,7 +1,4 @@
-/**
- * tooleks v1.4.5 2018-07-19T22:36:19.398Z. Copyright (c) Oleksandr Tolochko <tooleks@gmail.com>.
- */
-
+/* tooleks v1.4.6 2018-07-19T23:15:45.837Z. Copyright (c) Oleksandr Tolochko <tooleks@gmail.com>. License: MIT. */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -1054,3 +1051,4 @@
   Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
+//# sourceMappingURL=index.js.map
