@@ -1,5 +1,5 @@
 /**
- * tooleks v1.4.5 2018-07-19T22:31:39.311Z. Copyright (c) Oleksandr Tolochko <tooleks@gmail.com>.
+ * tooleks v1.4.5 2018-07-19T22:36:19.398Z. Copyright (c) Oleksandr Tolochko <tooleks@gmail.com>.
  */
 
 (function (global, factory) {
