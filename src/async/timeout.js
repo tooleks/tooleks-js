@@ -1,6 +1,4 @@
-"use strict";
-
-const Defer = require("./Defer");
+import Defer from "./Defer";
 
 const DEFAULT_TIME_INTERVAL = 0;
 
@@ -10,10 +8,8 @@ const DEFAULT_TIME_INTERVAL = 0;
  * @param {number} [timeInterval=0]
  * @return {Promise<*>}
  */
-function timeout(timeInterval = DEFAULT_TIME_INTERVAL) {
+export default function timeout(timeInterval = DEFAULT_TIME_INTERVAL) {
     const defer = new Defer();
     setTimeout(() => defer.resolve(), timeInterval);
     return defer.promisify();
 }
-
-module.exports = timeout;

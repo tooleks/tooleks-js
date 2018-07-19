@@ -1,5 +1,3 @@
-"use strict";
+import DependencyContainer from "./DependencyContainer";
 
-const DependencyContainer = require("./DependencyContainer");
-
-module.exports = DependencyContainer;
+export {DependencyContainer};

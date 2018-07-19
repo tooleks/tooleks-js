@@ -3,7 +3,7 @@
 const assert = require("assert");
 const {expect} = require("chai");
 const faker = require("faker");
-const {clone} = require("../../../src");
+const {clone} = require("../../../dist");
 
 describe("clone function test", function() {
     it("should clone undefined", function() {

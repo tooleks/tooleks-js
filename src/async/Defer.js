@@ -1,10 +1,7 @@
-"use strict";
-
 /**
  * Defer class.
  */
-class Defer {
-
+export default class Defer {
     /**
      * Defer constructor.
      */
@@ -25,5 +22,3 @@ class Defer {
         return this._promise;
     }
 }
-
-module.exports = Defer;

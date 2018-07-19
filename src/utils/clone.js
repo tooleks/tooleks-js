@@ -1,8 +1,6 @@
 /* eslint-disable */
 
-"use strict";
-
-const {isArray, isBoolean, isFunction, isNull, isNumber, isObject, isString, isUndefined} = require("./types");
+import {isArray, isBoolean, isFunction, isNull, isNumber, isObject, isString, isUndefined} from "./types";
 
 /**
  * Clone undefined value.
@@ -161,7 +159,7 @@ function cloneFunction(value) {
  * @returns {*}
  * @throws Error
  */
-function clone(value) {
+export default function clone(value) {
     if (isUndefined(value)) {
         return cloneUndefined(value);
     } else if (isNull(value)) {
@@ -188,5 +186,3 @@ function clone(value) {
 
     throw new Error(`Unable to clone the ${typeof value}.`);
 }
-
-module.exports = clone;

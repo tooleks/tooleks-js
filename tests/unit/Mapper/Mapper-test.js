@@ -4,7 +4,7 @@ const assert = require("assert");
 const {expect} = require("chai");
 const sinon = require("sinon");
 const faker = require("faker");
-const {Mapper} = require("../../../src");
+const {Mapper} = require("../../../dist");
 
 describe("Mapper class test", function() {
     let mapper, from, to, value, resolverValue, resolver;

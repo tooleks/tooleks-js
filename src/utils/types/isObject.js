@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * Determine if value is an object and not null.
  *
@@ -7,8 +5,6 @@
  * @param {boolean} value
  * @return {boolean}
  */
-function isObject(value) {
+export default function isObject(value) {
     return typeof value === "object" && value !== null;
 }
-
-module.exports = isObject;

@@ -3,7 +3,7 @@
 const assert = require("assert");
 const sinon = require("sinon");
 const faker = require("faker");
-const {Defer} = require("../../../src");
+const {Defer} = require("../../../dist");
 
 describe("Defer class test", function() {
     let defer, resolvedValue, rejectedValue, resolve, reject;

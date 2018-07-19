@@ -2,7 +2,7 @@
 
 const assert = require("assert");
 const faker = require("faker");
-const {isNull} = require("../../../../src");
+const {isNull} = require("../../../../dist");
 
 describe("isNull function test", function() {
     it("should return true", function() {

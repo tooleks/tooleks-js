@@ -2,7 +2,7 @@
 
 const assert = require("assert");
 const {expect} = require("chai");
-const {DependencyContainer} = require("../../../src");
+const {DependencyContainer} = require("../../../dist");
 
 describe("DependencyContainer class test", function() {
     let dc;

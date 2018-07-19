@@ -2,7 +2,7 @@
 
 const assert = require("assert");
 const faker = require("faker");
-const {isUndefined} = require("../../../../src");
+const {isUndefined} = require("../../../../dist");
 
 describe("isUndefined function test", function() {
     it("should return true", function() {

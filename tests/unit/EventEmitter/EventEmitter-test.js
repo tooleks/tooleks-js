@@ -3,7 +3,7 @@
 const assert = require("assert");
 const faker = require("faker");
 const sinon = require("sinon");
-const {EventEmitter} = require("../../../src");
+const {EventEmitter} = require("../../../dist");
 
 describe("EventEmitter class test", function() {
     let clock;

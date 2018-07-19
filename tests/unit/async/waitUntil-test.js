@@ -3,7 +3,7 @@
 const assert = require("assert");
 const {expect} = require("chai");
 const sinon = require("sinon");
-const {waitUntil} = require("../../../src");
+const {waitUntil} = require("../../../dist");
 
 describe("waitUntil function test", function() {
     let clock;
