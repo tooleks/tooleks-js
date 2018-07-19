@@ -91,8 +91,8 @@ export default class EventEmitter {
      * Add the listener function to the end of the listeners array for the event named eventName.
      *
      * @param {string} eventName
-     * @param {Function} listener
-     * @return {Function} - A function to remove the listener function from the listeners array for the event named eventName.
+     * @param {function} listener
+     * @return {function} - A function to remove the listener function from the listeners array for the event named eventName.
      */
     on(eventName, listener) {
         assertEventNameParameter(eventName);
