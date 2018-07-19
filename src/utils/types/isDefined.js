@@ -1,6 +1,4 @@
-"use strict";
-
-const isUndefined = require("./isUndefined");
+import isUndefined from "./isUndefined";
 
 /**
  * Determine if value is not undefined.
@@ -8,8 +6,6 @@ const isUndefined = require("./isUndefined");
  * @param {*} value
  * @return {boolean}
  */
-function isDefined(value) {
+export default function isDefined(value) {
     return !isUndefined(value);
 }
-
-module.exports = isDefined;

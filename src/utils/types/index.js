@@ -1,25 +1,12 @@
-"use strict";
+import isArray from "./isArray";
+import isBoolean from "./isBoolean";
+import isDefined from "./isDefined";
+import isFunction from "./isFunction";
+import isNull from "./isNull";
+import isNumber from "./isNumber";
+import isNumeric from "./isNumeric";
+import isObject from "./isObject";
+import isString from "./isString";
+import isUndefined from "./isUndefined";
 
-const isArray = require("./isArray");
-const isBoolean = require("./isBoolean");
-const isDefined = require("./isDefined");
-const isFunction = require("./isFunction");
-const isNull = require("./isNull");
-const isNumber = require("./isNumber");
-const isNumeric = require("./isNumeric");
-const isObject = require("./isObject");
-const isString = require("./isString");
-const isUndefined = require("./isUndefined");
-
-module.exports = Object.freeze({
-    isArray,
-    isBoolean,
-    isDefined,
-    isFunction,
-    isNull,
-    isNumber,
-    isNumeric,
-    isObject,
-    isString,
-    isUndefined
-});
+export {isArray, isBoolean, isDefined, isFunction, isNull, isNumber, isNumeric, isObject, isString, isUndefined};

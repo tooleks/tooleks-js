@@ -1,6 +1,4 @@
-"use strict";
-
-const {isFunction, isString, isUndefined} = require("../utils");
+import {isFunction, isString, isUndefined} from "../utils";
 
 /**
  * Assert "from" parameter.
@@ -11,7 +9,7 @@ const {isFunction, isString, isUndefined} = require("../utils");
  */
 function assertFromParameter(from) {
     if (!isString(from)) {
-        throw new TypeError("The \"from\" parameter should be a string.");
+        throw new TypeError('The "from" parameter should be a string.');
     }
 }
 
@@ -24,7 +22,7 @@ function assertFromParameter(from) {
  */
 function assertToParameter(to) {
     if (!isString(to)) {
-        throw new TypeError("The \"to\" parameter should be a string.");
+        throw new TypeError('The "to" parameter should be a string.');
     }
 }
 
@@ -37,15 +35,14 @@ function assertToParameter(to) {
  */
 function assertResolverParameter(resolver) {
     if (!isFunction(resolver)) {
-        throw new TypeError("The \"resolver\" parameter should be a function.");
+        throw new TypeError('The "resolver" parameter should be a function.');
     }
 }
 
 /**
  * Mapper class.
  */
-class Mapper {
-
+export default class Mapper {
     /**
      * Mapper constructor.
      */
@@ -144,5 +141,3 @@ class Mapper {
         return resolver(value);
     }
 }
-
-module.exports = Mapper;

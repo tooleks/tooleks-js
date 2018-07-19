@@ -2,7 +2,7 @@
 
 const {expect} = require("chai");
 const sinon = require("sinon");
-const {timeout} = require("../../../src");
+const {timeout} = require("../../../dist");
 
 describe("timeout function test", function() {
     let clock;

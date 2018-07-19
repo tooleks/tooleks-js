@@ -1,7 +1,5 @@
-"use strict";
-
-const {isFunction} = require("../utils");
-const Defer = require("./Defer");
+import Defer from "./Defer";
+import {isFunction} from "../utils";
 
 const DEFAULT_TIME_INTERVAL = 0;
 
@@ -14,7 +12,7 @@ const DEFAULT_TIME_INTERVAL = 0;
  */
 function assertCallbackParameter(callback) {
     if (!isFunction(callback)) {
-        throw new TypeError("The \"callback\" parameter should be a function.");
+        throw new TypeError('The "callback" parameter should be a function.');
     }
 }
 
@@ -25,7 +23,7 @@ function assertCallbackParameter(callback) {
  * @param {number} {timeInterval=0}
  * @return {Promise<*>}
  */
-function waitUntil(callback, timeInterval = DEFAULT_TIME_INTERVAL) {
+export default function waitUntil(callback, timeInterval = DEFAULT_TIME_INTERVAL) {
     assertCallbackParameter(callback);
     const defer = new Defer();
     const intervalId = setInterval(() => {
@@ -41,5 +39,3 @@ function waitUntil(callback, timeInterval = DEFAULT_TIME_INTERVAL) {
     }, timeInterval);
     return defer.promisify();
 }
-
-module.exports = waitUntil;

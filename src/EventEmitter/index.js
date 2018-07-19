@@ -1,5 +1,3 @@
-"use strict";
+import EventEmitter from "./EventEmitter";
 
-const EventEmitter = require("./EventEmitter");
-
-module.exports = EventEmitter;
+export {EventEmitter};

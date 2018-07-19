@@ -1,7 +1,5 @@
-"use strict";
+import Defer from "./Defer";
+import timeout from "./timeout";
+import waitUntil from "./waitUntil";
 
-const Defer = require("./Defer");
-const timeout = require("./timeout");
-const waitUntil = require("./waitUntil");
-
-module.exports = Object.freeze({Defer, timeout, waitUntil});
+export {Defer, timeout, waitUntil};

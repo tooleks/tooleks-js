@@ -1,9 +1,39 @@
-"use strict";
+import {Defer, timeout, waitUntil} from "./async";
+import {
+    clone,
+    isArray,
+    isBoolean,
+    isDefined,
+    isFunction,
+    isNull,
+    isNumber,
+    isNumeric,
+    isObject,
+    isString,
+    isUndefined,
+    optional,
+} from "./utils";
+import {DependencyContainer} from "./DependencyContainer";
+import {EventEmitter} from "./EventEmitter";
+import {Mapper} from "./Mapper";
 
-const async = require("./async");
-const utils = require("./utils");
-const DependencyContainer = require("./DependencyContainer");
-const EventEmitter = require("./EventEmitter");
-const Mapper = require("./Mapper");
-
-module.exports = Object.freeze({...async, ...utils, DependencyContainer, EventEmitter, Mapper});
+export {
+    Defer,
+    timeout,
+    waitUntil,
+    DependencyContainer,
+    EventEmitter,
+    Mapper,
+    isArray,
+    isBoolean,
+    isDefined,
+    isFunction,
+    isNull,
+    isNumber,
+    isNumeric,
+    isObject,
+    isString,
+    isUndefined,
+    clone,
+    optional,
+};

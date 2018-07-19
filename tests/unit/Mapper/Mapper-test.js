@@ -4,15 +4,15 @@ const assert = require("assert");
 const {expect} = require("chai");
 const sinon = require("sinon");
 const faker = require("faker");
-const {Mapper} = require("../../../src");
+const {Mapper} = require("../../../dist");
 
 describe("Mapper class test", function() {
     let mapper, from, to, value, resolverValue, resolver;
 
     beforeEach(function() {
         mapper = new Mapper();
-        from = faker.lorem.word();
-        to = faker.lorem.word();
+        from = faker.random.uuid();
+        to = faker.random.uuid();
         value = {};
         resolverValue = {};
         resolver = sinon.spy(() => resolverValue);
@@ -80,7 +80,7 @@ describe("Mapper class test", function() {
 
     it("should throw an error on map value with invalid `from` value", function() {
         mapper.registerResolver(from, to, resolver);
-        let _from = faker.lorem.word();
+        let _from = faker.random.uuid();
         try {
             mapper.map(value, _from, to);
             assert(false, "Whoops! An error should be thrown here.");
@@ -92,7 +92,7 @@ describe("Mapper class test", function() {
 
     it("should throw an error on map value with invalid `to` value", function() {
         mapper.registerResolver(from, to, resolver);
-        let _to = faker.lorem.word();
+        let _to = faker.random.uuid();
         try {
             mapper.map(value, from, _to);
             assert(false, "Whoops! An error should be thrown here.");

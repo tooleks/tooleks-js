@@ -1,5 +1,3 @@
-"use strict";
+import Mapper from "./Mapper";
 
-const Mapper = require("./Mapper");
-
-module.exports = Mapper;
+export {Mapper};

@@ -2,7 +2,7 @@
 
 const {expect} = require("chai");
 const faker = require("faker");
-const {optional} = require("../../../src");
+const {optional} = require("../../../dist");
 
 describe("optional function test", function() {
     let target, defaultValue;

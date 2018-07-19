@@ -1,6 +1,6 @@
 {
   "name": "tooleks",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "A set of tools for JavaScript development",
   "keywords": [
     "defer",
@@ -24,14 +24,15 @@
     "asyncronous"
   ],
   "main": "./dist/index.js",
+  "module": "./dist/index.es.js",
   "directories": {
     "lib": "dist",
     "test": "tests"
   },
   "scripts": {
-    "build": "./node_modules/.bin/webpack --config './webpack/webpack.config.js'",
-    "test": "./node_modules/.bin/nyc --include './src' ./node_modules/.bin/mocha './tests/**/*-test.js'",
-    "formatter": "./node_modules/.bin/prettier --write '{src,tests,webpack}/**/*.js'",
+    "build": "./node_modules/.bin/rollup -c",
+    "test": "./node_modules/.bin/mocha './tests/**/*-test.js'",
+    "formatter": "./node_modules/.bin/prettier --write '**/*.js' '!dist/**'",
     "build-preparation": "npm run formatter && npm run build && npm run test"
   },
   "repository": {
@@ -46,21 +47,21 @@
   "homepage": "https://github.com/tooleks/tooleks-js#readme",
   "devDependencies": {
     "babel-core": "^6.26.3",
-    "babel-eslint": "^8.2.5",
+    "babel-eslint": "^8.2.6",
     "babel-loader": "^7.1.5",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.7.0",
     "chai": "^4.1.2",
     "eslint": "^4.19.1",
-    "eslint-loader": "^2.0.0",
     "faker": "^4.1.0",
     "mocha": "^5.2.0",
-    "nyc": "^11.9.0",
+    "moment": "^2.22.2",
     "prettier": "^1.13.7",
-    "sinon": "^4.5.0",
-    "webpack": "^4.15.1",
-    "webpack-cli": "^2.1.5",
-    "webpack-merge": "^4.1.3"
-  },
-  "dependencies": {}
+    "rollup": "^0.63.2",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-eslint": "^4.0.0",
+    "rollup-plugin-license": "^0.7.0",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "sinon": "^4.5.0"
+  }
 }

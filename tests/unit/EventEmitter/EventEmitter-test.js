@@ -3,7 +3,7 @@
 const assert = require("assert");
 const faker = require("faker");
 const sinon = require("sinon");
-const {EventEmitter} = require("../../../src");
+const {EventEmitter} = require("../../../dist");
 
 describe("EventEmitter class test", function() {
     let clock;
@@ -21,8 +21,8 @@ describe("EventEmitter class test", function() {
     beforeEach(function() {
         clock = sinon.useFakeTimers();
         eventEmitter = new EventEmitter();
-        firstEventName = faker.lorem.word();
-        secondEventName = faker.lorem.word();
+        firstEventName = faker.random.uuid();
+        secondEventName = faker.random.uuid();
         payload = {};
         firstEventSyncListener = sinon.spy();
         firstEventAsyncListenerResolve = sinon.spy();

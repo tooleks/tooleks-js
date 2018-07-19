@@ -1,6 +1,4 @@
-"use strict";
-
-const {isArray, isBoolean, isDefined, isFunction, isString, isUndefined} = require("../utils");
+import {isArray, isBoolean, isDefined, isFunction, isString, isUndefined} from "../utils";
 
 /**
  * Assert "identifier" parameter.
@@ -11,7 +9,7 @@ const {isArray, isBoolean, isDefined, isFunction, isString, isUndefined} = requi
  */
 function assertIdentifierParameter(identifier) {
     if (!isString(identifier)) {
-        throw new TypeError("The \"identifier\" parameter should be a string.");
+        throw new TypeError('The "identifier" parameter should be a string.');
     }
 }
 
@@ -24,7 +22,7 @@ function assertIdentifierParameter(identifier) {
  */
 function assertTypeParameter(type) {
     if (!isFunction(type)) {
-        throw new TypeError("The \"type\" parameter should be a function.");
+        throw new TypeError('The "type" parameter should be a function.');
     }
 }
 
@@ -37,11 +35,11 @@ function assertTypeParameter(type) {
  */
 function assertDependenciesParameter(dependencies) {
     if (!isArray(dependencies)) {
-        throw new TypeError("The \"dependencies\" parameter should be an array.");
+        throw new TypeError('The "dependencies" parameter should be an array.');
     }
     dependencies.forEach((dependency) => {
         if (!isString(dependency) && !isFunction(dependency)) {
-            throw new TypeError("The \"dependencies\" parameter should be an array of strings or functions.");
+            throw new TypeError('The "dependencies" parameter should be an array of strings or functions.');
         }
     });
 }
@@ -55,7 +53,7 @@ function assertDependenciesParameter(dependencies) {
  */
 function assertSingletonParameter(singleton) {
     if (!isBoolean(singleton)) {
-        throw new TypeError("The \"singleton\" parameter should be a boolean.");
+        throw new TypeError('The "singleton" parameter should be a boolean.');
     }
 }
 
@@ -68,7 +66,7 @@ function assertSingletonParameter(singleton) {
  */
 function assertFactoryParameter(factory) {
     if (!isBoolean(factory)) {
-        throw new TypeError("The \"factory\" parameter should be a boolean.");
+        throw new TypeError('The "factory" parameter should be a boolean.');
     }
 }
 
@@ -81,15 +79,14 @@ function assertFactoryParameter(factory) {
  */
 function assertInstanceParameter(instance) {
     if (isUndefined(instance)) {
-        throw new TypeError("The \"instance\" parameter should not be an undefined.");
+        throw new TypeError('The "instance" parameter should not be an undefined.');
     }
 }
 
 /**
  * DependencyContainer class.
  */
-class DependencyContainer {
-
+export default class DependencyContainer {
     /**
      * DependencyContainer constructor.
      */
@@ -171,8 +168,10 @@ class DependencyContainer {
             if (isDefined(this._bindings[dependency])) {
                 this._bindings[dependency].dependencies.forEach((innerDependency) => {
                     if (innerDependency === identifier) {
-                        throw new Error("Circular dependency detected. " +
-                                `"${identifier}" depends on "${dependency}" and vise versa.`, );
+                        throw new Error(
+                            "Circular dependency detected. " +
+                                `"${identifier}" depends on "${dependency}" and vise versa.`,
+                        );
                     }
                 });
             }
@@ -245,5 +244,3 @@ class DependencyContainer {
         return instance;
     }
 }
-
-module.exports = DependencyContainer;
