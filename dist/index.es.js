@@ -1,4 +1,4 @@
-/* tooleks v1.4.6 2018-07-19T23:24:42.813Z. Copyright (c) Oleksandr Tolochko <tooleks@gmail.com>. License: MIT. */
+/* tooleks v1.4.6 2018-07-20T07:30:01.898Z. Copyright (c) Oleksandr Tolochko <tooleks@gmail.com>. License: MIT. */
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {

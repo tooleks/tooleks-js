@@ -31,7 +31,7 @@
   },
   "scripts": {
     "build": "./node_modules/.bin/rollup -c",
-    "test": "./node_modules/.bin/mocha './tests/**/*-test.js'",
+    "test": "./node_modules/.bin/nyc ./node_modules/.bin/mocha './tests/**/*-test.js'",
     "formatter": "./node_modules/.bin/prettier --write '**/*.js' '!dist/**'",
     "build-preparation": "npm run formatter && npm run build && npm run test"
   },
@@ -48,7 +48,6 @@
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.6",
-    "babel-loader": "^7.1.5",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.7.0",
     "chai": "^4.1.2",
@@ -56,6 +55,7 @@
     "faker": "^4.1.0",
     "mocha": "^5.2.0",
     "moment": "^2.22.2",
+    "nyc": "^12.0.2",
     "prettier": "^1.13.7",
     "rollup": "^0.63.2",
     "rollup-plugin-babel": "^3.0.7",
