@@ -1,43 +1,7 @@
-/* tooleks v1.4.6 2018-07-20T07:30:01.898Z. Copyright (c) Oleksandr Tolochko <tooleks@gmail.com>. License: MIT. */
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-  return typeof obj;
-} : function (obj) {
-  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-};
+/* tooleks v1.4.7 2018-07-20T16:15:23.474Z. Copyright (c) Oleksandr Tolochko <tooleks@gmail.com>. License: MIT. */
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var classCallCheck = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
-
-var createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
-
-var toConsumableArray = function (arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-    return arr2;
-  } else {
-    return Array.from(arr);
-  }
-};
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
  * Defer class.
@@ -49,7 +13,7 @@ var Defer = function () {
     function Defer() {
         var _this = this;
 
-        classCallCheck(this, Defer);
+        _classCallCheck(this, Defer);
 
         this._promise = new Promise(function (resolve, reject) {
             _this.resolve = resolve;
@@ -65,12 +29,13 @@ var Defer = function () {
      */
 
 
-    createClass(Defer, [{
+    _createClass(Defer, [{
         key: "promisify",
         value: function promisify() {
             return this._promise;
         }
     }]);
+
     return Defer;
 }();
 
@@ -173,6 +138,8 @@ function isNumeric(value) {
   return !isNaN(parseFloat(value)) && isFinite(value);
 }
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 /**
  * Determine if value is an object and not null.
  *
@@ -194,7 +161,7 @@ function isString(value) {
   return typeof value === "string" || value instanceof String;
 }
 
-/* eslint-disable */
+var _typeof$1 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /**
  * Clone undefined value.
@@ -380,7 +347,7 @@ function clone(value) {
         return cloneFunction(value);
     }
 
-    throw new Error("Unable to clone the " + (typeof value === "undefined" ? "undefined" : _typeof(value)) + ".");
+    throw new Error("Unable to clone the " + (typeof value === "undefined" ? "undefined" : _typeof$1(value)) + ".");
 }
 
 /**
@@ -444,6 +411,12 @@ function waitUntil(callback) {
     }, timeInterval);
     return defer.promisify();
 }
+
+var _createClass$1 = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck$1(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
  * Assert "identifier" parameter.
@@ -537,7 +510,7 @@ var DependencyContainer = function () {
      * DependencyContainer constructor.
      */
     function DependencyContainer() {
-        classCallCheck(this, DependencyContainer);
+        _classCallCheck$1(this, DependencyContainer);
 
         this._bindings = {};
         this._createInstance = this._createInstance.bind(this);
@@ -558,15 +531,15 @@ var DependencyContainer = function () {
      */
 
 
-    createClass(DependencyContainer, [{
+    _createClass$1(DependencyContainer, [{
         key: '_createInstance',
         value: function _createInstance(binding) {
             var dependencies = this._resolveDependencies(binding.dependencies);
             var instance = null;
             if (binding.factory) {
-                instance = binding.type.apply(binding, toConsumableArray(dependencies));
+                instance = binding.type.apply(binding, _toConsumableArray(dependencies));
             } else {
-                instance = new (Function.prototype.bind.apply(binding.type, [null].concat(toConsumableArray(dependencies))))();
+                instance = new (Function.prototype.bind.apply(binding.type, [null].concat(_toConsumableArray(dependencies))))();
             }
             return instance;
         }
@@ -707,7 +680,7 @@ var DependencyContainer = function () {
 
     }, {
         key: 'get',
-        value: function get$$1(identifier) {
+        value: function get(identifier) {
             assertIdentifierParameter(identifier);
             if (!this.has(identifier)) {
                 throw new Error('The "' + identifier + '" binding not found.');
@@ -723,8 +696,13 @@ var DependencyContainer = function () {
             return instance;
         }
     }]);
+
     return DependencyContainer;
 }();
+
+var _createClass$2 = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck$2(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
  * Assert "eventName" parameter.
@@ -761,7 +739,7 @@ var EventEmitter = function () {
      * EventEmitter constructor.
      */
     function EventEmitter() {
-        classCallCheck(this, EventEmitter);
+        _classCallCheck$2(this, EventEmitter);
 
         this._events = {};
         this._callEventListeners = this._callEventListeners.bind(this);
@@ -780,7 +758,7 @@ var EventEmitter = function () {
      */
 
 
-    createClass(EventEmitter, [{
+    _createClass$2(EventEmitter, [{
         key: "_callEventListeners",
         value: function _callEventListeners(eventName, payload) {
             assertEventNameParameter(eventName);
@@ -857,8 +835,13 @@ var EventEmitter = function () {
             };
         }
     }]);
+
     return EventEmitter;
 }();
+
+var _createClass$3 = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck$3(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
  * Assert "from" parameter.
@@ -908,7 +891,7 @@ var Mapper = function () {
      * Mapper constructor.
      */
     function Mapper() {
-        classCallCheck(this, Mapper);
+        _classCallCheck$3(this, Mapper);
 
         this._resolvers = {};
         this._assertResolver = this._assertResolver.bind(this);
@@ -928,7 +911,7 @@ var Mapper = function () {
      */
 
 
-    createClass(Mapper, [{
+    _createClass$3(Mapper, [{
         key: '_assertResolver',
         value: function _assertResolver(from, to) {
             if (isUndefined(this._resolvers[from])) {
@@ -1020,6 +1003,7 @@ var Mapper = function () {
             return resolver(value);
         }
     }]);
+
     return Mapper;
 }();
 
