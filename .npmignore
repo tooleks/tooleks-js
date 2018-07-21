@@ -1,10 +1,10 @@
 .idea
 .nyc_output
 node_modules
-tests
 .babelrc
-.eslintignore
 .eslintrc.js
 npm-debug.log
 prettier.config.js
 rollup.config.js
+
+/tests
