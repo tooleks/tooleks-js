@@ -2,8 +2,9 @@
 .nyc_output
 node_modules
 tests
-webpack
+.babelrc
 .eslintignore
 .eslintrc.js
 npm-debug.log
 prettier.config.js
+rollup.config.js
