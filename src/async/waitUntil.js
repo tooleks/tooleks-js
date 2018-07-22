@@ -12,7 +12,7 @@ const DEFAULT_TIME_INTERVAL = 0;
  */
 function assertCallbackParameter(callback) {
     if (!isFunction(callback)) {
-        throw new TypeError('The "callback" parameter should be a function.');
+        throw new TypeError("The \"callback\" parameter should be a function.");
     }
 }
 

@@ -2,6 +2,7 @@
  * Defer class.
  */
 export default class Defer {
+
     /**
      * Defer constructor.
      */
