@@ -1,15 +1,21 @@
 import * as src from "../src";
-// import * as dist from "../dist";
+import * as distEs from "../dist/index.es";
+import * as distUmd from "../dist/index.umd";
 
 import integrationTest from "./integration";
 import unitTest from "./unit";
 
-describe(`src library test`, function() {
+describe(`Source ES module test`, function() {
     integrationTest(src);
     unitTest(src);
 });
 
-// describe(`dist library test`, function() {
-//     integrationTest(dist);
-//     unitTest(dist);
-// });
+describe(`Distribution ES module test`, function() {
+    integrationTest(distEs);
+    unitTest(distEs);
+});
+
+describe(`Distribution UMD module test`, function() {
+    integrationTest(distUmd);
+    unitTest(distUmd);
+});
