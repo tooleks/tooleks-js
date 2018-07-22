@@ -9,7 +9,7 @@ import {isFunction, isString, isUndefined} from "../utils";
  */
 function assertFromParameter(from) {
     if (!isString(from)) {
-        throw new TypeError('The "from" parameter should be a string.');
+        throw new TypeError("The \"from\" parameter should be a string.");
     }
 }
 
@@ -22,7 +22,7 @@ function assertFromParameter(from) {
  */
 function assertToParameter(to) {
     if (!isString(to)) {
-        throw new TypeError('The "to" parameter should be a string.');
+        throw new TypeError("The \"to\" parameter should be a string.");
     }
 }
 
@@ -35,7 +35,7 @@ function assertToParameter(to) {
  */
 function assertResolverParameter(resolver) {
     if (!isFunction(resolver)) {
-        throw new TypeError('The "resolver" parameter should be a function.');
+        throw new TypeError("The \"resolver\" parameter should be a function.");
     }
 }
 
@@ -43,6 +43,7 @@ function assertResolverParameter(resolver) {
  * Mapper class.
  */
 export default class Mapper {
+
     /**
      * Mapper constructor.
      */

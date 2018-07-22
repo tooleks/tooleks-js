@@ -11,7 +11,7 @@ import {
     isObject,
     isString,
     isUndefined,
-    optional,
+    optional
 } from "./utils";
 import {DependencyContainer} from "./DependencyContainer";
 import {EventEmitter} from "./EventEmitter";
@@ -35,5 +35,5 @@ export {
     isString,
     isUndefined,
     clone,
-    optional,
+    optional
 };

@@ -10,7 +10,7 @@ import {Defer} from "../async";
  */
 function assertEventNameParameter(eventName) {
     if (!isString(eventName)) {
-        throw new TypeError('The "eventName" parameter should be a string.');
+        throw new TypeError("The \"eventName\" parameter should be a string.");
     }
 }
 
@@ -23,7 +23,7 @@ function assertEventNameParameter(eventName) {
  */
 function assertListenerParameter(listener) {
     if (!isFunction(listener)) {
-        throw new TypeError('The "listener" parameter should be a function.');
+        throw new TypeError("The \"listener\" parameter should be a function.");
     }
 }
 
@@ -31,6 +31,7 @@ function assertListenerParameter(listener) {
  * EventEmitter class.
  */
 export default class EventEmitter {
+
     /**
      * EventEmitter constructor.
      */
@@ -80,9 +81,9 @@ export default class EventEmitter {
     emitAsync(eventName, payload) {
         const defer = new Defer();
         setImmediate(() => {
-            Promise.all(this._callEventListeners(eventName, payload))
-                .then(defer.resolve)
-                .catch(defer.reject);
+            Promise.all(this._callEventListeners(eventName, payload)).
+                then(defer.resolve).
+                catch(defer.reject);
         });
         return defer.promisify();
     }
