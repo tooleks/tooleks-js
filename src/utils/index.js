@@ -8,7 +8,7 @@ import {
     isNumeric,
     isObject,
     isString,
-    isUndefined
+    isUndefined,
 } from "./types";
 import clone from "./clone";
 import optional from "./optional";
@@ -25,5 +25,5 @@ export {
     isString,
     isUndefined,
     clone,
-    optional
+    optional,
 };
