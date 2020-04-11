@@ -1,0 +1,8 @@
+{
+  "mode": "file",
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "includeVersion": true,
+  "readme": "./README.md",
+  "theme": "minimal"
+}
