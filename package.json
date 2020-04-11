@@ -19,7 +19,7 @@
     "test": "mocha -r ts-node/register ./tests/**/*.spec.ts",
     "coverage": "nyc npm run test",
     "docs": "typedoc --out ./docs ./src/**/*.ts",
-    "pre-release": "npm run lint && npm run coverage && npm run build && npm run docs"
+    "pre-publish": "npm run lint && npm run coverage && npm run build && npm run docs"
   },
   "repository": {
     "type": "git",
