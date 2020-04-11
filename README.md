@@ -1,270 +1,178 @@
-## A set of tools for JavaScript development
+# tooleks
 
-### Installation
+A set of tools for JavaScript development.
 
-```bash
+Try it on [RunKit](https://npm.runkit.com/tooleks).
+
+## Installation
+
+```
 npm install --save tooleks
 ```
 
-### Description
+## Overview
 
-#### `Defer` class
+### `Container` class
 
-`Defer` class exposes the associated `Promise` instance that can be used for retrieving the result of the task.
+Simple yet powerful dependency injection container implementation. 
+
+* Supports instance, factory and service bindings.
+* Supports nested dependencies.
+* Easily detects circular dependencies.
 
 ```JavaScript
-const {Defer} = require("tooleks");
+const { Container } = require('tooleks');
 
-const defer = new Defer();
+const container = new Container();
 
-const user = {
-    firstName: "Anna",
-    lastName: "P.",
-};
+// Register instance (constant) definition.
+container.instance('DB.ConnectionString', 'mongodb://...');
 
-defer.resolve(user);
+class UserRepository {
+  constructor(connectionString) {
+    this.connectionString = connectionString;
+  }
+}
 
-defer.promisify().then((user) => {
-    console.log(user); // { firstName: "Anna P.", lastName: "P." }
-});
+// Register factory function definition.
+container.factory(
+  'Infrastructure.UserRepository',
+  (connectionString) => new UserRepository(connectionString),
+  ['DB.ConnectionString'],
+);
+
+class AuthService {
+  constructor(userRepository) {
+    this.userRepository = userRepository;
+  }
+}
+
+// Register service class definition.
+container.service(
+  'Application.AuthService',
+  AuthService,
+  ['Infrastructure.UserRepository'],
+);
+
+// Retrieve an instance of service.
+const authService = container.get('Application.AuthService');
+
+console.log(authService); // AuthService { userRepository: UserRepository { connectionString: 'mongodb://...' } }
 ```
 
-#### `timeout` function
+### `EventEmitter` class
 
-`timeout` function returns `Promise` that will be resolved after a specified number of milliseconds. It's a `Promise` based alternative to a native `setTimeout` function.
+Asynchronous event emitter implementation with support of `Promise` and `async`/`await` syntax.
 
 ```JavaScript
-const {timeout} = require("tooleks");
+const { EventEmitter } = require('tooleks');
+
+const eventEmitter = new EventEmitter();
 
 (async () => {
-    console.log("Waiting (2s)...");
-    await timeout(2000);
-    console.log("Done!");
-})();
-```
 
-#### `waitUntil` function
-
-`waitUntil` function returns `Promise` that will be resolved when the passed callback will return truthy value and rejected when the passed callback will throw an error.
-
-```JavaScript
-const {waitUntil} = require("tooleks");
-
-let externalLibrary;
-
-waitUntil(() => externalLibrary).then((externalLibrary) => {
-    console.log("Done!");
-    externalLibrary.helloWorld(); // "Hello, world!"
-});
-
-console.log("Loading (2s)...");
-setTimeout(() => {
-    externalLibrary = {
-        helloWorld: () => console.log("Hello, world!"),
-    };
-}, 2000);
-```
-
-#### `DependencyContainer` class
-
-`DependencyContainer` class is a tool for managing class dependencies and performing dependency injection.
-
-```JavaScript
-const {DependencyContainer} = require("tooleks");
-
-function DataProvider(data) {
-    this.data = data;
-}
-
-function UserService(dataProvider) {
-    this.dataProvider = dataProvider;
-}
-
-const dc = new DependencyContainer();
-
-dc.registerBinding("DataProvider", DataProvider, {
-    dependencies: [
-        function() {
-            return [
-                {firstName: "Anna P.", lastName: "P."},
-            ];
-        },
-    ],
-    singleton: true,
-});
-
-const dataProvider = dc.get("DataProvider");
-
-console.log(dataProvider instanceof DataProvider); // true
-console.log(dataProvider === dc.get("DataProvider")); // true
-
-dc.registerBinding("UserService", UserService, {
-    dependencies: ["DataProvider"],
-    singleton: false,
-});
-
-const userService = dc.get("UserService");
-
-console.log(userService instanceof UserService); // true
-console.log(dataProvider === dc.get("UserService")); // false
-```
-
-#### `EventEmitter` class
-
-`EventEmitter` class notifies listeners when the event occurs.
-
-```JavaScript
-const {EventEmitter} = require("tooleks");
-
-const eventEmitter = new EventEmitter();
-
-const off = eventEmitter.on("userCreated", (user) => {
-    console.log(user); // { firstName: "Anna P.", lastName: "P." }
-});
-
-const user = {
-    firstName: "Anna",
-    lastName: "P.",
-};
-
-eventEmitter.emit("userCreated", user);
-
-off(); // Unsubscribe from the event.
-```
-
-`EventEmitter` class also exposes asynchronous method `emitAsync` that returns `Promise` that will be resolved when each of the listeners will be resolved.
-
-```JavaScript
-const {EventEmitter} = require("tooleks");
-
-const eventEmitter = new EventEmitter();
-
-const off = eventEmitter.on("userCreated", (user) => {
-    console.log("Waiting (2s)...");
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            console.log(user); // { firstName: "Anna P.", lastName: "P." }
-            resolve();
-        }, 2000);
+  eventEmitter.on('User.Update', (user) => {
+    return new Promise((resolve) => {
+      console.log(`Processing User.Update event for ${user.name}...`);
+      setTimeout(resolve, 1000);
     });
-});
+  });
 
-const user = {
-    firstName: "Anna",
-    lastName: "P.",
-};
+  const user = {
+    name: 'johndoe',
+  };
 
-(async () => {
-    await eventEmitter.emitAsync("userCreated", user);
-    console.log("Done!");
-    off(); // Unsubscribe from the event.
+  console.log('Before User.Update event.');
+
+  await eventEmitter.emit('User.Update', user);
+
+  console.log('After User.Update event.');
+
 })();
 ```
 
-#### `Mapper` class
+### `Mapper` class
 
-`Mapper` class transforms the initial data formats into the desired data formats.
+Utility to transform one data structures to another.
 
 ```JavaScript
-const {Mapper} = require("tooleks");
+const { Mapper } = require('tooleks');
 
 const mapper = new Mapper();
 
-mapper.registerResolver("api.v1.user", "app.user", (user) => {
-    return {
-        fullName: user.firstName + " " + user.lastName,
-    };
+mapper.register('API.User', 'Domain.User', (user) => {
+  return {
+    name: user.username,
+    fullName: `${user.firstName} ${user.lastName}`,
+  };
 });
 
-const user = {
-    firstName: "Anna",
-    lastName: "P.",
+const apiUser = {
+  username: 'johndoe',
+  firstName: 'John',
+  lastName: 'Doe',
 };
 
-const mappedUser = mapper.map(user, "api.v1.user", "app.user");
+const domainUser = mapper.map('API.User', 'Domain.User', apiUser);
 
-console.log(mappedUser); // { fullName: "Anna P." }
+console.log(domainUser); // { name: 'johndoe', fullName: 'John Doe' }
 ```
 
-#### `clone` function
+### `optional` function
 
-`clone` function provides the mechanism for objects deep cloning. It supports `Array`, `Boolean`, `Date`, `Function`, `Map`, `Number`, `Object`, `RegExp`, `String` types.
+Utility to suppress errors or empty results of function calls.
 
 ```JavaScript
-const {clone} = require("tooleks");
+const { optional } = require('tooleks');
 
 const user = {
-    firstName: "Anna",
-    lastName: "P.",
+  name: 'johndoe',
+  getWebsite() {
+    throw new Error('Website not found.');
+  },
 };
 
-const clonedUser = clone(user);
+const userCompany = optional(() => user.company, 'Default');
 
-clonedUser.lastName = "Po.";
+console.log(userCompany); // 'Default'
 
-console.log(JSON.stringify(clonedUser) !== JSON.stringify(user)); // true
+const userWebsite = optional(() => user.getWebsite(), `https://www.google.com/search?q=${user.name}`);
+
+console.log(userWebsite); // 'https://www.google.com/search?q=johndoe'
 ```
 
-To customize the default behavior of `clone` function for your class create the `clone` method.
+### `timeout` function
+
+`Promise` based implementation of native `setTimeout` function.
 
 ```JavaScript
-const {clone} = require("tooleks");
+const { timeout } = require('tooleks');
 
-function User(firstName, lastName) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.clone = () => {
-        const firstName = clone(this.firstName);
-        const lastName = clone(this.lastName);
-        return new User(firstName, lastName);
-    };
-}
+(async () => {
 
-const user = new User("Anna", "P.");
+  console.log('Before timeout...');
 
-const clonedUser = clone(user);
+  await timeout(1000);
 
-clonedUser.lastName = "Po.";
+  console.log('After 1000 milliseconds timeout.');
 
-console.log(clonedUser instanceof User); // true
-console.log(JSON.stringify(clonedUser) !== JSON.stringify(user)); // true
+})();
 ```
 
-#### `optional` function
+### `waitUntil` function
 
-`optional` function retrieves the result of callback call. If an error occurred or result is `undefined` returns a default value instead.
-
-```JavaScript
-const {optional} = require("tooleks");
-
-const user = {
-    firstName: "Anna",
-    lastName: "P.",
-};
-
-const phoneNumber = optional(() => user.profile.phoneNumber, null);
-
-console.log(phoneNumber); // null, damn it.
-```
-
-#### `types` functions
-
-`types` functions are shortcut functions to check variable type.
+Utility to wait until a [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) value returned from a function.
 
 ```JavaScript
-const {isArray, isBoolean, isDefined, isFunction, isNull, isNumber, isNumeric, isObject, isString, isUndefined} = require("tooleks");
+const { waitUntil } = require('tooleks');
 
-console.log(isArray([])); // true
-console.log(isBoolean(false)); // true
-console.log(isDefined(undefined)); // false
-console.log(isFunction(() => {})); // true
-console.log(isNull(null)); // true
-console.log(isNumber(42)); // true
-console.log(isNumeric("42")); // true
-console.log(isNumeric(NaN)); // false
-console.log(isNumeric(Infinity)); // false
-console.log(isObject({})); // true
-console.log(isObject(null)); // false
-console.log(isString("Forty two")); // true
-console.log(isUndefined(undefined)); // true
+let value = null;
+
+waitUntil(() => value).then((value) => {
+  console.log(`${value} received after 1000 milliseconds.`);
+});
+
+setTimeout(() => {
+  value = 'Hello!';
+}, 1000);
 ```
