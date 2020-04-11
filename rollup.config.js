@@ -1,5 +1,5 @@
 import moment from 'moment';
-import typescript from 'rollup-plugin-typescript';
+import typescript from '@rollup/plugin-typescript';
 import pkg from './package.json';
 
 const banner = `/* ${pkg.name} v${pkg.version}, Copyright (c) ${moment.utc().year()} ${pkg.author}, License: ${pkg.license} */`;
@@ -10,32 +10,32 @@ export default [
     output: [
       {
         name: 'tooleks',
-        file: pkg.browser,
+        file: './dist/main.umd.js',
         format: 'umd',
         sourcemap: true,
         banner,
       },
       {
-        file: pkg.main,
+        file: './dist/main.cjs.js',
         format: 'cjs',
         sourcemap: true,
         banner,
       }
     ],
     plugins: [
-      typescript({ target: 'es5' }),
+      typescript({ tsconfig: './tsconfig.legacy.json' }),
     ],
   },
   {
     input: './src/main.ts',
     output: {
-      file: pkg.module,
+      dir: './dist',
       format: 'es',
       sourcemap: true,
       banner,
     },
     plugins: [
-      typescript({ target: 'es2017' }),
+      typescript({ tsconfig: './tsconfig.module.json' }),
     ],
   }
 ]
