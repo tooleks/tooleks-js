@@ -12,7 +12,7 @@ npm install --save tooleks
 
 ## Documentation
 
-[https://github.com/tooleks/tooleks-js](https://github.com/tooleks/tooleks-js)
+[https://tooleks.github.io/tooleks-js](https://tooleks.github.io/tooleks-js)
 
 ## Overview
 
