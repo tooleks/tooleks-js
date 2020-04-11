@@ -10,6 +10,10 @@ Try it on [RunKit](https://npm.runkit.com/tooleks).
 npm install --save tooleks
 ```
 
+## Documentation
+
+[https://github.com/tooleks/tooleks-js](https://github.com/tooleks/tooleks-js)
+
 ## Overview
 
 ### `Container` class
