@@ -12,15 +12,15 @@ export default [
     input: './src/main.ts',
     output: [
       {
+        ...output,
         name: 'tooleks',
         file: './dist/main.umd.js',
         format: 'umd',
-        ...output,
       },
       {
+        ...output,
         file: './dist/main.cjs.js',
         format: 'cjs',
-        ...output,
       }
     ],
     plugins: [
@@ -30,9 +30,9 @@ export default [
   {
     input: './src/main.ts',
     output: {
+      ...output,
       dir: './dist',
       format: 'es',
-      ...output,
     },
     plugins: [
       typescript({ tsconfig: './tsconfig.module.json' }),
