@@ -5,19 +5,18 @@ import Container from '../../src/container/Container';
 describe('container/Container', () => {
   let container: Container;
 
-  class ZeroDepsService {
+  class A {
     //
   }
 
-  class TwoDepsService {
-    constructor(public a: ZeroDepsService, public b: ZeroDepsService) {
+  class B {
+    constructor(public a: A) {
       //
     }
   }
 
-  class ThreeDepsService {
-    // tslint:disable-next-line max-line-length
-    constructor(public a: ZeroDepsService, public b: ZeroDepsService, public c: TwoDepsService) {
+  class C {
+    constructor(public a: A, public b: B) {
       //
     }
   }
@@ -32,7 +31,7 @@ describe('container/Container', () => {
 
   it('should return true for registered service', () => {
     assert.isFalse(container.has('A'));
-    container.instance('A', ZeroDepsService);
+    container.instance('A', A);
     assert.isTrue(container.has('A'));
   });
 
@@ -41,7 +40,7 @@ describe('container/Container', () => {
   });
 
   it('should return true for registered service', () => {
-    container.instance('A', ZeroDepsService);
+    container.instance('A', A);
     assert.isTrue(container.delete('A'));
     assert.isFalse(container.delete('A'));
   });
@@ -51,99 +50,93 @@ describe('container/Container', () => {
   });
 
   it('should register аn instance and retrieve the same instance', () => {
-    const simpleService = new ZeroDepsService();
-    container.instance('A', simpleService);
-    assert.strictEqual(container.get('A'), simpleService);
+    const a = new A();
+    container.instance('A', a);
+    assert.strictEqual(container.get('A'), a);
     assert.strictEqual(container.get('A'), container.get('A'));
   });
 
   it('should register a service with no dependencies and retrieve an instance', () => {
-    container.service('A', ZeroDepsService);
-    assert.instanceOf(container.get('A'), ZeroDepsService);
+    container.service('A', A);
+    assert.instanceOf(container.get('A'), A);
   });
 
   it('should register a service with no dependencies and retrieve a new instance', () => {
-    container.service('A', ZeroDepsService);
+    container.service('A', A);
     assert.notEqual(container.get('A'), container.get('A'));
   });
 
   it('should register a service with dependencies and retrieve an instance', () => {
-    container.service('A', ZeroDepsService);
-    container.service('B', ZeroDepsService);
-    container.service('C', TwoDepsService, ['A', 'B']);
-    assert.instanceOf(container.get('C'), TwoDepsService);
+    container.service('A', A);
+    container.service('B', B, ['A']);
+    assert.instanceOf(container.get('B'), B);
   });
 
   it('should register a service with dependencies and retrieve a new instance', () => {
-    container.service('A', ZeroDepsService);
-    container.service('B', ZeroDepsService);
-    container.service('C', TwoDepsService, ['A', 'B']);
+    container.service('A', A);
+    container.service('B', B, ['A']);
+    assert.notEqual(container.get('B'), container.get('B'));
+  });
+
+  it('should register a service with nested dependencies and retrieve a new instance', () => {
+    container.service('A', A);
+    container.service('B', B, ['A']);
+    container.service('C', C, ['A', 'B']);
+    assert.instanceOf(container.get('C'), C);
+  });
+
+  it('should register a service with nested dependencies and retrieve a new instance', () => {
+    container.service('A', A);
+    container.service('B', B, ['A']);
+    container.service('C', C, ['A', 'B']);
     assert.notEqual(container.get('C'), container.get('C'));
   });
 
-  it('should register a service with nested dependencies and retrieve a new instance', () => {
-    container.service('A', ZeroDepsService);
-    container.service('B', ZeroDepsService);
-    container.service('C', TwoDepsService, ['A', 'B']);
-    container.service('D', ThreeDepsService, ['A', 'B', 'C']);
-    assert.instanceOf(container.get('D'), ThreeDepsService);
-  });
-
-  it('should register a service with nested dependencies and retrieve a new instance', () => {
-    container.service('A', ZeroDepsService);
-    container.service('B', ZeroDepsService);
-    container.service('C', TwoDepsService, ['A', 'B']);
-    container.service('D', ThreeDepsService, ['A', 'B', 'C']);
-    assert.notEqual(container.get('D'), container.get('D'));
-  });
-
   it('should register a factory with no dependencies and retrieve an instance', () => {
-    const serviceFactory = () => new ZeroDepsService();
-    container.factory('A', serviceFactory);
-    assert.instanceOf(container.get('A'), ZeroDepsService);
+    const makeA = () => new A();
+    container.factory('A', makeA);
+    assert.instanceOf(container.get('A'), A);
   });
 
   it('should register a factory with no dependencies and retrieve a new instance', () => {
-    const serviceFactory = () => new ZeroDepsService();
-    container.factory('A', serviceFactory);
+    const makeA = () => new A();
+    container.factory('A', makeA);
     assert.notEqual(container.get('A'), container.get('A'));
   });
 
   it('should register a factory with dependencies and retrieve an instance', () => {
-    container.service('A', ZeroDepsService);
-    container.service('B', ZeroDepsService);
+    container.service('A', A);
+    container.service('B', B);
     // tslint:disable-next-line max-line-length
-    const serviceFactory = (a: ZeroDepsService, b: ZeroDepsService) => new TwoDepsService(a, b);
-    container.factory('C', serviceFactory, ['A', 'B']);
-    assert.instanceOf(container.get('C'), TwoDepsService);
+    const makeC = (a: A, b: B) => new C(a, b);
+    container.factory('C', makeC, ['A', 'B']);
+    assert.instanceOf(container.get('C'), C);
   });
 
   it('should register a factory with dependencies and retrieve a new instance', () => {
-    container.service('A', ZeroDepsService);
-    container.service('B', ZeroDepsService);
+    container.service('A', A);
+    container.service('B', B, ['A']);
     // tslint:disable-next-line max-line-length
-    const serviceFactory = (a: ZeroDepsService, b: ZeroDepsService) => new TwoDepsService(a, b);
-    container.factory('C', serviceFactory, ['A', 'B']);
+    const makeC = (a: A, b: B) => new C(a, b);
+    container.factory('C', makeC, ['A', 'B']);
     assert.notEqual(container.get('C'), container.get('C'));
   });
 
   it('should register a factory with nested dependencies and retrieve a new instance', () => {
-    container.service('A', ZeroDepsService);
-    container.service('B', ZeroDepsService);
-    container.service('C', TwoDepsService, ['A', 'B']);
+    container.service('A', A);
+    container.service('B', B, ['A']);
     // tslint:disable-next-line max-line-length
-    const serviceFactory = (a: ZeroDepsService, b: ZeroDepsService, c: TwoDepsService) => new ThreeDepsService(a, b, c);
-    container.factory('D', serviceFactory, ['A', 'B', 'C']);
-    assert.instanceOf(container.get('D'), ThreeDepsService);
+    const makeC = (a: A, b: B) => new C(a, b);
+    container.factory('C', makeC, ['A', 'B']);
+    assert.instanceOf(container.get('C'), C);
   });
 
   it('should register a factory with nested dependencies and retrieve a new instance', () => {
-    container.service('A', ZeroDepsService);
-    container.service('B', ZeroDepsService);
-    container.service('C', TwoDepsService, ['A', 'B']);
-    const serviceFactory = (a: ZeroDepsService, b: ZeroDepsService, c: TwoDepsService) => new ThreeDepsService(a, b, c);
-    container.factory('D', serviceFactory, ['A', 'B', 'C']);
-    assert.notEqual(container.get('D'), container.get('D'));
+    container.service('A', A);
+    container.service('B', B, ['A']);
+    const makeC = (a: A, b: B) => new C(a, b);
+    container.factory('C', makeC, ['A', 'B']);
+    assert.notEqual(container.get('C'), container.get('C'));
   });
 
   it('should throw an error when circular dependency detected', () => {
@@ -154,8 +147,8 @@ describe('container/Container', () => {
 
   it('should throw an error when nested circular dependency detected', () => {
     container.factory('A', fake(), ['B']);
-    container.factory('B', fake(), ['D']);
+    container.factory('B', fake(), ['C']);
     // tslint:disable-next-line max-line-length
-    assert.throws(() => container.factory('D', fake(), ['A']), Error, 'Circular dependency detected for D.');
+    assert.throws(() => container.factory('C', fake(), ['A']), Error, 'Circular dependency detected for C.');
   });
 });

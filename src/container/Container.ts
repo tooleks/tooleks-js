@@ -63,7 +63,7 @@ export default class Container {
    *
    * @throws ContainerError
    */
-  get<T>(identifier: EntryIdentifier): T {
+  get(identifier: EntryIdentifier): any {
     if (!this.has(identifier)) {
       throw new ContainerError(`${identifier} not found.`);
     }

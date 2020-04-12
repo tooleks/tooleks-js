@@ -2749,7 +2749,7 @@ img {
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="mapper.html#has" class="tsd-kind-icon">has</a>
 				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="mapper.html#map" class="tsd-kind-icon">map</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -2770,19 +2770,34 @@ img {
 			<a href="timeouterror.html" class="tsd-kind-icon">Timeout<wbr>Error</a>
 		</li>
 		<li class=" tsd-kind-interface">
-			<a href="../interfaces/factory.html" class="tsd-kind-icon">Factory</a>
+			<a href="../interfaces/eventlistener.html" class="tsd-kind-icon">Event<wbr>Listener</a>
 		</li>
 		<li class=" tsd-kind-interface">
-			<a href="../interfaces/service.html" class="tsd-kind-icon">Service</a>
+			<a href="../interfaces/factoryentry.html" class="tsd-kind-icon">Factory<wbr>Entry</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/serviceentry.html" class="tsd-kind-icon">Service<wbr>Entry</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="../globals.html#entryidentifier" class="tsd-kind-icon">Entry<wbr>Identifier</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
-			<a href="../globals.html#eventlistener" class="tsd-kind-icon">Event<wbr>Listener</a>
+			<a href="../globals.html#instanceentry" class="tsd-kind-icon">Instance<wbr>Entry</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="../globals.html#typeidentifier" class="tsd-kind-icon">Type<wbr>Identifier</a>
+		</li>
+		<li class=" tsd-kind-variable">
+			<a href="../globals.html#metadata" class="tsd-kind-icon">metadata</a>
+		</li>
+		<li class=" tsd-kind-variable">
+			<a href="../globals.html#staticcontainer" class="tsd-kind-icon">static<wbr>Container</a>
+		</li>
+		<li class=" tsd-kind-function">
+			<a href="../globals.html#inject" class="tsd-kind-icon">Inject</a>
+		</li>
+		<li class=" tsd-kind-function">
+			<a href="../globals.html#injectable" class="tsd-kind-icon">Injectable</a>
 		</li>
 		<li class=" tsd-kind-function">
 			<a href="../globals.html#optional" class="tsd-kind-icon">optional</a>
@@ -2819,7 +2834,7 @@ img {
 						<h3>Methods</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="mapper.html#has" class="tsd-kind-icon">has</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="mapper.html#map" class="tsd-kind-icon">map</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="mapper.html#map" class="tsd-kind-icon">map</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="mapper.html#register" class="tsd-kind-icon">register</a></li>
 						</ul>
 					</section>
@@ -2838,7 +2853,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/ed1b736/src/mapper/Mapper.ts#L6">src/mapper/Mapper.ts:6</a></li>
+								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/mapper/Mapper.ts#L6">src/mapper/Mapper.ts:6</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-returns-title">Returns <a href="mapper.html" class="tsd-signature-type">Mapper</a></h4>
@@ -2858,7 +2873,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/ed1b736/src/mapper/Mapper.ts#L25">src/mapper/Mapper.ts:25</a></li>
+								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/mapper/Mapper.ts#L25">src/mapper/Mapper.ts:25</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2880,17 +2895,17 @@ img {
 					</li>
 				</ul>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 				<a name="map" class="tsd-anchor"></a>
 				<h3>map</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-					<li class="tsd-signature tsd-kind-icon">map&lt;T&gt;<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><a href="../globals.html#typeidentifier" class="tsd-signature-type">TypeIdentifier</a>, to<span class="tsd-signature-symbol">: </span><a href="../globals.html#typeidentifier" class="tsd-signature-type">TypeIdentifier</a>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">map<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><a href="../globals.html#typeidentifier" class="tsd-signature-type">TypeIdentifier</a>, to<span class="tsd-signature-symbol">: </span><a href="../globals.html#typeidentifier" class="tsd-signature-type">TypeIdentifier</a>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/ed1b736/src/mapper/Mapper.ts#L32">src/mapper/Mapper.ts:32</a></li>
+								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/mapper/Mapper.ts#L32">src/mapper/Mapper.ts:32</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2898,12 +2913,6 @@ img {
 								<p>Maps a value for the given identifiers.</p>
 							</div>
 						</div>
-						<h4 class="tsd-type-parameters-title">Type parameters</h4>
-						<ul class="tsd-type-parameters">
-							<li>
-								<h4>T</h4>
-							</li>
-						</ul>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
@@ -2916,7 +2925,7 @@ img {
 								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 					</li>
 				</ul>
 			</section>
@@ -2930,7 +2939,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/ed1b736/src/mapper/Mapper.ts#L15">src/mapper/Mapper.ts:15</a></li>
+								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/mapper/Mapper.ts#L15">src/mapper/Mapper.ts:15</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">

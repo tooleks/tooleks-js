@@ -64,6 +64,40 @@ const authService = container.get('Application.AuthService');
 console.log(authService); // AuthService { userRepository: UserRepository { connectionString: 'mongodb://...' } }
 ```
 
+TypeScript example with [decorators](https://www.typescriptlang.org/docs/handbook/decorators.html).
+
+```TypeScript
+import { staticContainer, Injectable, Inject } from 'tooleks';
+
+// Register instance (constant) definition.
+staticContainer.instance('DB.ConnectionString', 'mongodb://...');
+
+// Register service class definition.
+@Injectable('Infrastructure.UserRepository')
+class UserRepository {
+  readonly connectionString: string;
+
+  constructor(@Inject('DB.ConnectionString') connectionString: string) {
+    this.connectionString = connectionString;
+  }
+}
+
+// Register service class definition.
+@Injectable('Application.AuthService')
+class AuthService {
+  readonly userRepository: UserRepository;
+
+  constructor(@Inject('Infrastructure.UserRepository') userRepository: UserRepository) {
+    this.userRepository = userRepository;
+  }
+}
+
+// Retrieve an instance of service.
+const authService = staticContainer.get('Application.AuthService') as AuthService;
+
+console.log(authService); // AuthService { userRepository: UserRepository { connectionString: 'mongodb://...' } }
+```
+
 ### `EventEmitter` class
 
 Asynchronous event emitter implementation with support of `Promise` and `async`/`await` syntax.

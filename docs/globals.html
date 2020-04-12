@@ -2756,19 +2756,34 @@ img {
 			<a href="classes/timeouterror.html" class="tsd-kind-icon">Timeout<wbr>Error</a>
 		</li>
 		<li class=" tsd-kind-interface">
-			<a href="interfaces/factory.html" class="tsd-kind-icon">Factory</a>
+			<a href="interfaces/eventlistener.html" class="tsd-kind-icon">Event<wbr>Listener</a>
 		</li>
 		<li class=" tsd-kind-interface">
-			<a href="interfaces/service.html" class="tsd-kind-icon">Service</a>
+			<a href="interfaces/factoryentry.html" class="tsd-kind-icon">Factory<wbr>Entry</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="interfaces/serviceentry.html" class="tsd-kind-icon">Service<wbr>Entry</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="globals.html#entryidentifier" class="tsd-kind-icon">Entry<wbr>Identifier</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
-			<a href="globals.html#eventlistener" class="tsd-kind-icon">Event<wbr>Listener</a>
+			<a href="globals.html#instanceentry" class="tsd-kind-icon">Instance<wbr>Entry</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="globals.html#typeidentifier" class="tsd-kind-icon">Type<wbr>Identifier</a>
+		</li>
+		<li class=" tsd-kind-variable">
+			<a href="globals.html#metadata" class="tsd-kind-icon">metadata</a>
+		</li>
+		<li class=" tsd-kind-variable">
+			<a href="globals.html#staticcontainer" class="tsd-kind-icon">static<wbr>Container</a>
+		</li>
+		<li class=" tsd-kind-function">
+			<a href="globals.html#inject" class="tsd-kind-icon">Inject</a>
+		</li>
+		<li class=" tsd-kind-function">
+			<a href="globals.html#injectable" class="tsd-kind-icon">Injectable</a>
 		</li>
 		<li class=" tsd-kind-function">
 			<a href="globals.html#optional" class="tsd-kind-icon">optional</a>
@@ -2844,6 +2859,36 @@ container.service(
 
 <span class="hljs-comment">// Retrieve an instance of service.</span>
 <span class="hljs-keyword">const</span> authService = container.get(<span class="hljs-string">'Application.AuthService'</span>);
+
+<span class="hljs-built_in">console</span>.log(authService); <span class="hljs-comment">// AuthService { userRepository: UserRepository { connectionString: 'mongodb://...' } }</span></code></pre>
+			<p>TypeScript example with <a href="https://www.typescriptlang.org/docs/handbook/decorators.html">decorators</a>.</p>
+			<pre><code class="language-TypeScript"><span class="hljs-keyword">import</span> { staticContainer, Injectable, Inject } <span class="hljs-keyword">from</span> <span class="hljs-string">'tooleks'</span>;
+
+<span class="hljs-comment">// Register instance (constant) definition.</span>
+staticContainer.instance(<span class="hljs-string">'DB.ConnectionString'</span>, <span class="hljs-string">'mongodb://...'</span>);
+
+<span class="hljs-comment">// Register service class definition.</span>
+<span class="hljs-meta">@Injectable</span>(<span class="hljs-string">'Infrastructure.UserRepository'</span>)
+<span class="hljs-keyword">class</span> UserRepository {
+  readonly connectionString: <span class="hljs-built_in">string</span>;
+
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params"><span class="hljs-meta">@Inject</span>(<span class="hljs-string">'DB.ConnectionString'</span>) connectionString: <span class="hljs-built_in">string</span></span>) {
+    <span class="hljs-keyword">this</span>.connectionString = connectionString;
+  }
+}
+
+<span class="hljs-comment">// Register service class definition.</span>
+<span class="hljs-meta">@Injectable</span>(<span class="hljs-string">'Application.AuthService'</span>)
+<span class="hljs-keyword">class</span> AuthService {
+  readonly userRepository: UserRepository;
+
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params"><span class="hljs-meta">@Inject</span>(<span class="hljs-string">'Infrastructure.UserRepository'</span>) userRepository: UserRepository</span>) {
+    <span class="hljs-keyword">this</span>.userRepository = userRepository;
+  }
+}
+
+<span class="hljs-comment">// Retrieve an instance of service.</span>
+<span class="hljs-keyword">const</span> authService = staticContainer.get(<span class="hljs-string">'Application.AuthService'</span>) <span class="hljs-keyword">as</span> AuthService;
 
 <span class="hljs-built_in">console</span>.log(authService); <span class="hljs-comment">// AuthService { userRepository: UserRepository { connectionString: 'mongodb://...' } }</span></code></pre>
 			<a href="#eventemitter-class" id="eventemitter-class" style="color: inherit; text-decoration: none;">
@@ -2972,21 +3017,31 @@ setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;
 					<section class="tsd-index-section ">
 						<h3>Interfaces</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-interface"><a href="interfaces/factory.html" class="tsd-kind-icon">Factory</a></li>
-							<li class="tsd-kind-interface"><a href="interfaces/service.html" class="tsd-kind-icon">Service</a></li>
+							<li class="tsd-kind-interface"><a href="interfaces/eventlistener.html" class="tsd-kind-icon">Event<wbr>Listener</a></li>
+							<li class="tsd-kind-interface"><a href="interfaces/factoryentry.html" class="tsd-kind-icon">Factory<wbr>Entry</a></li>
+							<li class="tsd-kind-interface"><a href="interfaces/serviceentry.html" class="tsd-kind-icon">Service<wbr>Entry</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section ">
 						<h3>Type aliases</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-type-alias"><a href="globals.html#entryidentifier" class="tsd-kind-icon">Entry<wbr>Identifier</a></li>
-							<li class="tsd-kind-type-alias"><a href="globals.html#eventlistener" class="tsd-kind-icon">Event<wbr>Listener</a></li>
+							<li class="tsd-kind-type-alias"><a href="globals.html#instanceentry" class="tsd-kind-icon">Instance<wbr>Entry</a></li>
 							<li class="tsd-kind-type-alias"><a href="globals.html#typeidentifier" class="tsd-kind-icon">Type<wbr>Identifier</a></li>
+						</ul>
+					</section>
+					<section class="tsd-index-section ">
+						<h3>Variables</h3>
+						<ul class="tsd-index-list">
+							<li class="tsd-kind-variable"><a href="globals.html#metadata" class="tsd-kind-icon">metadata</a></li>
+							<li class="tsd-kind-variable"><a href="globals.html#staticcontainer" class="tsd-kind-icon">static<wbr>Container</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section ">
 						<h3>Functions</h3>
 						<ul class="tsd-index-list">
+							<li class="tsd-kind-function"><a href="globals.html#inject" class="tsd-kind-icon">Inject</a></li>
+							<li class="tsd-kind-function"><a href="globals.html#injectable" class="tsd-kind-icon">Injectable</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#optional" class="tsd-kind-icon">optional</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#timeout" class="tsd-kind-icon">timeout</a></li>
 							<li class="tsd-kind-function"><a href="globals.html#waituntil" class="tsd-kind-icon">wait<wbr>Until</a></li>
@@ -3003,17 +3058,17 @@ setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;
 				<div class="tsd-signature tsd-kind-icon">Entry<wbr>Identifier<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/ed1b736/src/container/EntryIdentifier.ts#L1">src/container/EntryIdentifier.ts:1</a></li>
+						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/container/EntryIdentifier.ts#L1">src/container/EntryIdentifier.ts:1</a></li>
 					</ul>
 				</aside>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-type-alias">
-				<a name="eventlistener" class="tsd-anchor"></a>
-				<h3>Event<wbr>Listener</h3>
-				<div class="tsd-signature tsd-kind-icon">Event<wbr>Listener<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Function</span></div>
+				<a name="instanceentry" class="tsd-anchor"></a>
+				<h3>Instance<wbr>Entry</h3>
+				<div class="tsd-signature tsd-kind-icon">Instance<wbr>Entry<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/ed1b736/src/eventEmitter/EventListener.ts#L1">src/eventEmitter/EventListener.ts:1</a></li>
+						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/container/InstanceEntry.ts#L1">src/container/InstanceEntry.ts:1</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -3023,13 +3078,82 @@ setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;
 				<div class="tsd-signature tsd-kind-icon">Type<wbr>Identifier<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/ed1b736/src/mapper/TypeIdentifier.ts#L1">src/mapper/TypeIdentifier.ts:1</a></li>
+						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/mapper/TypeIdentifier.ts#L1">src/mapper/TypeIdentifier.ts:1</a></li>
+					</ul>
+				</aside>
+			</section>
+		</section>
+		<section class="tsd-panel-group tsd-member-group ">
+			<h2>Variables</h2>
+			<section class="tsd-panel tsd-member tsd-kind-variable">
+				<a name="metadata" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagConst">Const</span> metadata</h3>
+				<div class="tsd-signature tsd-kind-icon">metadata<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">WeakMap</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/serviceentry.html" class="tsd-signature-type">ServiceEntry</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new WeakMap&lt;ServiceEntry, EntryIdentifier[]&gt;()</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/container/Decorators.ts#L5">src/container/Decorators.ts:5</a></li>
+					</ul>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-variable">
+				<a name="staticcontainer" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagConst">Const</span> static<wbr>Container</h3>
+				<div class="tsd-signature tsd-kind-icon">static<wbr>Container<span class="tsd-signature-symbol">:</span> <a href="classes/container.html" class="tsd-signature-type">Container</a><span class="tsd-signature-symbol"> = new Container()</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/container/staticContainer.ts#L3">src/container/staticContainer.ts:3</a></li>
 					</ul>
 				</aside>
 			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Functions</h2>
+			<section class="tsd-panel tsd-member tsd-kind-function">
+				<a name="inject" class="tsd-anchor"></a>
+				<h3>Inject</h3>
+				<ul class="tsd-signatures tsd-kind-function">
+					<li class="tsd-signature tsd-kind-icon">Inject<span class="tsd-signature-symbol">(</span>identifier<span class="tsd-signature-symbol">: </span><a href="globals.html#entryidentifier" class="tsd-signature-type">EntryIdentifier</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/container/Decorators.ts#L19">src/container/Decorators.ts:19</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>identifier: <a href="globals.html#entryidentifier" class="tsd-signature-type">EntryIdentifier</a></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function">
+				<a name="injectable" class="tsd-anchor"></a>
+				<h3>Injectable</h3>
+				<ul class="tsd-signatures tsd-kind-function">
+					<li class="tsd-signature tsd-kind-icon">Injectable<span class="tsd-signature-symbol">(</span>identifier<span class="tsd-signature-symbol">: </span><a href="globals.html#entryidentifier" class="tsd-signature-type">EntryIdentifier</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">(Anonymous function)</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/container/Decorators.ts#L8">src/container/Decorators.ts:8</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>identifier: <a href="globals.html#entryidentifier" class="tsd-signature-type">EntryIdentifier</a></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function">
 				<a name="optional" class="tsd-anchor"></a>
 				<h3>optional</h3>
@@ -3040,7 +3164,7 @@ setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/ed1b736/src/optional/optional.ts#L6">src/optional/optional.ts:6</a></li>
+								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/optional/optional.ts#L6">src/optional/optional.ts:6</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3073,7 +3197,7 @@ setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/ed1b736/src/timeout/timeout.ts#L4">src/timeout/timeout.ts:4</a></li>
+								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/timeout/timeout.ts#L4">src/timeout/timeout.ts:4</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3101,7 +3225,7 @@ setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/ed1b736/src/waitUntil/waitUntil.ts#L8">src/waitUntil/waitUntil.ts:8</a></li>
+								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/waitUntil/waitUntil.ts#L8">src/waitUntil/waitUntil.ts:8</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">

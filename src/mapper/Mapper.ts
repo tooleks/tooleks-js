@@ -29,7 +29,7 @@ export default class Mapper {
   /**
    * Maps a value for the given identifiers.
    */
-  map<T>(from: TypeIdentifier, to: TypeIdentifier, ...args: any[]): T {
+  map(from: TypeIdentifier, to: TypeIdentifier, ...args: any[]): any {
     return this.get(from, to)(...args);
   }
 

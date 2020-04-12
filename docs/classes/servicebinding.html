@@ -2767,19 +2767,34 @@ img {
 			<a href="timeouterror.html" class="tsd-kind-icon">Timeout<wbr>Error</a>
 		</li>
 		<li class=" tsd-kind-interface">
-			<a href="../interfaces/factory.html" class="tsd-kind-icon">Factory</a>
+			<a href="../interfaces/eventlistener.html" class="tsd-kind-icon">Event<wbr>Listener</a>
 		</li>
 		<li class=" tsd-kind-interface">
-			<a href="../interfaces/service.html" class="tsd-kind-icon">Service</a>
+			<a href="../interfaces/factoryentry.html" class="tsd-kind-icon">Factory<wbr>Entry</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/serviceentry.html" class="tsd-kind-icon">Service<wbr>Entry</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="../globals.html#entryidentifier" class="tsd-kind-icon">Entry<wbr>Identifier</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
-			<a href="../globals.html#eventlistener" class="tsd-kind-icon">Event<wbr>Listener</a>
+			<a href="../globals.html#instanceentry" class="tsd-kind-icon">Instance<wbr>Entry</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="../globals.html#typeidentifier" class="tsd-kind-icon">Type<wbr>Identifier</a>
+		</li>
+		<li class=" tsd-kind-variable">
+			<a href="../globals.html#metadata" class="tsd-kind-icon">metadata</a>
+		</li>
+		<li class=" tsd-kind-variable">
+			<a href="../globals.html#staticcontainer" class="tsd-kind-icon">static<wbr>Container</a>
+		</li>
+		<li class=" tsd-kind-function">
+			<a href="../globals.html#inject" class="tsd-kind-icon">Inject</a>
+		</li>
+		<li class=" tsd-kind-function">
+			<a href="../globals.html#injectable" class="tsd-kind-icon">Injectable</a>
 		</li>
 		<li class=" tsd-kind-function">
 			<a href="../globals.html#optional" class="tsd-kind-icon">optional</a>
@@ -2833,20 +2848,20 @@ img {
 				<a name="constructor" class="tsd-anchor"></a>
 				<h3>constructor</h3>
 				<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-					<li class="tsd-signature tsd-kind-icon">new <wbr>Service<wbr>Binding<span class="tsd-signature-symbol">(</span>service<span class="tsd-signature-symbol">: </span><a href="../interfaces/service.html" class="tsd-signature-type">Service</a>, dependencies<span class="tsd-signature-symbol">?: </span><a href="../globals.html#entryidentifier" class="tsd-signature-type">EntryIdentifier</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="servicebinding.html" class="tsd-signature-type">ServiceBinding</a></li>
+					<li class="tsd-signature tsd-kind-icon">new <wbr>Service<wbr>Binding<span class="tsd-signature-symbol">(</span>service<span class="tsd-signature-symbol">: </span><a href="../interfaces/serviceentry.html" class="tsd-signature-type">ServiceEntry</a>, dependencies<span class="tsd-signature-symbol">?: </span><a href="../globals.html#entryidentifier" class="tsd-signature-type">EntryIdentifier</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="servicebinding.html" class="tsd-signature-type">ServiceBinding</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<p>Overrides ContainerBinding.__constructor</p>
 							<ul>
-								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/ed1b736/src/container/ServiceBinding.ts#L6">src/container/ServiceBinding.ts:6</a></li>
+								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/container/ServiceBinding.ts#L6">src/container/ServiceBinding.ts:6</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>service: <a href="../interfaces/service.html" class="tsd-signature-type">Service</a></h5>
+								<h5>service: <a href="../interfaces/serviceentry.html" class="tsd-signature-type">ServiceEntry</a></h5>
 							</li>
 							<li>
 								<h5><span class="tsd-flag ts-flagDefault value">Default value</span> dependencies: <a href="../globals.html#entryidentifier" class="tsd-signature-type">EntryIdentifier</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></h5>
@@ -2866,17 +2881,17 @@ img {
 				<aside class="tsd-sources">
 					<p>Inherited from <a href="containerbinding.html">ContainerBinding</a>.<a href="containerbinding.html#dependencies">dependencies</a></p>
 					<ul>
-						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/ed1b736/src/container/ContainerBinding.ts#L4">src/container/ContainerBinding.ts:4</a></li>
+						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/container/ContainerBinding.ts#L4">src/container/ContainerBinding.ts:4</a></li>
 					</ul>
 				</aside>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 				<a name="service" class="tsd-anchor"></a>
 				<h3>service</h3>
-				<div class="tsd-signature tsd-kind-icon">service<span class="tsd-signature-symbol">:</span> <a href="../interfaces/service.html" class="tsd-signature-type">Service</a></div>
+				<div class="tsd-signature tsd-kind-icon">service<span class="tsd-signature-symbol">:</span> <a href="../interfaces/serviceentry.html" class="tsd-signature-type">ServiceEntry</a></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/ed1b736/src/container/ServiceBinding.ts#L6">src/container/ServiceBinding.ts:6</a></li>
+						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/container/ServiceBinding.ts#L6">src/container/ServiceBinding.ts:6</a></li>
 					</ul>
 				</aside>
 			</section>
