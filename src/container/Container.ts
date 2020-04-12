@@ -17,30 +17,27 @@ export default class Container {
   /**
    * Registers a new service class binding in the container.
    */
-  service(identifier: EntryIdentifier, service: Service, dependencies: EntryIdentifier[] = []): Container {
+  service(identifier: EntryIdentifier, service: Service, dependencies: EntryIdentifier[] = []): void {
     const binding = new ServiceBinding(service, dependencies);
     this.detectCircularDependencies(identifier, binding);
     this.bindings.set(identifier, binding);
-    return this;
   }
 
   /**
    * Registers a new factory function binding in the container.
    */
-  factory(identifier: EntryIdentifier, factory: Factory, dependencies: EntryIdentifier[] = []): Container {
+  factory(identifier: EntryIdentifier, factory: Factory, dependencies: EntryIdentifier[] = []): void {
     const binding = new FactoryBinding(factory, dependencies);
     this.detectCircularDependencies(identifier, binding);
     this.bindings.set(identifier, binding);
-    return this;
   }
 
   /**
    * Registers an existing instance as shared in the container.
    */
-  instance(identifier: EntryIdentifier, instance: any): Container {
+  instance(identifier: EntryIdentifier, instance: any): void {
     const binding = new InstanceBinding(instance);
     this.bindings.set(identifier, binding);
-    return this;
   }
 
   /**
