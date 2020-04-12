@@ -1,3 +1,5 @@
-type EventListener = Function;
+interface EventListener {
+  (...args: any[]): any;
+}
 
 export default EventListener;

@@ -1,11 +1,11 @@
 import ContainerBinding from './ContainerBinding';
-import Factory from './Factory';
+import FactoryEntry from './FactoryEntry';
 import EntryIdentifier from './EntryIdentifier';
 
 export default class FactoryBinding extends ContainerBinding {
-  readonly factory: Factory;
+  readonly factory: FactoryEntry;
 
-  constructor(factory: Factory, dependencies: EntryIdentifier[] = []) {
+  constructor(factory: FactoryEntry, dependencies: EntryIdentifier[] = []) {
     super(dependencies);
     this.factory = factory;
   }
