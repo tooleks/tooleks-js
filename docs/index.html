@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>tooleks - v2.0.1 | tooleks - v2.0.1</title>
-	<meta name="description" content="Documentation for tooleks - v2.0.1">
+	<title>tooleks - v2.1.0 | tooleks - v2.1.0</title>
+	<meta name="description" content="Documentation for tooleks - v2.1.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style type="text/css">/*! normalize.css v1.1.3 | MIT License | git.io/normalize */
 /* ==========================================================================
@@ -2692,7 +2692,7 @@ img {
 		<div class="container">
 			<div class="table-wrap">
 				<div class="table-cell">
-					<strong><a href="index.html">tooleks - v2.0.1</a></strong>
+					<strong><a href="index.html">tooleks - v2.1.0</a></strong>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -2822,13 +2822,14 @@ img {
 			<ul>
 				<li>Supports instance, factory and service bindings.</li>
 				<li>Supports nested dependencies.</li>
-				<li>Easily detects circular dependencies.</li>
+				<li>Detects circular dependencies.</li>
+				<li>Supports TypeScript decorators.</li>
 			</ul>
 			<pre><code class="language-JavaScript"><span class="hljs-keyword">const</span> { Container } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'tooleks'</span>);
 
 <span class="hljs-keyword">const</span> container = <span class="hljs-keyword">new</span> Container();
 
-<span class="hljs-comment">// Register instance (constant) definition.</span>
+<span class="hljs-comment">// Register instance (constant) binding.</span>
 container.instance(<span class="hljs-string">'DB.ConnectionString'</span>, <span class="hljs-string">'mongodb://...'</span>);
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserRepository</span> </span>{
@@ -2837,7 +2838,7 @@ container.instance(<span class="hljs-string">'DB.ConnectionString'</span>, <span
   }
 }
 
-<span class="hljs-comment">// Register factory function definition.</span>
+<span class="hljs-comment">// Register factory function binding.</span>
 container.factory(
   <span class="hljs-string">'Infrastructure.UserRepository'</span>,
   (connectionString) =&gt; <span class="hljs-keyword">new</span> UserRepository(connectionString),
@@ -2850,7 +2851,7 @@ container.factory(
   }
 }
 
-<span class="hljs-comment">// Register service class definition.</span>
+<span class="hljs-comment">// Register service class binding.</span>
 container.service(
   <span class="hljs-string">'Application.AuthService'</span>,
   AuthService,
@@ -2864,10 +2865,10 @@ container.service(
 			<p>TypeScript example with <a href="https://www.typescriptlang.org/docs/handbook/decorators.html">decorators</a>.</p>
 			<pre><code class="language-TypeScript"><span class="hljs-keyword">import</span> { staticContainer, Injectable, Inject } <span class="hljs-keyword">from</span> <span class="hljs-string">'tooleks'</span>;
 
-<span class="hljs-comment">// Register instance (constant) definition.</span>
+<span class="hljs-comment">// Register instance (constant) binding.</span>
 staticContainer.instance(<span class="hljs-string">'DB.ConnectionString'</span>, <span class="hljs-string">'mongodb://...'</span>);
 
-<span class="hljs-comment">// Register service class definition.</span>
+<span class="hljs-comment">// Register service class binding using decorators.</span>
 <span class="hljs-meta">@Injectable</span>(<span class="hljs-string">'Infrastructure.UserRepository'</span>)
 <span class="hljs-keyword">class</span> UserRepository {
   readonly connectionString: <span class="hljs-built_in">string</span>;
@@ -2877,7 +2878,7 @@ staticContainer.instance(<span class="hljs-string">'DB.ConnectionString'</span>,
   }
 }
 
-<span class="hljs-comment">// Register service class definition.</span>
+<span class="hljs-comment">// Register service class binding using decorators.</span>
 <span class="hljs-meta">@Injectable</span>(<span class="hljs-string">'Application.AuthService'</span>)
 <span class="hljs-keyword">class</span> AuthService {
   readonly userRepository: UserRepository;
@@ -2901,6 +2902,7 @@ staticContainer.instance(<span class="hljs-string">'DB.ConnectionString'</span>,
 
 <span class="hljs-function">(<span class="hljs-params"><span class="hljs-keyword">async</span> (</span>) =&gt;</span> {
 
+  <span class="hljs-comment">// Register event listener function.</span>
   eventEmitter.on(<span class="hljs-string">'User.Update'</span>, (user) =&gt; {
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> {
       <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Processing User.Update event for <span class="hljs-subst">${user.name}</span>...`</span>);
@@ -2908,12 +2910,13 @@ staticContainer.instance(<span class="hljs-string">'DB.ConnectionString'</span>,
     });
   });
 
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Before User.Update event.'</span>);
+
   <span class="hljs-keyword">const</span> user = {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'johndoe'</span>,
   };
 
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Before User.Update event.'</span>);
-
+  <span class="hljs-comment">// Emit event with data.</span>
   <span class="hljs-keyword">await</span> eventEmitter.emit(<span class="hljs-string">'User.Update'</span>, user);
 
   <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'After User.Update event.'</span>);
@@ -2927,6 +2930,7 @@ staticContainer.instance(<span class="hljs-string">'DB.ConnectionString'</span>,
 
 <span class="hljs-keyword">const</span> mapper = <span class="hljs-keyword">new</span> Mapper();
 
+<span class="hljs-comment">// Register mapping function.</span>
 mapper.register(<span class="hljs-string">'API.User'</span>, <span class="hljs-string">'Domain.User'</span>, (user) =&gt; {
   <span class="hljs-keyword">return</span> {
     <span class="hljs-attr">name</span>: user.username,
@@ -2935,14 +2939,15 @@ mapper.register(<span class="hljs-string">'API.User'</span>, <span class="hljs-s
 });
 
 <span class="hljs-keyword">const</span> apiUser = {
-  <span class="hljs-attr">username</span>: <span class="hljs-string">'johndoe'</span>,
+  <span class="hljs-attr">username</span>: <span class="hljs-string">'john.doe'</span>,
   <span class="hljs-attr">firstName</span>: <span class="hljs-string">'John'</span>,
   <span class="hljs-attr">lastName</span>: <span class="hljs-string">'Doe'</span>,
 };
 
+<span class="hljs-comment">// Map data structure.</span>
 <span class="hljs-keyword">const</span> domainUser = mapper.map(<span class="hljs-string">'API.User'</span>, <span class="hljs-string">'Domain.User'</span>, apiUser);
 
-<span class="hljs-built_in">console</span>.log(domainUser); <span class="hljs-comment">// { name: 'johndoe', fullName: 'John Doe' }</span></code></pre>
+<span class="hljs-built_in">console</span>.log(domainUser); <span class="hljs-comment">// { name: 'john.doe', fullName: 'John Doe' }</span></code></pre>
 			<a href="#optional-function" id="optional-function" style="color: inherit; text-decoration: none;">
 				<h3><code>optional</code> function</h3>
 			</a>
@@ -2950,19 +2955,21 @@ mapper.register(<span class="hljs-string">'API.User'</span>, <span class="hljs-s
 			<pre><code class="language-JavaScript"><span class="hljs-keyword">const</span> { optional } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'tooleks'</span>);
 
 <span class="hljs-keyword">const</span> user = {
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'johndoe'</span>,
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'john.doe'</span>,
   getWebsite() {
     <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Website not found.'</span>);
   },
 };
 
+<span class="hljs-comment">// Wrap property call.</span>
 <span class="hljs-keyword">const</span> userCompany = optional(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> user.company, <span class="hljs-string">'Default'</span>);
 
 <span class="hljs-built_in">console</span>.log(userCompany); <span class="hljs-comment">// 'Default'</span>
 
+<span class="hljs-comment">// Wrap method/function call.</span>
 <span class="hljs-keyword">const</span> userWebsite = optional(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> user.getWebsite(), <span class="hljs-string">`https://www.google.com/search?q=<span class="hljs-subst">${user.name}</span>`</span>);
 
-<span class="hljs-built_in">console</span>.log(userWebsite); <span class="hljs-comment">// 'https://www.google.com/search?q=johndoe'</span></code></pre>
+<span class="hljs-built_in">console</span>.log(userWebsite); <span class="hljs-comment">// 'https://www.google.com/search?q=john.doe'</span></code></pre>
 			<a href="#timeout-function" id="timeout-function" style="color: inherit; text-decoration: none;">
 				<h3><code>timeout</code> function</h3>
 			</a>
@@ -2971,8 +2978,9 @@ mapper.register(<span class="hljs-string">'API.User'</span>, <span class="hljs-s
 
 <span class="hljs-function">(<span class="hljs-params"><span class="hljs-keyword">async</span> (</span>) =&gt;</span> {
 
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Before timeout...'</span>);
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Before timeout.'</span>);
 
+  <span class="hljs-comment">// Wait for specified timeout then resolve Promise.</span>
   <span class="hljs-keyword">await</span> timeout(<span class="hljs-number">1000</span>);
 
   <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'After 1000 milliseconds timeout.'</span>);
@@ -2986,6 +2994,7 @@ mapper.register(<span class="hljs-string">'API.User'</span>, <span class="hljs-s
 
 <span class="hljs-keyword">let</span> value = <span class="hljs-literal">null</span>;
 
+<span class="hljs-comment">// Wait until variable will contain truthy value.</span>
 waitUntil(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> value).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
   <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`<span class="hljs-subst">${value}</span> received after 1000 milliseconds.`</span>);
 });
@@ -3059,7 +3068,7 @@ setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;
 				<div class="tsd-signature tsd-kind-icon">Entry<wbr>Identifier<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/container/EntryIdentifier.ts#L1">src/container/EntryIdentifier.ts:1</a></li>
+						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/1e0f4aa/src/container/EntryIdentifier.ts#L1">src/container/EntryIdentifier.ts:1</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -3069,7 +3078,7 @@ setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;
 				<div class="tsd-signature tsd-kind-icon">Instance<wbr>Entry<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/container/InstanceEntry.ts#L1">src/container/InstanceEntry.ts:1</a></li>
+						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/1e0f4aa/src/container/InstanceEntry.ts#L1">src/container/InstanceEntry.ts:1</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -3079,7 +3088,7 @@ setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;
 				<div class="tsd-signature tsd-kind-icon">Type<wbr>Identifier<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/mapper/TypeIdentifier.ts#L1">src/mapper/TypeIdentifier.ts:1</a></li>
+						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/1e0f4aa/src/mapper/TypeIdentifier.ts#L1">src/mapper/TypeIdentifier.ts:1</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -3092,7 +3101,7 @@ setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;
 				<div class="tsd-signature tsd-kind-icon">metadata<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">WeakMap</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/serviceentry.html" class="tsd-signature-type">ServiceEntry</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new WeakMap&lt;ServiceEntry, EntryIdentifier[]&gt;()</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/container/Decorators.ts#L5">src/container/Decorators.ts:5</a></li>
+						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/1e0f4aa/src/container/Decorators.ts#L5">src/container/Decorators.ts:5</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -3102,7 +3111,7 @@ setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;
 				<div class="tsd-signature tsd-kind-icon">static<wbr>Container<span class="tsd-signature-symbol">:</span> <a href="classes/container.html" class="tsd-signature-type">Container</a><span class="tsd-signature-symbol"> = new Container()</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/container/staticContainer.ts#L3">src/container/staticContainer.ts:3</a></li>
+						<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/1e0f4aa/src/container/staticContainer.ts#L3">src/container/staticContainer.ts:3</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -3119,7 +3128,7 @@ setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/container/Decorators.ts#L19">src/container/Decorators.ts:19</a></li>
+								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/1e0f4aa/src/container/Decorators.ts#L19">src/container/Decorators.ts:19</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3142,7 +3151,7 @@ setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/container/Decorators.ts#L8">src/container/Decorators.ts:8</a></li>
+								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/1e0f4aa/src/container/Decorators.ts#L8">src/container/Decorators.ts:8</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3165,7 +3174,7 @@ setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/optional/optional.ts#L6">src/optional/optional.ts:6</a></li>
+								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/1e0f4aa/src/optional/optional.ts#L6">src/optional/optional.ts:6</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3198,7 +3207,7 @@ setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/timeout/timeout.ts#L4">src/timeout/timeout.ts:4</a></li>
+								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/1e0f4aa/src/timeout/timeout.ts#L4">src/timeout/timeout.ts:4</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3226,7 +3235,7 @@ setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/0e5a36c/src/waitUntil/waitUntil.ts#L8">src/waitUntil/waitUntil.ts:8</a></li>
+								<li>Defined in <a href="https://github.com/tooleks/tooleks-js/blob/1e0f4aa/src/waitUntil/waitUntil.ts#L8">src/waitUntil/waitUntil.ts:8</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
