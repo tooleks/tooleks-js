@@ -13,6 +13,7 @@
   "browser": "./dist/main.umd.js",
   "main": "./dist/main.cjs.js",
   "module": "./dist/main.js",
+  "types": "./dist/main.d.ts",
   "scripts": {
     "build": "rm -rf ./dist && rollup -c",
     "lint": "tslint --fix -p ./tsconfig.json -c ./tslint.json",
