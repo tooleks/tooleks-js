@@ -4,8 +4,9 @@ import FactoryBinding from './FactoryBinding';
 import ContainerError from './ContainerError';
 import ContainerBinding from './ContainerBinding';
 import InstanceBinding from './InstanceBinding';
-import Factory from './Factory';
-import Service from './Service';
+import FactoryEntry from './FactoryEntry';
+import ServiceEntry from './ServiceEntry';
+import InstanceEntry from './InstanceEntry';
 
 export default class Container {
   private readonly bindings: Map<EntryIdentifier, ContainerBinding>;
@@ -17,7 +18,7 @@ export default class Container {
   /**
    * Registers a new service class binding in the container.
    */
-  service(identifier: EntryIdentifier, service: Service, dependencies: EntryIdentifier[] = []): void {
+  service(identifier: EntryIdentifier, service: ServiceEntry, dependencies: EntryIdentifier[] = []): void {
     const binding = new ServiceBinding(service, dependencies);
     this.detectCircularDependencies(identifier, binding);
     this.bindings.set(identifier, binding);
@@ -26,7 +27,7 @@ export default class Container {
   /**
    * Registers a new factory function binding in the container.
    */
-  factory(identifier: EntryIdentifier, factory: Factory, dependencies: EntryIdentifier[] = []): void {
+  factory(identifier: EntryIdentifier, factory: FactoryEntry, dependencies: EntryIdentifier[] = []): void {
     const binding = new FactoryBinding(factory, dependencies);
     this.detectCircularDependencies(identifier, binding);
     this.bindings.set(identifier, binding);
@@ -35,7 +36,7 @@ export default class Container {
   /**
    * Registers an existing instance as shared in the container.
    */
-  instance(identifier: EntryIdentifier, instance: any): void {
+  instance(identifier: EntryIdentifier, instance: InstanceEntry): void {
     const binding = new InstanceBinding(instance);
     this.bindings.set(identifier, binding);
   }

@@ -1,9 +1,10 @@
 import ContainerBinding from './ContainerBinding';
+import InstanceEntry from './InstanceEntry';
 
 export default class InstanceBinding extends ContainerBinding {
-  readonly instance: any;
+  readonly instance: InstanceEntry;
 
-  constructor(instance: any) {
+  constructor(instance: InstanceEntry) {
     super([]);
     this.instance = instance;
   }
