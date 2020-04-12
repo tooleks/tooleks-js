@@ -22,7 +22,7 @@ Simple yet powerful dependency injection container implementation.
 
 * Supports instance, factory and service bindings.
 * Supports nested dependencies.
-* Easily detects circular dependencies.
+* Detects circular dependencies.
 * Supports TypeScript decorators.
 
 ```JavaScript
