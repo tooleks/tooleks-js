@@ -3,8 +3,6 @@
   "compilerOptions": {
     "target": "es2017",
     "module": "esnext",
-    "declaration": true,
-    "outDir": "./dist",
     "rootDir": "./src"
   },
   "include": [

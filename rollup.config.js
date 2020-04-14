@@ -14,12 +14,12 @@ export default [
       {
         ...output,
         name: 'tooleks',
-        file: './dist/main.umd.js',
+        file: pkg.browser,
         format: 'umd',
       },
       {
         ...output,
-        file: './dist/main.cjs.js',
+        file: pkg.main,
         format: 'cjs',
       }
     ],
@@ -31,7 +31,7 @@ export default [
     input: './src/main.ts',
     output: {
       ...output,
-      dir: './dist',
+      file: pkg.module,
       format: 'es',
     },
     plugins: [

@@ -1,21 +1,23 @@
 {
   "name": "tooleks",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "A set of tools for JavaScript development",
   "keywords": [
     "utils",
-    "ioc",
     "inversion of control",
+    "inversion of control",
+    "dependency injection",
     "dependency injection container",
+    "event emitter",
     "asynchronous event emitter",
     "data mapper"
   ],
   "browser": "./dist/main.umd.js",
   "main": "./dist/main.cjs.js",
-  "module": "./dist/main.js",
+  "module": "./dist/main.es.js",
   "types": "./dist/main.d.ts",
   "scripts": {
-    "build": "rm -rf ./dist && rollup -c",
+    "build": "rm -rf ./dist && rollup -c && npx tsc -p ./tsconfig.declaration.json",
     "lint": "tslint --fix -p ./tsconfig.json -c ./tslint.json",
     "test": "mocha -r ts-node/register ./tests/**/*.spec.ts",
     "coverage": "nyc npm run test",
