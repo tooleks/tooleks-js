@@ -5,12 +5,14 @@
   "keywords": [
     "utils",
     "inversion of control",
-    "inversion of control",
     "dependency injection",
+    "dependency container",
     "dependency injection container",
     "event emitter",
     "asynchronous event emitter",
-    "data mapper"
+    "data mapper",
+    "async utils",
+    "typescript"
   ],
   "browser": "./dist/main.umd.js",
   "main": "./dist/main.cjs.js",
@@ -33,7 +35,7 @@
   "bugs": {
     "url": "https://github.com/tooleks/tooleks-js/issues"
   },
-  "homepage": "https://github.com/tooleks/tooleks-js#readme",
+  "homepage": "https://tooleks.github.io/tooleks-js",
   "devDependencies": {
     "@rollup/plugin-typescript": "^4.0.0",
     "@types/chai": "^4.2.11",

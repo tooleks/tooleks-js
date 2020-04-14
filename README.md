@@ -2,7 +2,11 @@
 
 A set of tools for JavaScript development.
 
-Try it on [RunKit](https://npm.runkit.com/tooleks).
+* Browser & Node.js environments.
+* Zero dependencies.
+* Modern code (ES modules, classes, `async`/`await`, etc.)
+
+Try on [RunKit](https://npm.runkit.com/tooleks).
 
 ## Installation
 
@@ -20,9 +24,9 @@ npm install --save tooleks
 
 Simple yet powerful dependency injection container implementation. 
 
-* Supports instance, factory and service bindings.
-* Automatically detects circular dependencies.
-* Supports TypeScript decorators.
+* Instance, factory and service bindings.
+* Circular dependencies detection.
+* TypeScript decorators support.
 
 ```JavaScript
 const { Container } = require('tooleks');
