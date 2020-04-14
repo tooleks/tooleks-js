@@ -21,8 +21,7 @@ npm install --save tooleks
 Simple yet powerful dependency injection container implementation. 
 
 * Supports instance, factory and service bindings.
-* Supports nested dependencies.
-* Detects circular dependencies.
+* Automatically detects circular dependencies.
 * Supports TypeScript decorators.
 
 ```JavaScript
