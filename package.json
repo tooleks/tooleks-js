@@ -1,6 +1,6 @@
 {
   "name": "tooleks",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "A set of tools for JavaScript development",
   "keywords": [
     "utils",
@@ -14,10 +14,10 @@
     "async utils",
     "typescript"
   ],
-  "browser": "./dist/main.umd.js",
-  "main": "./dist/main.cjs.js",
-  "module": "./dist/main.es.js",
-  "types": "./dist/main.d.ts",
+  "browser": "./dist/umd/main.js",
+  "main": "./dist/cjs/main.js",
+  "module": "./dist/es/main.js",
+  "types": "./dist/types/main.d.ts",
   "scripts": {
     "build": "rm -rf ./dist && rollup -c && tsc -p ./tsconfig.declaration.json",
     "lint": "tslint --fix -p ./tsconfig.json -c ./tslint.json",
