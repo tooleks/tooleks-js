@@ -19,7 +19,7 @@
   "module": "./dist/main.es.js",
   "types": "./dist/main.d.ts",
   "scripts": {
-    "build": "rm -rf ./dist && rollup -c && npx tsc -p ./tsconfig.declaration.json",
+    "build": "rm -rf ./dist && rollup -c && tsc -p ./tsconfig.declaration.json",
     "lint": "tslint --fix -p ./tsconfig.json -c ./tslint.json",
     "test": "mocha -r ts-node/register ./tests/**/*.spec.ts",
     "coverage": "nyc npm run test",
